@@ -1,0 +1,126 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+.login-box {
+  width: 450px; 
+  padding: 40px; 
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px; 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.login-title {
+  margin-top: -5px;
+  text-align: center;
+  margin-bottom: 30px; 
+  font-size: 28px;
+  color: #333;
+  font-weight: bold;
+}
+
+.input-group {
+  margin-bottom: 25px; 
+}
+
+
+.input-label {
+  margin-bottom: 10px;
+  margin-top: 20px;
+  display: block;
+  font-size: 14px;
+ 
+  color: #555;
+  font-weight: bold;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.input-field:focus {
+  border-color: #6a11cb; 
+  outline: none;
+  box-shadow: 0 0 4px rgba(106, 17, 203, 0.2);
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 25px; 
+}
+
+.forgot-password-link {
+  color: #4e54c8;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-button {
+  width: 100%;
+  padding: 14px; 
+  background: #6a11cb; 
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.login-button:hover {
+  background: #5a0dbf;
+}
+
+.register-container {
+  text-align: center;
+  margin-top: 30px; 
+}
+
+.register-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.register-link {
+  background: none;
+  border: none;
+  color: #4e54c8;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #6a11cb;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-decoration: none;
+}
+
+.back-button:hover {
+  background: #5a0dbf;
+}
