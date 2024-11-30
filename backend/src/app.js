@@ -20,5 +20,14 @@ app.get("/", (req, res) => {
 //rutas para la API de usuarios
 app.use('/api/usuarios', require('./routes/usuario.route'));
 
+//rutas para la API de clientes
+app.use('/api/clientes', require('./routes/cliente.route'));
+
+//rutas para la API de facturas
+app.use('/api/facturas', require('./routes/factura.route'));
+
+//rutas para la API de productos
+app.use('/api/productos', require('./routes/productos.route'));
+
 //Se exporta el app para que sea utilizado en otras partes del proyecto
 module.exports = app;
