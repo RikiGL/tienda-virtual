@@ -2,9 +2,9 @@ const Factura = require('../models/factura.model');
 
 // Definir el controlador para las facturas
 const facturaCtrl = {};
-
+/*
 // Crear una nueva factura
-facturaCtrl.crearFactura = (req, res) => {
+facturaCtrl.crearFactura = async (req, res) => {
   const { id_cliente, total, metodo_pago } = req.body;
 
   // Crear una nueva instancia de Factura
@@ -15,22 +15,51 @@ facturaCtrl.crearFactura = (req, res) => {
   });
 
   // Guardar la nueva factura
-  nuevaFactura.save((err, facturaGuardada) => {
+  await nuevaFactura.save((err, facturaGuardada) => {
     if (err) {
       return res.status(500).json({ message: 'Error al crear la factura', error: err });
     }
     res.status(201).json({ message: 'Factura creada exitosamente', factura: facturaGuardada });
   });
 };
+*/
+facturaCtrl.crearFactura = async (req, res) => {
+  const { id_cliente, total, metodo_pago } = req.body;
+
+  if (!id_cliente || !total || !metodo_pago) {
+    return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' }); 
+  }
+
+  const nuevaFactura = new Factura({
+    id_cliente,
+    total,
+    metodo_pago,
+  });
+
+  try {
+    await nuevaFactura.save();
+    res.status(201).json({ mensaje: 'Factura creada exitosamente', factura: nuevaFactura });
+  } catch (error) {
+    // Manejo de errores (por ejemplo, si el correo ya existe)
+    res.status(500).json({ mensaje: 'Error al crear la factura', error: error.message });
+  }
+}
 
 // Obtener todas las facturas
-facturaCtrl.obtenerFacturas = (req, res) => {
-  Factura.find((err, facturas) => {
+facturaCtrl.obtenerFacturas = async (req, res) => {
+  /*Factura.find((err, facturas) => {
     if (err) {
       return res.status(500).json({ message: 'Error al obtener las facturas', error: err });
     }
     res.status(200).json(facturas);
   });
+  */
+  try {
+    const facturas = await Factura.find();
+    res.status(200).json(facturas);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener las facturas', error: error.message });
+  }
 };
 
 // Obtener una factura por ID

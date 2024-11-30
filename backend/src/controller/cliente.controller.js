@@ -8,7 +8,7 @@ clienteCtrl.crearCliente = async (req, res) => {
   const { nombre, apellido, email, contrasenia, rol, domicilio, carrito } = req.body;
 
   // Validación de campos obligatorios
-  if (!nombre || !apellido || !email || !contrasenia || !rol || !domicilio || !carrito) {
+  if (!nombre || !apellido || !email || !contrasenia || !rol || !domicilio/* || !carrito*/) {
     return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
   }
 
