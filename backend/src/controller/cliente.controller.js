@@ -70,28 +70,37 @@ clienteCtrl.actualizarCliente = async (req, res) => {
   }
 
   try {
-    const clienteActualizado = await Cliente.findByIdAndUpdate(
-      req.params.id,
-      {
-        nombre,
-        apellido,
-        email,
-        contrasenia,
-        rol,
-        domicilio: {
-          ciudad: domicilio ? domicilio.ciudad : undefined,
-          direccion: domicilio ? domicilio.direccion : undefined,
-          referencia: domicilio ? domicilio.referencia : undefined,
-        },
-        carrito: carrito || undefined,
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!clienteActualizado) {
+    // Recuperar el cliente actual para preservar los valores existentes
+    const clienteActual = await Cliente.findById(req.params.id);
+    if (!clienteActual) {
       return res.status(404).json({ mensaje: 'Cliente no encontrado' });
     }
-
+  
+    // Construir el objeto de actualización dinámicamente
+    const actualizacion = {};
+    if (nombre) actualizacion.nombre = nombre;
+    if (apellido) actualizacion.apellido = apellido;
+    if (email) actualizacion.email = email;
+    if (contrasenia) actualizacion.contrasenia = contrasenia;
+    if (rol) actualizacion.rol = rol;
+    if (carrito) actualizacion.carrito = carrito;
+  
+    // Manejar el campo "domicilio" dinámicamente
+    if (domicilio) {
+      actualizacion.domicilio = {
+        ciudad: domicilio.ciudad || clienteActual.domicilio.ciudad,
+        direccion: domicilio.direccion || clienteActual.domicilio.direccion,
+        referencia: domicilio.referencia || clienteActual.domicilio.referencia,
+      };
+    }
+  
+    // Actualizar el cliente en la base de datos
+    const clienteActualizado = await Cliente.findByIdAndUpdate(
+      req.params.id,
+      actualizacion,
+      { new: true, runValidators: true }
+    );
+  
     res.status(200).json({ mensaje: 'Cliente actualizado exitosamente', cliente: clienteActualizado });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al actualizar el cliente', error: error.message });

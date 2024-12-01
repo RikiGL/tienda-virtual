@@ -49,19 +49,35 @@ facturaCtrl.obtenerFacturaPorId = async (req, res) => {
 };
 
 // Actualizar una factura por ID
-facturaCtrl.actualizarFactura = (req, res) => {
+facturaCtrl.actualizarFactura = async (req, res) => {
   const { id } = req.params;
   const { id_cliente, total, metodo_pago } = req.body;
 
-  Factura.findByIdAndUpdate(id, { id_cliente, total, metodo_pago }, { new: true, runValidators: true }, (err, facturaActualizada) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al actualizar la factura', error: err });
+  if (!id_cliente && !total && !metodo_pago) {
+    return res.status(400).json({ mensaje: 'Se debe enviar al menos un campo para actualizar' });
+  }
+
+  try {
+    const facturaActual = await Factura.findById(req.params.id);
+    if (!facturaActual) {
+      return es.status(404).json({ mensaje: 'Factura no encontrada' });
     }
-    if (!facturaActualizada) {
-      return res.status(404).json({ message: 'Factura no encontrada' });
-    }
-    res.status(200).json({ message: 'Factura actualizada exitosamente', factura: facturaActualizada });
-  });
+
+    const actualizacion = {};
+    if (id_cliente) actualizacion.id_cliente = id_cliente;
+    if (total) actualizacion.total = total;
+    if (metodo_pago) actualizacion.metodo_pago = metodo_pago;
+
+    const facturaActualizada = await Factura.findByIdAndUpdate(
+      req.params.id,
+      actualizacion,
+      { new:true, runValidators: true }
+    );
+
+    res.status(200).json({ mensaje: 'Factura actualizada exitosamente', factura: facturaActualizada });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al actualizar la factura', error: error.message });
+  }
 };
 
 // Eliminar una factura por ID
