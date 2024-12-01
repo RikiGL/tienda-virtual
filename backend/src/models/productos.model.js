@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 //Se definen los tipos de datos que se van a usar en la colección de mongo
 //Se quiere que tenga estas validaciones para poder escribir en la base de datos
@@ -46,8 +46,8 @@ const productoSchema = new mongoose.Schema({
 });
 
 //El identificador será solo numérico y se asignará automaticamente incrementando.
-productoSchema.plugin(AutoIncrement, { id: 'producto_seq', inc_field: '_id' });
+productoSchema.plugin(AutoIncrement, { id: "producto_seq", inc_field: "_id" });
 
 //El esquema se exporta como modelo para que sea usado por el controlador
 //Se define un nombre de modelo y un esquema
-module.exports = mongoose.model('Producto', productoSchema);
+module.exports = mongoose.model("Producto", productoSchema);
