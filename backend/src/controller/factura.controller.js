@@ -2,27 +2,8 @@ const Factura = require('../models/factura.model');
 
 // Definir el controlador para las facturas
 const facturaCtrl = {};
-/*
-// Crear una nueva factura
-facturaCtrl.crearFactura = async (req, res) => {
-  const { id_cliente, total, metodo_pago } = req.body;
 
-  // Crear una nueva instancia de Factura
-  const nuevaFactura = new Factura({
-    id_cliente,
-    total,
-    metodo_pago,
-  });
-
-  // Guardar la nueva factura
-  await nuevaFactura.save((err, facturaGuardada) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al crear la factura', error: err });
-    }
-    res.status(201).json({ message: 'Factura creada exitosamente', factura: facturaGuardada });
-  });
-};
-*/
+//Nueva factura
 facturaCtrl.crearFactura = async (req, res) => {
   const { id_cliente, total, metodo_pago } = req.body;
 
@@ -47,13 +28,6 @@ facturaCtrl.crearFactura = async (req, res) => {
 
 // Obtener todas las facturas
 facturaCtrl.obtenerFacturas = async (req, res) => {
-  /*Factura.find((err, facturas) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al obtener las facturas', error: err });
-    }
-    res.status(200).json(facturas);
-  });
-  */
   try {
     const facturas = await Factura.find();
     res.status(200).json(facturas);
@@ -63,18 +37,15 @@ facturaCtrl.obtenerFacturas = async (req, res) => {
 };
 
 // Obtener una factura por ID
-facturaCtrl.obtenerFacturaPorId = (req, res) => {
+facturaCtrl.obtenerFacturaPorId = async (req, res) => {
   const { id } = req.params;
 
-  Factura.findById(id, (err, factura) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al obtener la factura', error: err });
-    }
-    if (!factura) {
-      return res.status(404).json({ message: 'Factura no encontrada' });
-    }
-    res.status(200).json(factura);
-  });
+  try {
+    const facturas = await Factura.findById(id);
+    res.status(200).json(facturas);
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al obtener las facturas', error: error.message });
+  }
 };
 
 // Actualizar una factura por ID
