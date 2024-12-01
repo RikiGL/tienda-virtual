@@ -81,18 +81,18 @@ facturaCtrl.actualizarFactura = async (req, res) => {
 };
 
 // Eliminar una factura por ID
-facturaCtrl.eliminarFactura = (req, res) => {
-  const { id } = req.params;
+facturaCtrl.eliminarFactura = async (req, res) => {
+  try {
+    const facturaEliminada = await Factura.findByIdAndDelete(req.params.id);
 
-  Factura.findByIdAndDelete(id, (err, facturaEliminada) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error al eliminar la factura', error: err });
-    }
     if (!facturaEliminada) {
-      return res.status(404).json({ message: 'Factura no encontrada' });
+      return res.status(404).json({ mensaje: 'Factura no encontrada' });
     }
-    res.status(200).json({ message: 'Factura eliminada exitosamente' });
-  });
+
+    res.status(200).json({ mensaje: 'Factura eliminada exitosamente' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar la factura', error: error.message });
+  }
 };
 
 // Exportar el controlador
