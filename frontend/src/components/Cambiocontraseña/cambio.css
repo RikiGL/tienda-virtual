@@ -1,0 +1,85 @@
+.change-password-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .change-password-box {
+    width: 450px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .change-password-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .input-group {
+    margin-bottom: 25px;
+  }
+  
+  .input-label {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    display: block;
+    font-size: 14px;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  
+  .input-field:focus {
+    border-color: #6a11cb;
+    outline: none;
+    box-shadow: 0 0 4px rgba(106, 17, 203, 0.2);
+  }
+  
+  .change-password-button {
+    width: 100%;
+    padding: 14px;
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .change-password-button:hover {
+    background: #5a0dbf;
+  }
+  
+  .back-to-login {
+    text-align: center;
+    margin-top: 30px;
+  }
+  
+  .back-to-login-link {
+    color: #4e54c8;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
