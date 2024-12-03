@@ -1,3 +1,4 @@
+// Importación
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
