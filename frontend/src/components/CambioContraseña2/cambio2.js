@@ -1,26 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
-import "./cambio.css";
+import "./cambio2.css";
 import logo from "../imagenes/asdlogo.png";
 
-function CambioContrasena() {
-  const [email, setEmail] = useState("");
+function CambioCodigo() {
+  const [codigo, setCodigo] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Se ha enviado un enlace de recuperación a: ${email}`);
-    navigate("/cambio2"); 
+    if (codigo.length !== 6) {
+      alert("El código debe contener exactamente 6 caracteres.");
+      return;
+    }
+    alert(`Código ingresado correctamente: ${codigo}`);
+    navigate("/cambio3"); 
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate(-1); // Regresa a la página anterior
   };
 
   return (
     <div
-      className="change-password-container"
+      className="change-code-container"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       <header className="app-header">
@@ -40,26 +44,27 @@ function CambioContrasena() {
         </button>
       </div>
 
-      <main className="change-password-main">
-        <div className="change-password-box">
-          <h2 className="change-password-title">Cambio de contraseña</h2>
+      <main className="change-code-main">
+        <div className="change-code-box">
+          <h2 className="change-code-title">Ingrese el código de verificación</h2>
+          <p className="verification-instruction">
+            Ingrese el código de verificación que ha sido enviado a su correo electrónico
+          </p>
           <form onSubmit={handleSubmit}>
             <div className="input-group">
-              <label htmlFor="email" className="input-label">
-                Correo Electrónico:
-              </label>
               <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Ingresa tu correo electrónico"
-                className="input-field"
+                type="text"
+                id="codigo"
+                value={codigo}
+                onChange={(e) => setCodigo(e.target.value)}
+                placeholder="XXXXXX"
+                className="input-field verification-code-input"
+                maxLength={6}
                 required
               />
             </div>
-            <button type="submit" className="change-password-button">
-              Enviar mensaje
+            <button type="submit" className="change-code-button">
+              Enviar
             </button>
           </form>
         </div>
@@ -73,4 +78,4 @@ function CambioContrasena() {
   );
 }
 
-export default CambioContrasena;
+export default CambioCodigo;

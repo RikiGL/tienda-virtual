@@ -1,11 +1,60 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Header styles */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f1c40f;
+  color: white;
+  height: 60px;
+}
+
+.app-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 50px;
+  height: auto;
+  vertical-align: middle;
+}
+
+.app-header .name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #0c5304;
+}
+
+/* Footer styles */
+.app-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  width: 100%;
+}
+
+.app-footer p {
+  margin: 5px 0;
+}
+
+/* Login styles */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 120px); /* Restar altura del header y footer */
   background-size: cover;
   background-position: center;
-  font-family: 'Roboto', sans-serif;
 }
 
 .login-box {
@@ -29,13 +78,11 @@
   margin-bottom: 25px; 
 }
 
-
 .input-label {
   margin-bottom: 10px;
   margin-top: 20px;
   display: block;
   font-size: 14px;
- 
   color: #555;
   font-weight: bold;
 }

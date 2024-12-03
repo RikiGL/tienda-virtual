@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import fondo from "../imagenes/fondo_.png"; 
+import fondo from "../imagenes/fondo212.jpg"; 
 import "./cambio.css"; 
 
 function CambioContrasena() {
