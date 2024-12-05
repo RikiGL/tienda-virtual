@@ -9,7 +9,8 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [modalMessage, setModalMessage] = useState(""); 
+  const [modalMessage, setModalMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); 
 
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
@@ -19,7 +20,6 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    
     if (!email.trim()) {
       setModalMessage("Por favor, ingresa un correo electrónico.");
       return;
@@ -30,26 +30,23 @@ function Login() {
       return;
     }
 
-    
     if (!validateEmail(email)) {
       setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
 
-    
     setModalMessage(""); 
     navigate("/principal");
   };
 
   const closeModal = () => {
-    setModalMessage(""); 
+    setModalMessage("");
   };
 
-  // Función para manejar el envío del formulario
+  // Función para manejar el envío del formulario (adaptada)
   const handleLogin = async (e) => {
-    e.preventDefault(); // Evitar recargar la página
+    e.preventDefault();
     try {
-      // Solicitud al backend
       const response = await fetch("http://localhost:4000/api/clientes/login", {
         method: "POST",
         headers: {
@@ -60,11 +57,9 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        // Aquí puedes manejar los datos recibidos, por ejemplo, guardar un token en localStorage
         console.log(data);
-        navigate("/principal"); // Redirigir al usuario
+        navigate("/principal");
       } else {
-        // Manejo de errores en la respuesta del backend
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
       }
@@ -93,7 +88,7 @@ function Login() {
         </button>
         <div className="login-box">
           <h2 className="login-title">Login</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleLogin}> {/* Cambiar a handleLogin */}
             <div className="input-group">
               <label htmlFor="email" className="input-label">
                 Correo Electrónico
@@ -120,6 +115,7 @@ function Login() {
                 className="input-field"
               />
             </div>
+            {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Mostrar errores */}
             <div className="forgot-password">
               <button
                 type="button"
@@ -151,7 +147,6 @@ function Login() {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {}
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );

@@ -5,7 +5,7 @@ const clienteCtrl = {};
 // Crear un nuevo cliente
 clienteCtrl.crearCliente = async (req, res) => {
   // Desestructuración de los datos recibidos en el cuerpo de la solicitud
-  const { nombre, apellido, email, contrasenia, rol, domicilio, carrito } =
+  const { nombre, apellido, email, contrasenia, rol, domicilio, carrito} =
     req.body;
 
   // Validación de campos obligatorios
@@ -30,19 +30,19 @@ clienteCtrl.crearCliente = async (req, res) => {
     contrasenia,
     rol,
     domicilio: {
-      ciudad: domicilio.ciudad,
-      direccion: domicilio.direccion,
-      referencia: domicilio.referencia || null, // Si referencia es opcional
-    },
+      ciudad: domicilio.ciudad || "Ciudad",
+      direccion: domicilio.direccion || "Dirección",
+      referencia: domicilio.referencia || "Referencia"
+    },    
     carrito,
   });
 
   try {
     // Guardar el nuevo cliente en la base de datos
-    await nuevoCliente.save();
+    const clienteGuardado = await nuevoCliente.save();
     res
       .status(201)
-      .json({ mensaje: "Cliente creado exitosamente", cliente: nuevoCliente });
+      .json({ mensaje: "Cliente creado exitosamente", cliente: clienteGuardado });
   } catch (error) {
     // Manejo de errores (por ejemplo, si el correo ya existe)
     res
@@ -188,5 +188,8 @@ clienteCtrl.loginCliente = async (req, res) => {
     res.status(500).json({ mensaje: "Error en el servidor", error: error.message });
   }
 };
+
+
+
 
 module.exports = clienteCtrl;
