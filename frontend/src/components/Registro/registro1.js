@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import fondo from "../imagenes/fondo_.png";
+import fondo from "../imagenes/fondo212.jpg";
+import logo from "../imagenes/asdlogo.png";
+import Modal from "../Modal/modal";
 import "./registro1.css";
 
 function Registro1() {
@@ -14,161 +16,215 @@ function Registro1() {
     descripcion: "",
     referencia: "",
   });
-  const [mensaje, setMensaje] = useState("");
-
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-
+    // Validaciones previas
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexNombre.test(nombre)) {
-      setMensaje("El nombre solo debe contener letras y espacios.");
+      setModalMessage("El nombre solo debe contener letras y espacios.");
       return;
     }
 
     if (!regexNombre.test(apellido)) {
-      setMensaje("El apellido solo debe contener letras y espacios.");
+      setModalMessage("El apellido solo debe contener letras y espacios.");
       return;
     }
 
-    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     if (!regexCorreo.test(correo)) {
-      setMensaje("Por favor, ingresa un correo válido.");
+      setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
 
-    if (contraseña.length < 6) {
-      setMensaje("La contraseña debe tener al menos 6 caracteres.");
+    const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regexContraseña.test(contraseña)) {
+      setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
       return;
     }
 
     if (contraseña !== confirmarContraseña) {
-      setMensaje("Las contraseñas no coinciden.");
+      setModalMessage("Las contraseñas no coinciden.");
       return;
     }
 
     const regexCiudad = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexCiudad.test(direccion.ciudad)) {
-      setMensaje("La ciudad solo debe contener letras y espacios.");
+      setModalMessage("La ciudad solo debe contener letras y espacios.");
       return;
     }
 
-    if (!direccion.descripcion || !direccion.referencia) {
-      setMensaje("Por favor, completa todos los campos de dirección.");
+    const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
+    if (!regexDescripcion.test(direccion.descripcion)) {
+      setModalMessage("La descripción de la dirección solo puede contener letras, números y el símbolo '-'.");
       return;
     }
 
-    const rol = "cliente";
+    const regexReferencia = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!regexReferencia.test(direccion.referencia)) {
+      setModalMessage("La referencia solo debe contener letras y espacios.");
+      return;
+    }
 
-    setMensaje("¡Registro exitoso!");
-    console.log({
+    // Crear el objeto de datos
+    const clienteData = {
       nombre,
       apellido,
-      correo,
-      contraseña,
-      direccion,
-      rol,
-    });
+      email: correo,
+      contrasenia: contraseña,
+      rol: "cliente", // Puedes ajustar el rol según tu lógica
+      domicilio: {
+        ciudad: direccion.ciudad,
+        direccion: direccion.descripcion,
+        referencia: direccion.referencia,
+      },
+      carrito: [], // Opcional si no hay información inicial del carrito
+    };
+
+    try {
+      // Llamada al backend
+      const response = await fetch("http://localhost:4000/api/clientes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clienteData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setModalMessage(result.mensaje); // Mostrar mensaje de éxito
+        setTimeout(() => navigate("/login"), 2000); // Redirigir al login
+      } else {
+        const errorData = await response.json();
+        setModalMessage(errorData.mensaje || "Error en el registro.");
+      }
+    } catch (error) {
+      setModalMessage("Hubo un error al conectar con el servidor.");
+    }
+  };
+
+  const closeModal = () => {
+    setModalMessage("");
   };
 
   return (
-    <div className="registro-container" style={{ backgroundImage: `url(${fondo})` }}>
-      <button
-        onClick={() => navigate(-1)}
-        className="back-button"
-        title="Volver"
+    <div>
+      <header className="app-header">
+        <div className="logo">
+          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
+          <div className="name">TU DESPENSA 🛒</div>
+        </div>
+      </header>
+      <div
+        className="registro-container"
+        style={{ backgroundImage: `url(${fondo})` }}
       >
-        ← Volver
-      </button>
-      <div className="registro-box">
-        <h2 className="registro-title">Registro</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
+        <button onClick={() => navigate(-1)} className="back-button" title="Volver">
+          ← Volver
+        </button>
+        <div className="registro-box">
+          <h2 className="registro-title">Registro</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-grid">
+              <div>
+                <label className="form-label">Nombre</label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Ingresa tu nombre"
+                  className="form-input"
+                />
+              </div>
+              <div>
+                <label className="form-label">Apellido</label>
+                <input
+                  type="text"
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                  placeholder="Ingresa tu apellido"
+                  className="form-input"
+                />
+              </div>
+            </div>
             <div>
-              <label className="form-label">Nombre</label>
+              <label className="form-label">Correo</label>
               <input
                 type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder="Ingresa tu nombre"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                placeholder="Ingresa tu correo"
                 className="form-input"
               />
             </div>
-            <div>
-              <label className="form-label">Apellido</label>
+            <div className="form-grid">
+              <div>
+                <label className="form-label">Contraseña</label>
+                <input
+                  type="password"
+                  value={contraseña}
+                  onChange={(e) => setContraseña(e.target.value)}
+                  placeholder="Crea tu contraseña"
+                  className="form-input"
+                />
+              </div>
+              <div>
+                <label className="form-label">Confirmar Contraseña</label>
+                <input
+                  type="password"
+                  value={confirmarContraseña}
+                  onChange={(e) => setConfirmarContraseña(e.target.value)}
+                  placeholder="Confirma tu contraseña"
+                  className="form-input"
+                />
+              </div>
+            </div>
+            <div className="direccion-container">
+              <label className="form-label">Dirección</label>
               <input
                 type="text"
-                value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
-                placeholder="Ingresa tu apellido"
+                value={direccion.ciudad}
+                onChange={(e) =>
+                  setDireccion({ ...direccion, ciudad: e.target.value })
+                }
+                placeholder="Ciudad"
                 className="form-input"
               />
-            </div>
-          </div>
-          <div>
-            <label className="form-label">Correo</label>
-            <input
-              type="email"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-              placeholder="Ingresa tu correo"
-              className="form-input"
-            />
-          </div>
-          <div className="form-grid">
-            <div>
-              <label className="form-label">Contraseña</label>
               <input
-                type="password"
-                value={contraseña}
-                onChange={(e) => setContraseña(e.target.value)}
-                placeholder="Crea tu contraseña"
+                type="text"
+                value={direccion.descripcion}
+                onChange={(e) =>
+                  setDireccion({ ...direccion, descripcion: e.target.value })
+                }
+                placeholder="Describe tu dirección"
                 className="form-input"
               />
-            </div>
-            <div>
-              <label className="form-label">Confirmar Contraseña</label>
               <input
-                type="password"
-                value={confirmarContraseña}
-                onChange={(e) => setConfirmarContraseña(e.target.value)}
-                placeholder="Confirma tu contraseña"
+                type="text"
+                value={direccion.referencia}
+                onChange={(e) =>
+                  setDireccion({ ...direccion, referencia: e.target.value })
+                }
+                placeholder="Referencia"
                 className="form-input"
               />
             </div>
-          </div>
-          <div className="direccion-container">
-            <label className="form-label">Dirección</label>
-            <input
-              type="text"
-              value={direccion.ciudad}
-              onChange={(e) => setDireccion({ ...direccion, ciudad: e.target.value })}
-              placeholder="Ciudad"
-              className="form-input"
-            />
-            <input
-              type="text"
-              value={direccion.descripcion}
-              onChange={(e) => setDireccion({ ...direccion, descripcion: e.target.value })}
-              placeholder="Describe tu dirección"
-              className="form-input"
-            />
-            <input
-              type="text"
-              value={direccion.referencia}
-              onChange={(e) => setDireccion({ ...direccion, referencia: e.target.value })}
-              placeholder="Referencia"
-              className="form-input"
-            />
-          </div>
-          <button type="submit" className="registro-button">
-            Registrarse
-          </button>
-        </form>
-        {mensaje && <p className={`mensaje ${mensaje.includes("exitoso") ? "success" : "error"}`}>{mensaje}</p>}
+            <button type="submit" className="registro-button">
+              Registrarse
+            </button>
+          </form>
+        </div>
       </div>
+      <footer className="app-footer">
+        <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
+        <p>Contacto: info@tudespensa.com</p>
+      </footer>
+
+      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 }

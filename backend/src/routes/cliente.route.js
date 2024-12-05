@@ -5,6 +5,8 @@ const clienteCtrl = require("../controller/cliente.controller");
 // Crear un nuevo cliente
 router.post("/", clienteCtrl.crearCliente);
 
+//router.post("/login", clienteCtrl.loginCliente);
+
 // Obtener todos los clientes
 router.get("/", clienteCtrl.obtenerClientes);
 
@@ -16,5 +18,8 @@ router.put("/:id", clienteCtrl.actualizarCliente);
 
 // Eliminar un cliente por ID
 router.delete("/:id", clienteCtrl.eliminarCliente);
+
+// Login de cliente
+router.post("/:login", clienteCtrl.loginCliente);
 
 module.exports = router;
