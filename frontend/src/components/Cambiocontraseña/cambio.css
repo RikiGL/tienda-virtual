@@ -9,10 +9,19 @@
 }
 
 .change-password-main {
+  /*display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;*/
+
+
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  height: calc(100vh - 190px); 
+  background-size: cover;
+  background-position: center;
+  
 }
 
 .change-password-box {

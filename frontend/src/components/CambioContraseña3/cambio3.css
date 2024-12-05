@@ -13,7 +13,7 @@
     justify-content: center;
     align-items: center;
     flex-grow: 1;
-    padding: 20px; /* Asegura espacio entre main y header/footer */
+    padding: 20px; 
   }
   
   .change-password-box {

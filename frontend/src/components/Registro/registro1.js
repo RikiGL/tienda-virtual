@@ -1,8 +1,8 @@
-// Importación
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
+import Modal from "../Modal/modal"; 
 import "./registro1.css";
 
 function Registro1() {
@@ -16,56 +16,78 @@ function Registro1() {
     descripcion: "",
     referencia: "",
   });
-  const [mensaje, setMensaje] = useState("");
-
+  const [modalMessage, setModalMessage] = useState(""); 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexNombre.test(nombre)) {
-      setMensaje("El nombre solo debe contener letras y espacios.");
+      setModalMessage("El nombre solo debe contener letras y espacios.");
       return;
     }
 
     if (!regexNombre.test(apellido)) {
-      setMensaje("El apellido solo debe contener letras y espacios.");
+      setModalMessage("El apellido solo debe contener letras y espacios.");
       return;
     }
 
-    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     if (!regexCorreo.test(correo)) {
-      setMensaje("Por favor, ingresa un correo válido.");
+      setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
 
-    if (contraseña.length < 6) {
-      setMensaje("La contraseña debe tener al menos 6 caracteres.");
+    
+    const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!regexContraseña.test(contraseña)) {
+      setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
       return;
     }
 
     if (contraseña !== confirmarContraseña) {
-      setMensaje("Las contraseñas no coinciden.");
+      setModalMessage("Las contraseñas no coinciden.");
       return;
     }
 
+    
     const regexCiudad = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexCiudad.test(direccion.ciudad)) {
-      setMensaje("La ciudad solo debe contener letras y espacios.");
+      setModalMessage("La ciudad solo debe contener letras y espacios.");
       return;
     }
 
+    
+    const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
+    if (!regexDescripcion.test(direccion.descripcion)) {
+      setModalMessage("La descripción de la dirección solo puede contener letras, números y el símbolo '-'");
+      return;
+    }
+
+    
+    const regexReferencia = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!regexReferencia.test(direccion.referencia)) {
+      setModalMessage("La referencia solo debe contener letras y espacios.");
+      return;
+    }
+
+    
     if (!direccion.descripcion || !direccion.referencia) {
-      setMensaje("Por favor, completa todos los campos de dirección.");
+      setModalMessage("Por favor, completa todos los campos de dirección.");
       return;
     }
 
-    const rol = "cliente";
-
-    setMensaje("¡Registro exitoso!");
-    navigate("/login");
+    
+    setModalMessage("¡Registro exitoso!");
+    setTimeout(() => navigate("/login"), 2000); 
   };
+
+  const closeModal = () => {
+    setModalMessage(""); 
+  }
 
   return (
     <div>
@@ -107,7 +129,7 @@ function Registro1() {
             <div>
               <label className="form-label">Correo</label>
               <input
-                type="email"
+                type="text"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="Ingresa tu correo"
@@ -164,17 +186,15 @@ function Registro1() {
               Registrarse
             </button>
           </form>
-          {mensaje && (
-            <p className={`mensaje ${mensaje.includes("exitoso") ? "success" : "error"}`}>
-              {mensaje}
-            </p>
-          )}
         </div>
       </div>
       <footer className="app-footer">
-        <p>© 2024 Tu Despensa. Todos los derechos reservados.</p>
+        <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
+
+      {}
+      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 }

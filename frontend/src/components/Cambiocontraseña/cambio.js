@@ -1,21 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio.css";
 import logo from "../imagenes/asdlogo.png";
+import Modal from "../Modal/modal"; 
 
 function CambioContrasena() {
   const [email, setEmail] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false); 
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
+
+  const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
+
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate("/login"); 
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Se ha enviado un enlace de recuperación a: ${email}`);
-    navigate("/cambio2"); 
+
+    if (!email) {
+      setModalMessage("Por favor, ingresa tu correo electrónico.");
+      setMostrarModal(true); 
+      return;
+    }
+
+    if (!regexCorreo.test(email)) {
+      setModalMessage("El correo electrónico no es válido.");
+      setMostrarModal(true); 
+      return;
+    }
+
+    setModalMessage(`Se ha enviado un enlace de recuperación a: ${email}`);
+    setMostrarModal(true); 
+  };
+
+  const handleModalClose = () => {
+    setMostrarModal(false); 
+    if (modalMessage.includes("enlace de recuperación")) {
+      navigate("/cambio2"); 
+    }
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate("/login"); 
   };
 
   return (
@@ -31,11 +68,7 @@ function CambioContrasena() {
       </header>
 
       <div className="back-button-container">
-        <button
-          type="button"
-          onClick={handleBack}
-          className="back-button"
-        >
+        <button type="button" onClick={handleBack} className="back-button">
           Volver
         </button>
       </div>
@@ -43,7 +76,7 @@ function CambioContrasena() {
       <main className="change-password-main">
         <div className="change-password-box">
           <h2 className="change-password-title">Cambio de contraseña</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="input-group">
               <label htmlFor="email" className="input-label">
                 Correo Electrónico:
@@ -55,7 +88,6 @@ function CambioContrasena() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Ingresa tu correo electrónico"
                 className="input-field"
-                required
               />
             </div>
             <button type="submit" className="change-password-button">
@@ -66,9 +98,17 @@ function CambioContrasena() {
       </main>
 
       <footer className="app-footer">
-        <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
+        <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
+
+      {}
+      {mostrarModal && (
+        <Modal
+          message={modalMessage}
+          onClose={handleModalClose}
+        />
+      )}
     </div>
   );
 }

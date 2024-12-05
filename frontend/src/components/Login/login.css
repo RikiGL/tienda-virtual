@@ -1,10 +1,10 @@
-/* General Styles */
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
 
-/* Header styles */
+
 .app-header {
   display: flex;
   justify-content: space-between;
@@ -33,7 +33,7 @@ body {
   color: #0c5304;
 }
 
-/* Footer styles */
+
 .app-footer {
   background-color: #333;
   color: white;
@@ -47,12 +47,12 @@ body {
   margin: 5px 0;
 }
 
-/* Login styles */
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 120px); /* Restar altura del header y footer */
+  height: calc(100vh - 140px); 
   background-size: cover;
   background-position: center;
 }
@@ -171,3 +171,4 @@ body {
 .back-button:hover {
   background: #5a0dbf;
 }
+

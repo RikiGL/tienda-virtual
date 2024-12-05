@@ -1,28 +1,60 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio3.css";
 import logo from "../imagenes/asdlogo.png";
+import Modal from "../Modal/modal"; 
 
 function CambioContrasena3() {
   const [contraseña, setContraseña] = useState("");
   const [confirmarContraseña, setConfirmarContraseña] = useState("");
+  const [modalMessage, setModalMessage] = useState(""); 
   const navigate = useNavigate();
+
+
+  const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate("/cambio"); 
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (contraseña !== confirmarContraseña) {
-      alert("Las contraseñas no coinciden. Por favor, verifícalas.");
+
+    if (!regexContraseña.test(contraseña)) {
+      setModalMessage(
+        "La contraseña debe tener al menos 8 caracteres e incluir un carácter especial."
+      );
       return;
     }
 
-    alert("¡Contraseña cambiada exitosamente!");
-    navigate("/login"); 
+  
+    if (contraseña !== confirmarContraseña) {
+      setModalMessage("Las contraseñas no coinciden. Por favor, verifícalas.");
+      return;
+    }
+
+    setModalMessage("¡Contraseña cambiada exitosamente!");
+  };
+
+  const closeModal = () => {
+    if (modalMessage === "¡Contraseña cambiada exitosamente!") {
+      navigate("/login"); 
+    }
+    setModalMessage(""); 
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate("/cambio"); 
   };
 
   return (
@@ -30,7 +62,7 @@ function CambioContrasena3() {
       className="change-password-container"
       style={{ backgroundImage: `url(${fondo})` }}
     >
-      {/* Header */}
+      {}
       <header className="app-header">
         <div className="logo">
           <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
@@ -38,7 +70,7 @@ function CambioContrasena3() {
         </div>
       </header>
 
-      {/* Botón Volver */}
+      {}
       <div className="back-button-container">
         <button
           type="button"
@@ -49,7 +81,7 @@ function CambioContrasena3() {
         </button>
       </div>
 
-      {/* Formulario */}
+      {}
       <main className="change-password-main">
         <div className="change-password-box">
           <h2 className="change-password-title">Ingrese su nueva contraseña</h2>
@@ -89,11 +121,14 @@ function CambioContrasena3() {
         </div>
       </main>
 
-      {/* Footer */}
+      {}
       <footer className="app-footer">
-        <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
+        <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
+
+      {}
+      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 }

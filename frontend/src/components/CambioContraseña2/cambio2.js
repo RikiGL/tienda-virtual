@@ -3,23 +3,33 @@ import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio2.css";
 import logo from "../imagenes/asdlogo.png";
+import Modal from "../Modal/modal"; 
 
 function CambioCodigo() {
   const [codigo, setCodigo] = useState("");
+  const [modalMessage, setModalMessage] = useState(""); 
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (codigo.length !== 6) {
-      alert("El código debe contener exactamente 6 caracteres.");
+      setModalMessage("El código debe contener exactamente 6 caracteres.");
       return;
     }
-    alert(`Código ingresado correctamente: ${codigo}`);
-    navigate("/cambio3"); 
+
+    setModalMessage(`Código ingresado correctamente: ${codigo}`);
   };
 
   const handleBack = () => {
-    navigate(-1); // Regresa a la página anterior
+    navigate(-1); 
+  };
+
+  const closeModal = () => {
+    if (modalMessage.includes("correctamente")) {
+      navigate("/cambio3"); 
+    }
+    setModalMessage(""); 
   };
 
   return (
@@ -71,9 +81,12 @@ function CambioCodigo() {
       </main>
 
       <footer className="app-footer">
-        <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
+        <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
+
+      {}
+      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
 }
