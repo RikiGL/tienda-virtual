@@ -45,6 +45,35 @@ function Login() {
     setModalMessage(""); 
   };
 
+  // Función para manejar el envío del formulario
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Evitar recargar la página
+    try {
+      // Solicitud al backend
+      const response = await fetch("http://localhost:4000/api/clientes/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, contrasenia: password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Aquí puedes manejar los datos recibidos, por ejemplo, guardar un token en localStorage
+        console.log(data);
+        navigate("/principal"); // Redirigir al usuario
+      } else {
+        // Manejo de errores en la respuesta del backend
+        const errorData = await response.json();
+        setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      console.error("Error al enviar la solicitud:", error);
+      setErrorMessage("Error de conexión con el servidor");
+    }
+  };
+
   return (
     <div>
       <header className="app-header">
