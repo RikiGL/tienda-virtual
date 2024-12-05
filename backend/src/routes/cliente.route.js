@@ -19,7 +19,7 @@ router.put("/:id", clienteCtrl.actualizarCliente);
 // Eliminar un cliente por ID
 router.delete("/:id", clienteCtrl.eliminarCliente);
 
-// Login de cliente
-router.post("/:login", clienteCtrl.loginCliente);
+//Verificar el login:
+router.post("/login", clienteCtrl.loginCliente);
 
 module.exports = router;
