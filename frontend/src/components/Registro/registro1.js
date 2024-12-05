@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
-<<<<<<< HEAD
-import Modal from "../Modal/modal";
-=======
 import Modal from "../Modal/modal"; 
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
 import "./registro1.css";
 
 function Registro1() {
@@ -20,21 +16,13 @@ function Registro1() {
     descripcion: "",
     referencia: "",
   });
-<<<<<<< HEAD
-  const [modalMessage, setModalMessage] = useState("");
-=======
   const [modalMessage, setModalMessage] = useState(""); 
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-<<<<<<< HEAD
-    // Validaciones previas
-=======
     
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexNombre.test(nombre)) {
       setModalMessage("El nombre solo debe contener letras y espacios.");
@@ -46,20 +34,14 @@ function Registro1() {
       return;
     }
 
-<<<<<<< HEAD
-=======
     
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
     const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     if (!regexCorreo.test(correo)) {
       setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
 
-<<<<<<< HEAD
-=======
     
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
     const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regexContraseña.test(contraseña)) {
       setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
@@ -78,60 +60,6 @@ function Registro1() {
       return;
     }
 
-<<<<<<< HEAD
-    const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
-    if (!regexDescripcion.test(direccion.descripcion)) {
-      setModalMessage("La descripción de la dirección solo puede contener letras, números y el símbolo '-'.");
-      return;
-    }
-
-    const regexReferencia = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-    if (!regexReferencia.test(direccion.referencia)) {
-      setModalMessage("La referencia solo debe contener letras y espacios.");
-      return;
-    }
-
-    // Crear el objeto de datos
-    const clienteData = {
-      nombre,
-      apellido,
-      email: correo,
-      contrasenia: contraseña,
-      rol: "cliente", // Puedes ajustar el rol según tu lógica
-      domicilio: {
-        ciudad: direccion.ciudad,
-        direccion: direccion.descripcion,
-        referencia: direccion.referencia,
-      },
-      carrito: [], // Opcional si no hay información inicial del carrito
-    };
-
-    try {
-      // Llamada al backend
-      const response = await fetch("http://localhost:4000/api/clientes", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(clienteData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        setModalMessage(result.mensaje); // Mostrar mensaje de éxito
-        setTimeout(() => navigate("/login"), 2000); // Redirigir al login
-      } else {
-        const errorData = await response.json();
-        setModalMessage(errorData.mensaje || "Error en el registro.");
-      }
-    } catch (error) {
-      setModalMessage("Hubo un error al conectar con el servidor.");
-    }
-  };
-
-  const closeModal = () => {
-    setModalMessage("");
-=======
     
     const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
     if (!regexDescripcion.test(direccion.descripcion)) {
@@ -155,7 +83,6 @@ function Registro1() {
     
     setModalMessage("¡Registro exitoso!");
     setTimeout(() => navigate("/login"), 2000); 
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
   };
 
   const closeModal = () => {
@@ -170,14 +97,7 @@ function Registro1() {
           <div className="name">TU DESPENSA 🛒</div>
         </div>
       </header>
-<<<<<<< HEAD
-      <div
-        className="registro-container"
-        style={{ backgroundImage: `url(${fondo})` }}
-      >
-=======
       <div className="registro-container" style={{ backgroundImage: `url(${fondo})` }}>
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
         <button onClick={() => navigate(-1)} className="back-button" title="Volver">
           ← Volver
         </button>
@@ -243,39 +163,21 @@ function Registro1() {
               <input
                 type="text"
                 value={direccion.ciudad}
-<<<<<<< HEAD
-                onChange={(e) =>
-                  setDireccion({ ...direccion, ciudad: e.target.value })
-                }
-=======
                 onChange={(e) => setDireccion({ ...direccion, ciudad: e.target.value })}
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
                 placeholder="Ciudad"
                 className="form-input"
               />
               <input
                 type="text"
                 value={direccion.descripcion}
-<<<<<<< HEAD
-                onChange={(e) =>
-                  setDireccion({ ...direccion, descripcion: e.target.value })
-                }
-=======
                 onChange={(e) => setDireccion({ ...direccion, descripcion: e.target.value })}
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
                 placeholder="Describe tu dirección"
                 className="form-input"
               />
               <input
                 type="text"
                 value={direccion.referencia}
-<<<<<<< HEAD
-                onChange={(e) =>
-                  setDireccion({ ...direccion, referencia: e.target.value })
-                }
-=======
                 onChange={(e) => setDireccion({ ...direccion, referencia: e.target.value })}
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
                 placeholder="Referencia"
                 className="form-input"
               />
@@ -291,10 +193,7 @@ function Registro1() {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-<<<<<<< HEAD
-=======
       {}
->>>>>>> da208fafc648d142ea2254a163594a7d2951a965
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
