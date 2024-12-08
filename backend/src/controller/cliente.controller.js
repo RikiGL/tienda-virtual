@@ -164,7 +164,7 @@ clienteCtrl.eliminarCliente = async (req, res) => {
       .json({ mensaje: "Error al eliminar el cliente", error: error.message });
   }
 };
-
+// Controlador para el login del cliente.
 clienteCtrl.loginCliente = async (req, res) => {
   const { email, contrasenia } = req.body;
 
