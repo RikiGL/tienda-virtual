@@ -10,15 +10,17 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalMessage, setModalMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); 
+  const [errorMessage, setErrorMessage] = useState("");
+
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     return regex.test(email);
   };
 
-  const handleSubmit = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Validación de campos
     if (!email.trim()) {
       setModalMessage("Por favor, ingresa un correo electrónico.");
       return;
@@ -34,17 +36,6 @@ function Login() {
       return;
     }
 
-    setModalMessage(""); 
-    navigate("/principal");
-  };
-
-  const closeModal = () => {
-    setModalMessage("");
-  };
-
-  // Función para manejar el envío del formulario (adaptada)
-  const handleLogin = async (e) => {
-    e.preventDefault();
     try {
       const response = await fetch("http://localhost:4000/api/clientes/login", {
         method: "POST",
@@ -68,6 +59,10 @@ function Login() {
     }
   };
 
+  const closeModal = () => {
+    setModalMessage("");
+  };
+
   return (
     <div>
       <header className="app-header">
@@ -87,7 +82,7 @@ function Login() {
         </button>
         <div className="login-box">
           <h2 className="login-title">Login</h2>
-          <form onSubmit={handleLogin}> {/* Cambiar a handleLogin */}
+          <form onSubmit={handleLogin}>
             <div className="input-group">
               <label htmlFor="email" className="input-label">
                 Correo Electrónico
@@ -114,7 +109,7 @@ function Login() {
                 className="input-field"
               />
             </div>
-            {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Mostrar errores */}
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <div className="forgot-password">
               <button
                 type="button"
