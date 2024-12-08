@@ -1,3 +1,5 @@
+
+
 const Cliente = require("../models/cliente.model");
 
 const clienteCtrl = {};
@@ -162,8 +164,7 @@ clienteCtrl.eliminarCliente = async (req, res) => {
       .json({ mensaje: "Error al eliminar el cliente", error: error.message });
   }
 };
- 
-// Controlador para el login del cliente.
+
 clienteCtrl.loginCliente = async (req, res) => {
   const { email, contrasenia } = req.body;
 
@@ -177,6 +178,7 @@ clienteCtrl.loginCliente = async (req, res) => {
     if (!cliente) {
       return res.status(404).json({ mensaje: "El correo no está registrado" });
     }
+
 
     if (cliente.contrasenia !== contrasenia) {
       return res.status(401).json({ mensaje: "Contraseña incorrecta" });
@@ -192,4 +194,5 @@ clienteCtrl.loginCliente = async (req, res) => {
 
 
 
-module.exports = clienteCtrl;
+
+

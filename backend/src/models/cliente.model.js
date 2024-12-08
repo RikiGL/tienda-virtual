@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 //Se definen los tipos de datos que se van a usar en la colección de mongo

@@ -2,6 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express(); //En app se almacena las funcionalidad de express
+//const clienteRoutes = require("./routes/cliente.route");
 
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
@@ -17,6 +18,8 @@ app.get("/", (req, res) => {
   res.send("Bienvenido a la API Rest Full");
 });
 
+
+//app.use("/api/clientes", clienteRoutes);
 
 
 //rutas para la API de clientes
