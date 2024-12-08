@@ -1,3 +1,5 @@
+
+
 const Cliente = require("../models/cliente.model");
 
 const clienteCtrl = {};
@@ -188,3 +190,7 @@ clienteCtrl.loginCliente = async (req, res) => {
   }
 };
 module.exports = clienteCtrl;
+
+
+
+

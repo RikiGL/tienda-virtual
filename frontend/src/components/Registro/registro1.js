@@ -19,7 +19,7 @@ function Registro1() {
   const [modalMessage, setModalMessage] = useState(""); 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     
