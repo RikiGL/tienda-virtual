@@ -4,7 +4,6 @@ import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./registro1.css";
-//import clienteModel from "../../../../backend/src/models/cliente.model";
 
 function Registro1() {
   const [nombre, setNombre] = useState("");
@@ -17,12 +16,13 @@ function Registro1() {
     descripcion: "",
     referencia: "",
   });
-  const [modalMessage, setModalMessage] = useState(""); 
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validaciones
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexNombre.test(nombre)) {
       setModalMessage("El nombre solo debe contener letras y espacios.");
@@ -73,44 +73,50 @@ function Registro1() {
       setModalMessage("Por favor, completa todos los campos de dirección.");
       return;
     }
-    const clienteData = {
+
+    // Crear el objeto cliente
+    const cliente = {
       nombre,
       apellido,
-      email: correo, // Usamos 'correo' para el campo 'email'
+      email: correo,
       contrasenia: contraseña,
-      rol: "cliente",
+      rol: "cliente", // Asignar un rol predeterminado
       domicilio: {
         ciudad: direccion.ciudad,
         direccion: direccion.descripcion,
         referencia: direccion.referencia,
       },
-      
+      carrito: [], // Inicialmente vacío
     };
 
     try {
-      const response = await fetch("http://localhost:4000/api/clientes/registro1", {
+      // Solicitud al backend
+      const response = await fetch("http://localhost:4000/api/clientes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(clienteData), // Asegúrate de enviar todos los datos necesarios
+        body: JSON.stringify(cliente),
       });
-  
-      const result = await response.json();
+
+      const data = await response.json();
+
       if (response.ok) {
-        console.log("Cliente registrado exitosamente", result);
+        setModalMessage("¡Registro exitoso!");
+        setTimeout(() => navigate("/login"), 2000); // Redirigir al login después de 2 segundos
       } else {
-        console.error("Error en el registro", result.mensaje);
+        setModalMessage(data.mensaje || "Error al registrar el cliente");
       }
     } catch (error) {
-      console.error("Error al registrar el cliente", error);
+      console.error("Error en la solicitud:", error);
+      setModalMessage("Hubo un problema al conectar con el servidor");
     }
   };
-  
+
   const closeModal = () => {
-    setModalMessage(""); // Limpiar el mensaje del modal
+    setModalMessage("");
   };
-   
+
   return (
     <div>
       <header className="app-header">
@@ -215,7 +221,6 @@ function Registro1() {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {}
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
