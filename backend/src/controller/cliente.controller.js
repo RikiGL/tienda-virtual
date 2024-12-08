@@ -191,6 +191,8 @@ clienteCtrl.loginCliente = async (req, res) => {
   }
 };
 
+// Exportar el controlador
+module.exports = clienteCtrl;
 
 
 
