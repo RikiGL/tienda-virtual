@@ -10,8 +10,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalMessage, setModalMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Agregar estado para errores
-
+  const [errorMessage, setErrorMessage] = useState(""); 
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     return regex.test(email);
