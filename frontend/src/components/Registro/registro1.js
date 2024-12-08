@@ -4,6 +4,7 @@ import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./registro1.css";
+//import clienteModel from "../../../../backend/src/models/cliente.model";
 
 function Registro1() {
   const [nombre, setNombre] = useState("");
@@ -22,7 +23,6 @@ function Registro1() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexNombre.test(nombre)) {
       setModalMessage("El nombre solo debe contener letras y espacios.");
@@ -34,14 +34,12 @@ function Registro1() {
       return;
     }
 
-    
     const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     if (!regexCorreo.test(correo)) {
       setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
 
-    
     const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regexContraseña.test(contraseña)) {
       setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
@@ -53,42 +51,66 @@ function Registro1() {
       return;
     }
 
-    
     const regexCiudad = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexCiudad.test(direccion.ciudad)) {
       setModalMessage("La ciudad solo debe contener letras y espacios.");
       return;
     }
 
-    
     const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
     if (!regexDescripcion.test(direccion.descripcion)) {
       setModalMessage("La descripción de la dirección solo puede contener letras, números y el símbolo '-'");
       return;
     }
 
-    
     const regexReferencia = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexReferencia.test(direccion.referencia)) {
       setModalMessage("La referencia solo debe contener letras y espacios.");
       return;
     }
 
-    
     if (!direccion.descripcion || !direccion.referencia) {
       setModalMessage("Por favor, completa todos los campos de dirección.");
       return;
     }
+    const clienteData = {
+      nombre,
+      apellido,
+      email: correo, // Usamos 'correo' para el campo 'email'
+      contrasenia: contraseña,
+      rol: "cliente",
+      domicilio: {
+        ciudad: direccion.ciudad,
+        direccion: direccion.descripcion,
+        referencia: direccion.referencia,
+      },
+      
+    };
 
-    
-    setModalMessage("¡Registro exitoso!");
-    setTimeout(() => navigate("/login"), 2000); 
+    try {
+      const response = await fetch("http://localhost:4000/api/clientes/registro1", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(clienteData), // Asegúrate de enviar todos los datos necesarios
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        console.log("Cliente registrado exitosamente", result);
+      } else {
+        console.error("Error en el registro", result.mensaje);
+      }
+    } catch (error) {
+      console.error("Error al registrar el cliente", error);
+    }
   };
-
+  
   const closeModal = () => {
-    setModalMessage(""); 
-  }
-
+    setModalMessage(""); // Limpiar el mensaje del modal
+  };
+   
   return (
     <div>
       <header className="app-header">
