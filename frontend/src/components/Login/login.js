@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from '../imagenes/asdlogo.png';
-import google from '../imagenes/googleI-.png';
+
 import Modal from "../Modal/modal"; 
 import "./login.css";
 
@@ -123,30 +123,7 @@ function Login() {
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-            <div className="igoogle">
-
-
-        
-            <p>Inicia sesión con:</p>
-            </div>
-                      <div className="iniciarGoogle">
-
-            <button
-                type="button"
-                onClick={() => navigate("/google")}
-                className="google-link"
->
-            <img 
-                  src={google}
-                  alt="Logo de Google" 
-                  className="google" 
-            />Google
-           </button>
-
-
-
-
-            </div>
+           
             <div className="register-container">
               <span className="register-text">¿No tienes una cuenta?</span>{" "}
               <button

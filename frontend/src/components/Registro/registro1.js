@@ -4,6 +4,7 @@ import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./registro1.css";
+import google from '../imagenes/googleI-.png';
 
 function Registro1() {
   const [nombre, setNombre] = useState("");
@@ -213,6 +214,33 @@ function Registro1() {
             <button type="submit" className="registro-button">
               Registrarse
             </button>
+
+            <div className="igoogle">
+
+
+        
+            <p>Inicia sesión con:</p>
+            </div>
+                      <div className="iniciarGoogle">
+
+            <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="google-link"
+>
+            <img 
+                  src={google}
+                  alt="Logo de Google" 
+                  className="google" 
+            />Google
+           </button>
+
+
+
+
+            </div>
+
+
           </form>
         </div>
       </div>
