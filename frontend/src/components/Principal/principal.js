@@ -80,7 +80,7 @@ const Principal = () => {
   const handleAddToCart = (product) => {
     if (product.inventario > 0) {
       const updatedProducts = productsState.map((p) =>
-        p.id === product.id
+        p._id === product._id
           ? {
               ...p,
               inventario: p.inventario - 1,
@@ -95,7 +95,7 @@ const Principal = () => {
   const handleRemoveFromCart = (product) => {
     if (product.quantity > 0) {
       const updatedProducts = productsState.map((p) =>
-        p.id === product.id
+        p._id === product._id
           ? { ...p, inventario: p.inventario + 1, quantity: p.quantity - 1 }
           : p
       );
