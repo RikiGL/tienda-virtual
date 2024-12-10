@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from '../imagenes/asdlogo.png';
-import google from '../imagenes/googleI-.png';
 import Modal from "../Modal/modal"; 
-import "./login.css";
+import "./google.css";
+import google from '../imagenes/googleI-.png';
 
-function Login() {
+function Google() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +14,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const validateEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
+    const regex = /^[a-zA-Z0-9._%+-]+@(gmail)\.com$/;
     return regex.test(email);
   };
 
@@ -77,12 +77,13 @@ function Login() {
         <button
           className="back-button"
           title="Volver"
-          onClick={() => navigate("/principal")}
+          onClick={() => navigate("/login")}
         >
           ← Volver
         </button>
         <div className="login-box">
           <h2 className="login-title">Login</h2>
+          <img src = {google} alt="Logo Google" className="Google"/>
           <form onSubmit={handleLogin}>
             <div className="input-group">
               <label htmlFor="email" className="input-label">
@@ -111,53 +112,11 @@ function Login() {
               />
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <div className="forgot-password">
-              <button
-                type="button"
-                onClick={() => navigate("/cambio")}
-                className="forgot-password-link"
-              >
-                ¿Olvidaste tu contraseña?
-              </button>
-            </div>
+         
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-            <div className="igoogle">
-
-
-        
-            <p>Inicia sesión con:</p>
-            </div>
-                      <div className="iniciarGoogle">
-
-            <button
-                type="button"
-                onClick={() => navigate("/google")}
-                className="google-link"
->
-            <img 
-                  src={google}
-                  alt="Logo de Google" 
-                  className="google" 
-            />Google
-           </button>
-
-
-
-
-            </div>
-            <div className="register-container">
-              <span className="register-text">¿No tienes una cuenta?</span>{" "}
-              <button
-                type="button"
-                onClick={() => navigate("/registro1")}
-                className="register-link"
-              >
-                Regístrate
-              </button>
-              
-            </div>
+          
           </form>
         </div>
       </div>
@@ -172,4 +131,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Google;
