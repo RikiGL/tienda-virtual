@@ -184,8 +184,14 @@ clienteCtrl.loginCliente = async (req, res) => {
       return res.status(401).json({ mensaje: "Contraseña incorrecta" });
     }
 
-    // Puedes generar un token aquí si estás usando autenticación JWT
-    res.status(200).json({ mensaje: "Inicio de sesión exitoso", cliente });
+    res.status(200).json({ 
+      mensaje: "Inicio de sesión exitoso", 
+      usuario: { 
+        nombre: cliente.nombre 
+      } 
+    });
+    
+    
   } catch (error) {
     res.status(500).json({ mensaje: "Error en el servidor", error: error.message });
   }

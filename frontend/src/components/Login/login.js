@@ -48,9 +48,10 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // Guarda el nombre del usuario en el almacenamiento local o en un estado global
+        localStorage.setItem("usuarioNombre", data.usuario.nombre);
         navigate("/principal");
-      } else {
+      }  else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
       }
