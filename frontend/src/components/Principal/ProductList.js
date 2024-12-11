@@ -23,10 +23,10 @@ Object.keys(groupedProducts).forEach((category) => {
           <div className="products">
             {groupedProducts[category].map((product) => (
               <div
-                key={product.id}
+                key={product._id}
                 className={`product-card ${product.inventario === 0 ? 'out-of-stock' : ''}`}
               >
-                <img src={`./img/${product.imagen}`} alt={product.nombre} />
+                <img src={`./img/${product.imagen_url}`} alt={product.nombre} />
                 <div className="product-info">
                   <h4>{product.nombre}</h4>
                   <p>{product.descripcion}</p>

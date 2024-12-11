@@ -18,9 +18,9 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
         <p>No hay productos en el carrito.</p>
       ) : (
         validProducts.map((product) => (
-          <div key={product.id} className="cart-item">
+          <div key={product._id} className="cart-item">
             <img 
-              src={`./img/${product.imagen}`} 
+              src={`./img/${product.imagen_url}`} 
               alt={product.nombre} 
               className="cart-item-image" 
             />
