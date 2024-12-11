@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Importar useNavigate
 import ProductList from "./ProductList"; // Importa el componente ProductList
 import SearchBar from "./SearchBar"; // Importa el componente SearchBar
 import Cart from "./Cart"; // Importa el componente Carrito
-import logo from '../imagenes/asdlogo.png';
+import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
 
 const Principal = () => {
@@ -16,6 +16,7 @@ const Principal = () => {
   const [isLoading, setIsLoading] = useState(true); // Estado para indicar carga
   const [error, setError] = useState(null); // Estado para errores
   const navigate = useNavigate();
+  const [usuarioNombre, setUsuarioNombre] = useState("");
 
   const categories = [
     "Todas",
@@ -27,6 +28,8 @@ const Principal = () => {
     "Carnes-Embutidos",
     "Abastos",
   ];
+
+  const [showMenu, setShowMenu] = useState(false);
 
   // Hook para cargar productos desde el backend
   useEffect(() => {
@@ -52,6 +55,13 @@ const Principal = () => {
 
     fetchProducts();
   }, []); // Este efecto solo se ejecuta al montar el componente
+
+  useEffect(() => {
+    const nombre = localStorage.getItem("usuarioNombre");
+    if (nombre) {
+      setUsuarioNombre(nombre);
+    }
+  }, []);
 
   // Filtrar productos según la búsqueda y categoría seleccionada
   const filterProducts = useCallback(() => {
@@ -103,6 +113,25 @@ const Principal = () => {
     }
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".user-menu")) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, []);
+
+  const handleClearCart = () => {
+    const clearedProducts = productsState.map((product) => ({
+      ...product,
+      quantity: 0, // Restablece la cantidad a 0
+      inventario: product.inventario + product.quantity, // Devuelve los productos al inventario
+    }));
+    setProducts(clearedProducts); // Actualiza el estado de los productos
+  };
+
   return (
     <div className="app-container">
       <header className="app-header">
@@ -113,9 +142,34 @@ const Principal = () => {
 
         <SearchBar onSearch={handleSearch} />
         {/* Botón de Login */}
-        <button className="header-button" onClick={() => navigate("/login")}>
-          Iniciar Sesión
-        </button>
+        {usuarioNombre ? (
+          <div className="user-menu">
+            <span
+              className="header-button user-name"
+              onClick={() => setShowMenu((prev) => !prev)}
+            >
+              ¡Hola, {usuarioNombre}!
+            </span>
+            {showMenu && (
+              <div className="dropdown-menu">
+                <button
+                  className="dropdown-item"
+                  onClick={() => {
+                    localStorage.removeItem("usuarioNombre");
+                    setUsuarioNombre("");
+                    setShowMenu(false);
+                  }}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <button className="header-button" onClick={() => navigate("/login")}>
+            Iniciar Sesión
+          </button>
+        )}
 
         {/* Botón para abrir/cerrar el carrito */}
         {!cartVisible && (
@@ -124,7 +178,7 @@ const Principal = () => {
             onClick={() => setCartVisible(!cartVisible)}
             aria-label="Ver Carrito"
           >
-            <FaShoppingCart size={30} /> {/* Icono de carrito */}
+            <FaShoppingCart size={30} />
           </button>
         )}
       </header>
@@ -162,6 +216,7 @@ const Principal = () => {
           products={productsState.filter((product) => product.quantity > 0)}
           onAddToCart={handleAddToCart}
           onRemoveFromCart={handleRemoveFromCart}
+          onClearCart={handleClearCart}
           onClose={() => setCartVisible(false)} // Función para cerrar el carrito
         />
       )}

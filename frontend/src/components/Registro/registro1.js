@@ -4,6 +4,7 @@ import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./registro1.css";
+import google from '../imagenes/googleI-.png';
 
 function Registro1() {
   const [nombre, setNombre] = useState("");
@@ -21,74 +22,75 @@ function Registro1() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Validaciones
-    const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$/; 
     if (!regexNombre.test(nombre)) {
-      setModalMessage("El nombre solo debe contener letras y espacios.");
+      setModalMessage("El nombre debe ser un solo nombre sin espacios ni caracteres especiales.");
       return;
     }
-
-    if (!regexNombre.test(apellido)) {
-      setModalMessage("El apellido solo debe contener letras y espacios.");
+  
+    const regexApellido = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$/; 
+    if (!regexApellido.test(apellido)) {
+      setModalMessage("El apellido debe ser un solo apellido sin espacios ni caracteres especiales.");
       return;
     }
-
+  
     const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     if (!regexCorreo.test(correo)) {
       setModalMessage("Por favor, ingresa un correo válido.");
       return;
     }
-
+  
     const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regexContraseña.test(contraseña)) {
       setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
       return;
     }
-
+  
     if (contraseña !== confirmarContraseña) {
       setModalMessage("Las contraseñas no coinciden.");
       return;
     }
-
+  
     const regexCiudad = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
     if (!regexCiudad.test(direccion.ciudad)) {
       setModalMessage("La ciudad solo debe contener letras y espacios.");
       return;
     }
-
+  
     const regexDescripcion = /^[a-zA-Z0-9\s-]+$/;
     if (!regexDescripcion.test(direccion.descripcion)) {
       setModalMessage("La descripción de la dirección solo puede contener letras, números y el símbolo '-'");
       return;
     }
-
-    const regexReferencia = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-    if (!regexReferencia.test(direccion.referencia)) {
-      setModalMessage("La referencia solo debe contener letras y espacios.");
+  
+    if (!direccion.descripcion) {
+      setModalMessage("La descripción de la dirección es obligatoria.");
       return;
     }
-
-    if (!direccion.descripcion || !direccion.referencia) {
-      setModalMessage("Por favor, completa todos los campos de dirección.");
-      return;
-    }
-
-    // Crear el objeto cliente
+  
+    const capitalize = (text) =>
+      text
+        .toLowerCase()
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+  
+    // Capitalizar Nombre, Apellido y Dirección
     const cliente = {
-      nombre,
-      apellido,
+      nombre: capitalize(nombre),
+      apellido: capitalize(apellido),
       email: correo,
       contrasenia: contraseña,
-      rol: "cliente", // Asignar un rol predeterminado
+      rol: "cliente", 
       domicilio: {
-        ciudad: direccion.ciudad,
-        direccion: direccion.descripcion,
-        referencia: direccion.referencia,
+        ciudad: capitalize(direccion.ciudad),
+        direccion: capitalize(direccion.descripcion),
+        referencia: direccion.referencia ? capitalize(direccion.referencia) : "", 
       },
-      carrito: [], // Inicialmente vacío
+      carrito: [], 
     };
-
     try {
       // Solicitud al backend
       const response = await fetch("http://localhost:4000/api/clientes", {
@@ -98,12 +100,12 @@ function Registro1() {
         },
         body: JSON.stringify(cliente),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setModalMessage("¡Registro exitoso!");
-        setTimeout(() => navigate("/login"), 2000); // Redirigir al login después de 2 segundos
+        setTimeout(() => navigate("/login"), 2000);
       } else {
         setModalMessage(data.mensaje || "Error al registrar el cliente");
       }
@@ -112,6 +114,7 @@ function Registro1() {
       setModalMessage("Hubo un problema al conectar con el servidor");
     }
   };
+  
 
   const closeModal = () => {
     setModalMessage("");
@@ -213,6 +216,33 @@ function Registro1() {
             <button type="submit" className="registro-button">
               Registrarse
             </button>
+
+            <div className="igoogle">
+
+
+        
+            <p>Inicia sesión con:</p>
+            </div>
+                      <div className="iniciarGoogle">
+
+            <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="google-link"
+>
+            <img 
+                  src={google}
+                  alt="Logo de Google" 
+                  className="google" 
+            />Google
+           </button>
+
+
+
+
+            </div>
+
+
           </form>
         </div>
       </div>

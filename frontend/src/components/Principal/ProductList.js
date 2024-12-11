@@ -19,7 +19,7 @@ Object.keys(groupedProducts).forEach((category) => {
       {Object.keys(groupedProducts).map((category) => (
         <div key={category} className="category-section">
           <h3>{category}</h3>
-          {/* Contenedor para productos en fila */}
+     
           <div className="products">
             {groupedProducts[category].map((product) => (
               <div

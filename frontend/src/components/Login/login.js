@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from '../imagenes/asdlogo.png';
-import google from '../imagenes/googleI-.png';
+
 import Modal from "../Modal/modal"; 
 import "./login.css";
 
@@ -48,9 +48,10 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // Guarda el nombre del usuario en el almacenamiento local o en un estado global
+        localStorage.setItem("usuarioNombre", data.usuario.nombre);
         navigate("/principal");
-      } else {
+      }  else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
       }
@@ -123,30 +124,7 @@ function Login() {
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-            <div className="igoogle">
-
-
-        
-            <p>Inicia sesión con:</p>
-            </div>
-                      <div className="iniciarGoogle">
-
-            <button
-                type="button"
-                onClick={() => navigate("/google")}
-                className="google-link"
->
-            <img 
-                  src={google}
-                  alt="Logo de Google" 
-                  className="google" 
-            />Google
-           </button>
-
-
-
-
-            </div>
+           
             <div className="register-container">
               <span className="register-text">¿No tienes una cuenta?</span>{" "}
               <button
