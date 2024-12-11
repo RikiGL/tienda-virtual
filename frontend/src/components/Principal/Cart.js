@@ -26,12 +26,9 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
     handleCloseModal(); // Cierra el modal después de seleccionar una opción
 
     // Aquí podrías realizar alguna acción según la opción seleccionada
-    if (option === 'tarjeta') {
-      // Redirigir a la página de pago con tarjeta
-    } else if (option === 'paypal') {
+    if (option === 'paypal') {
       // Redirigir a la página de pago con PayPal
-    } else if (option === 'efectivo') {
-      // Mostrar instrucciones para pagar en efectivo
+   
     }
   };
 
