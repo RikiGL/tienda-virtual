@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Pago from './Pago';
 
 const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [paymentOption, setPaymentOption] = useState(null);
   // Aseguramos que products es un array
   const validProducts = Array.isArray(products) ? products : [];
 
@@ -9,6 +12,28 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
     (sum, item) => sum + item.precio * item.quantity,
     0
   );
+  const handleProceedToPayment = () => {
+    setShowModal(true); // Muestra el modal
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false); // Cierra el modal
+  };
+
+  const handleSelectPaymentOption = (option) => {
+    setPaymentOption(option); // Guarda la opción seleccionada
+    alert(`Opción de pago seleccionada: ${option}`);
+    handleCloseModal(); // Cierra el modal después de seleccionar una opción
+
+    // Aquí podrías realizar alguna acción según la opción seleccionada
+    if (option === 'tarjeta') {
+      // Redirigir a la página de pago con tarjeta
+    } else if (option === 'paypal') {
+      // Redirigir a la página de pago con PayPal
+    } else if (option === 'efectivo') {
+      // Mostrar instrucciones para pagar en efectivo
+    }
+  };
 
   return (
     <div className="cart">
@@ -49,6 +74,19 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
         </button>
       </div>
       <h3 className="cart-total">Subtotal: ${subtotal.toFixed(2)}</h3>
+      {validProducts.length > 0 && (
+        <button className="proceed-to-payment" onClick={handleProceedToPayment}>
+          Proceder al pago
+        </button>
+      )}
+      
+      {showModal && (
+        <Pago
+          subtotal={subtotal}
+          onClose={handleCloseModal}
+          onSelectPaymentOption={handleSelectPaymentOption}
+        />
+      )}
     </div>
   );
 };
