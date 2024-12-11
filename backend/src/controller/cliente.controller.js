@@ -1,55 +1,97 @@
-
-
 const Cliente = require("../models/cliente.model");
+const bcrypt = require("bcryptjs");
 
 const clienteCtrl = {};
 
 // Crear un nuevo cliente
 clienteCtrl.crearCliente = async (req, res) => {
-  // Desestructuración de los datos recibidos en el cuerpo de la solicitud
-  const { nombre, apellido, email, contrasenia, rol, domicilio, carrito} =
+  const { nombre, apellido, email, contrasenia, rol, domicilio, carrito } =
     req.body;
 
-  // Validación de campos obligatorios
-  if (
-    !nombre ||
-    !apellido ||
-    !email ||
-    !contrasenia ||
-    !rol ||
-    !domicilio /* || !carrito*/
-  ) {
+  if (!nombre || !apellido || !email || !contrasenia || !rol || !domicilio) {
     return res
       .status(400)
       .json({ mensaje: "Todos los campos son obligatorios" });
   }
 
-  // Crear el nuevo cliente
-  const nuevoCliente = new Cliente({
-    nombre,
-    apellido,
-    email,
-    contrasenia,
-    rol,
-    domicilio: {
-      ciudad: domicilio.ciudad || "Ciudad",
-      direccion: domicilio.direccion || "Dirección",
-      referencia: domicilio.referencia || "Referencia"
-    },    
-    carrito,
-  });
-
   try {
-    // Guardar el nuevo cliente en la base de datos
+    // Verificar si el correo ya existe
+    const clienteExistente = await Cliente.findOne({ email });
+    if (clienteExistente) {
+      return res
+        .status(400)
+        .json({ mensaje: "El correo ya está registrado" });
+    }
+
+    // Encriptar la contraseña
+    const hashedPassword = await bcrypt.hash(contrasenia, 10);
+
+    // Crear el nuevo cliente
+    const nuevoCliente = new Cliente({
+      nombre,
+      apellido,
+      email,
+      contrasenia: hashedPassword, // Guardar la contraseña encriptada
+      rol,
+      domicilio: {
+        ciudad: domicilio.ciudad || "Ciudad",
+        direccion: domicilio.direccion || "Dirección",
+        referencia: domicilio.referencia || "Referencia",
+      },
+      carrito,
+    });
+
+    // Guardar el cliente en la base de datos
     const clienteGuardado = await nuevoCliente.save();
-    res
-      .status(201)
-      .json({ mensaje: "Cliente creado exitosamente", cliente: clienteGuardado });
+    res.status(201).json({
+      mensaje: "Cliente creado exitosamente",
+      cliente: clienteGuardado,
+    });
   } catch (error) {
-    // Manejo de errores (por ejemplo, si el correo ya existe)
     res
       .status(500)
       .json({ mensaje: "Error al crear el cliente", error: error.message });
+  }
+};
+
+// Inicio de sesión del cliente
+clienteCtrl.loginCliente = async (req, res) => {
+  const { email, contrasenia } = req.body;
+
+  if (!email || !contrasenia) {
+    return res.status(400).json({
+      mensaje: "Correo y contraseña son obligatorios",
+    });
+  }
+
+  try {
+    // Buscar cliente por correo
+    const cliente = await Cliente.findOne({ email });
+
+    if (!cliente) {
+      return res.status(404).json({
+        mensaje: "El correo no está registrado",
+      });
+    }
+
+    // Verificar la contraseña
+    const isMatch = await bcrypt.compare(contrasenia, cliente.contrasenia);
+    if (!isMatch) {
+      return res.status(401).json({
+        mensaje: "Contraseña incorrecta",
+      });
+    }
+
+    // Aquí puedes generar un token JWT si es necesario
+    res.status(200).json({
+      mensaje: "Inicio de sesión exitoso",
+      cliente,
+    });
+  } catch (error) {
+    res.status(500).json({
+      mensaje: "Error en el servidor",
+      error: error.message,
+    });
   }
 };
 
@@ -59,9 +101,10 @@ clienteCtrl.obtenerClientes = async (req, res) => {
     const clientes = await Cliente.find();
     res.status(200).json(clientes);
   } catch (error) {
-    res
-      .status(500)
-      .json({ mensaje: "Error al obtener los clientes", error: error.message });
+    res.status(500).json({
+      mensaje: "Error al obtener los clientes",
+      error: error.message,
+    });
   }
 };
 
@@ -70,13 +113,16 @@ clienteCtrl.obtenerClientePorId = async (req, res) => {
   try {
     const cliente = await Cliente.findById(req.params.id);
     if (!cliente) {
-      return res.status(404).json({ mensaje: "Cliente no encontrado" });
+      return res.status(404).json({
+        mensaje: "Cliente no encontrado",
+      });
     }
     res.status(200).json(cliente);
   } catch (error) {
-    res
-      .status(500)
-      .json({ mensaje: "Error al obtener el cliente", error: error.message });
+    res.status(500).json({
+      mensaje: "Error al obtener el cliente",
+      error: error.message,
+    });
   }
 };
 
@@ -85,7 +131,6 @@ clienteCtrl.actualizarCliente = async (req, res) => {
   const { nombre, apellido, email, contrasenia, rol, domicilio, carrito } =
     req.body;
 
-  // Validar que al menos uno de los campos sea enviado
   if (
     !nombre &&
     !apellido &&
@@ -97,26 +142,30 @@ clienteCtrl.actualizarCliente = async (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ mensaje: "Se debe enviar al menos un campo para actualizar" });
+      .json({
+        mensaje: "Se debe enviar al menos un campo para actualizar",
+      });
   }
 
   try {
-    // Recuperar el cliente actual para preservar los valores existentes
     const clienteActual = await Cliente.findById(req.params.id);
     if (!clienteActual) {
-      return res.status(404).json({ mensaje: "Cliente no encontrado" });
+      return res.status(404).json({
+        mensaje: "Cliente no encontrado",
+      });
     }
 
-    // Construir el objeto de actualización dinámicamente
     const actualizacion = {};
     if (nombre) actualizacion.nombre = nombre;
     if (apellido) actualizacion.apellido = apellido;
     if (email) actualizacion.email = email;
-    if (contrasenia) actualizacion.contrasenia = contrasenia;
+    if (contrasenia) {
+      // Encriptar nueva contraseña
+      actualizacion.contrasenia = await bcrypt.hash(contrasenia, 10);
+    }
     if (rol) actualizacion.rol = rol;
     if (carrito) actualizacion.carrito = carrito;
 
-    // Manejar el campo "domicilio" dinámicamente
     if (domicilio) {
       actualizacion.domicilio = {
         ciudad: domicilio.ciudad || clienteActual.domicilio.ciudad,
@@ -125,26 +174,21 @@ clienteCtrl.actualizarCliente = async (req, res) => {
       };
     }
 
-    // Actualizar el cliente en la base de datos
     const clienteActualizado = await Cliente.findByIdAndUpdate(
       req.params.id,
       actualizacion,
       { new: true, runValidators: true }
     );
 
-    res
-      .status(200)
-      .json({
-        mensaje: "Cliente actualizado exitosamente",
-        cliente: clienteActualizado,
-      });
+    res.status(200).json({
+      mensaje: "Cliente actualizado exitosamente",
+      cliente: clienteActualizado,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        mensaje: "Error al actualizar el cliente",
-        error: error.message,
-      });
+    res.status(500).json({
+      mensaje: "Error al actualizar el cliente",
+      error: error.message,
+    });
   }
 };
 
@@ -154,47 +198,21 @@ clienteCtrl.eliminarCliente = async (req, res) => {
     const clienteEliminado = await Cliente.findByIdAndDelete(req.params.id);
 
     if (!clienteEliminado) {
-      return res.status(404).json({ mensaje: "Cliente no encontrado" });
+      return res.status(404).json({
+        mensaje: "Cliente no encontrado",
+      });
     }
 
-    res.status(200).json({ mensaje: "Cliente eliminado exitosamente" });
+    res.status(200).json({
+      mensaje: "Cliente eliminado exitosamente",
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ mensaje: "Error al eliminar el cliente", error: error.message });
+    res.status(500).json({
+      mensaje: "Error al eliminar el cliente",
+      error: error.message,
+    });
   }
-};
-// Controlador para el login del cliente.
-clienteCtrl.loginCliente = async (req, res) => {
-  const { email, contrasenia } = req.body;
-
-  if (!email || !contrasenia) {
-    return res.status(400).json({ mensaje: "Correo y contraseña son obligatorios" });
-  }
-
-  try {
-    const cliente = await Cliente.findOne({ email });
-
-    if (!cliente) {
-      return res.status(404).json({ mensaje: "El correo no está registrado" });
-    }
-
-
-    if (cliente.contrasenia !== contrasenia) {
-      return res.status(401).json({ mensaje: "Contraseña incorrecta" });
-    }
-
-    // Puedes generar un token aquí si estás usando autenticación JWT
-    res.status(200).json({ mensaje: "Inicio de sesión exitoso", cliente });
-  } catch (error) {
-    res.status(500).json({ mensaje: "Error en el servidor", error: error.message });
-  }
 };
 
 // Exportar el controlador
 module.exports = clienteCtrl;
-
-
-
-
-
