@@ -29,6 +29,8 @@ const Principal = () => {
     "Abastos",
   ];
 
+  const [showMenu, setShowMenu] = useState(false);
+
   // Hook para cargar productos desde el backend
   useEffect(() => {
     const fetchProducts = async () => {
