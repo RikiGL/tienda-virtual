@@ -10,9 +10,8 @@ const Pago = ({ subtotal, onClose, onSelectPaymentOption }) => {
         
         <h3>Selecciona una opción de pago:</h3>
         <div className="payment-options">
-          <button onClick={() => onSelectPaymentOption('tarjeta')}>Pagar con tarjeta</button>
           <button onClick={() => onSelectPaymentOption('paypal')}>Pagar con PayPal</button>
-          <button onClick={() => onSelectPaymentOption('efectivo')}>Pagar en efectivo</button>
+          
         </div>
         
         <button onClick={onClose} className="close-button">✖</button>
