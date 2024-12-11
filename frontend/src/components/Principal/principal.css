@@ -398,3 +398,75 @@ button:disabled, button.disabled {
 .main {
   flex: 1; /* Hace que el contenido principal se expanda para llenar el espacio */
 }
+
+
+
+
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.user-name {
+  cursor: pointer;
+  position: relative;
+  padding: 10px;
+  background-color: #f8b400; 
+  color: #fff; 
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.user-name:hover {
+  background-color: #f5a623; 
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: -20px; 
+  background-color: #ffedcc; 
+  border: 1px solid #e5a100; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
+  z-index: 1000;
+  min-width: 150px;
+  margin-right: 60px;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: left;
+  color: #555;
+  font-size: 14px;
+  font-weight: bold;
+  width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  
+}
+
+.dropdown-item:hover {
+  background-color: #f5a623; 
+  color: white; 
+}
+
+
+
+.borrarPedido .borrar{
+
+  font-size: 16px;
+  
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  padding: 8px 12px;
+}

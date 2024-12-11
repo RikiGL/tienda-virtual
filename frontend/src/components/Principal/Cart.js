@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose }) => {
+const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart }) => {
   // Aseguramos que products es un array
   const validProducts = Array.isArray(products) ? products : [];
 
@@ -28,20 +28,26 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose }) => {
               <span className="cart-item-name">{product.nombre}</span>
               <span className="cart-item-price">${(product.precio * product.quantity).toFixed(2)}</span>
               <div className="cart-controls">
-              <button onClick={() => onRemoveFromCart(product)}>-</button>
-              <span className="cart-item-quantity">{product.quantity}</span>
-              <button 
-                onClick={() => onAddToCart(product)} 
-                disabled={product.inventario === 0}
-                className={product.inventario === 0 ? 'disabled' : ''}
-              >
-                +
-              </button>
-            </div>
+                <button onClick={() => onRemoveFromCart(product)}>-</button>
+                <span className="cart-item-quantity">{product.quantity}</span>
+                <button 
+                  onClick={() => onAddToCart(product)} 
+                  disabled={product.inventario === 0}
+                  className={product.inventario === 0 ? 'disabled' : ''}
+                >
+                  +
+                </button>
+              </div>
             </div>
           </div>
         ))
       )}
+
+      <div className="borrarPedido">
+        <button className="borrar" onClick={onClearCart}>
+          Vaciar carrito
+        </button>
+      </div>
       <h3 className="cart-total">Subtotal: ${subtotal.toFixed(2)}</h3>
     </div>
   );

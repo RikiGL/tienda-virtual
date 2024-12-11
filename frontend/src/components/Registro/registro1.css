@@ -6,10 +6,12 @@
   background-size: cover;
   background-position: center;
   font-family: 'Roboto', sans-serif;
+  padding: 20px;
 }
 
 .registro-box {
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   padding: 20px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
@@ -156,4 +158,43 @@
 
 .app-footer p {
   margin: 5px 0;
+}
+
+
+.google-link {
+  margin-left: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  padding: 10px 20px;
+  border: 1px solid #ddd; 
+  border-radius: 10px; 
+  background-color: #fff; 
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #000; 
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.google-link:hover {
+  background-color: #f5f5f5; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.google-link img {
+  width: 20px; 
+  height: 20px;
+}
+
+.igoogle{
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  display: block;
+  font-size: 14px;
+  color: #555;
+
 }
