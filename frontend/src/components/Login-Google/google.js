@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from '../imagenes/asdlogo.png';
-
 import Modal from "../Modal/modal"; 
-import "./login.css";
+import "./google.css";
+import google from '../imagenes/googleI-.png';
 
-function Login() {
+function Google() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +14,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const validateEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
+    const regex = /^[a-zA-Z0-9._%+-]+@(gmail)\.com$/;
     return regex.test(email);
   };
 
@@ -48,10 +48,9 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        // Guarda el nombre del usuario en el almacenamiento local o en un estado global
-        localStorage.setItem("usuarioNombre", data.usuario.nombre);
+        console.log(data);
         navigate("/principal");
-      }  else {
+      } else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
       }
@@ -78,12 +77,13 @@ function Login() {
         <button
           className="back-button"
           title="Volver"
-          onClick={() => navigate("/principal")}
+          onClick={() => navigate("/login")}
         >
           ← Volver
         </button>
         <div className="login-box">
           <h2 className="login-title">Login</h2>
+          <img src = {google} alt="Logo Google" className="Google"/>
           <form onSubmit={handleLogin}>
             <div className="input-group">
               <label htmlFor="email" className="input-label">
@@ -112,30 +112,11 @@ function Login() {
               />
             </div>
             {errorMessage && <p className="error-message">{errorMessage}</p>}
-            <div className="forgot-password">
-              <button
-                type="button"
-                onClick={() => navigate("/cambio")}
-                className="forgot-password-link"
-              >
-                ¿Olvidaste tu contraseña?
-              </button>
-            </div>
+         
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-           
-            <div className="register-container">
-              <span className="register-text">¿No tienes una cuenta?</span>{" "}
-              <button
-                type="button"
-                onClick={() => navigate("/registro1")}
-                className="register-link"
-              >
-                Regístrate
-              </button>
-              
-            </div>
+          
           </form>
         </div>
       </div>
@@ -150,4 +131,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Google;

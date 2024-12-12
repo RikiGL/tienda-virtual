@@ -19,7 +19,8 @@ function App() {
        <Route path="/principal" element={<Principal />}/>
        <Route path="/cambio2" element={<CambioCodigo />}/>
        <Route path="/cambio3" element={<CambioContrasena3 />}/>
-      </Routes>
+       
+             </Routes>
     </Router>
   );
 }
