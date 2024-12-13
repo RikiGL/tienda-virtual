@@ -5,6 +5,7 @@ import logo from '../imagenes/asdlogo.png';
 
 import Modal from "../Modal/modal"; 
 import "./login.css";
+import google from '../imagenes/googleI-.png';
 
 function Login() {
   const navigate = useNavigate();
@@ -124,7 +125,17 @@ function Login() {
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-           
+            <button
+                type="button"
+                onClick={() => navigate("/login")}
+                className="google-l"
+>
+            <img 
+                  src={google}
+                  alt="Logo de Google" 
+                  className="googleG" 
+            />Google
+           </button>
             <div className="register-container">
               <span className="register-text">¿No tienes una cuenta?</span>{" "}
               <button

@@ -7,7 +7,7 @@ import Registro1 from "./components/Registro/registro1";
 import CambioCodigo from "./components/CambioContraseña2/cambio2";
 //import CambioContrasena from "./components/Cambio_contraseña/cambio";
 import CambioContrasena3 from "./components/CambioContraseña3/cambio3";
-
+import GoogleR from "./components/GoogleR/googler"
 function App() {
   return (
     <Router>
@@ -19,6 +19,7 @@ function App() {
        <Route path="/principal" element={<Principal />}/>
        <Route path="/cambio2" element={<CambioCodigo />}/>
        <Route path="/cambio3" element={<CambioContrasena3 />}/>
+       <Route path="/googler" element={<GoogleR />}/>
        
              </Routes>
     </Router>
