@@ -4,11 +4,15 @@ const cors = require("cors");
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
-
+const { OAuth2Client } = require("google-auth-library");
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
 //de lo contrario, usará el puerto 4000
 app.set("port", process.env.PORT || 4000);
+
+// Google OAuth
+const client = new OAuth2Client("215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com"); // Usa tu Client ID aquí
+
 
 //middlewares
 app.use(cors()); // Para hacer consultas entre servidores
@@ -33,6 +37,36 @@ app.use("/api/facturas", require("./routes/factura.route"));
 
 //rutas para la API de productos
 app.use("/api/productos", require("./routes/productos.route"));
+
+
+app.post("/api/auth/google", async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verificar el token con Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+    });
+
+    // Obtener los datos del usuario
+    const payload = ticket.getPayload();
+    console.log("Datos del usuario en el back:", payload);
+
+    // Ejemplo: Manejo de usuario en tu sistema
+    const user = {
+      email: payload.email,
+      name: payload.name,
+    };
+
+    // Aquí podrías registrar al usuario en tu base de datos si es nuevo
+
+    res.json({ success: true, user });
+  } catch (error) {
+    console.error("Error al validar el token:", error);
+    res.status(401).json({ success: false, message: "Token inválido" });
+  }
+});
 
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
