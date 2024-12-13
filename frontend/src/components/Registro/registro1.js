@@ -227,7 +227,7 @@ function Registro1() {
 
             <button
                 type="button"
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/googler")}
                 className="google-link"
 >
             <img 

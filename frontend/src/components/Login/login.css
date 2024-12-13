@@ -173,3 +173,32 @@ body {
 }
 
 
+
+.google-l {
+  margin-left: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; 
+  padding: 10px 20px;
+  border: 1px solid #ddd; 
+  border-radius: 10px; 
+  background-color: #fff; 
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #000; 
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  margin-left: 160px;
+}
+
+.google-l:hover {
+  background-color: #f5f5f5; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.google-l img {
+  width: 20px; 
+  height: 20px;
+}
