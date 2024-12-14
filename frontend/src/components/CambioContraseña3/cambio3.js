@@ -11,7 +11,6 @@ function CambioContrasena3() {
   const [modalMessage, setModalMessage] = useState(""); 
   const navigate = useNavigate();
 
-
   const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
@@ -29,7 +28,6 @@ function CambioContrasena3() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
     if (!regexContraseña.test(contraseña)) {
       setModalMessage(
         "La contraseña debe tener al menos 8 caracteres e incluir un carácter especial."
@@ -37,7 +35,6 @@ function CambioContrasena3() {
       return;
     }
 
-  
     if (contraseña !== confirmarContraseña) {
       setModalMessage("Las contraseñas no coinciden. Por favor, verifícalas.");
       return;
@@ -59,35 +56,35 @@ function CambioContrasena3() {
 
   return (
     <div
-      className="change-password-container"
+      className="cambio3-change-password-container"
       style={{ backgroundImage: `url(${fondo})` }}
     >
       {}
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+      <header className="cambio3-app-header">
+        <div className="cambio3-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="cambio3-logo-img" />
+          <div className="cambio3-name">TU DESPENSA 🛒</div>
         </div>
       </header>
 
       {}
-      <div className="back-button-container">
+      <div className="cambio3-back-button-container">
         <button
           type="button"
           onClick={handleBack}
-          className="back-button"
+          className="cambio3-back-button"
         >
           Volver
         </button>
       </div>
 
       {}
-      <main className="change-password-main">
-        <div className="change-password-box">
-          <h2 className="change-password-title">Ingrese su nueva contraseña</h2>
+      <main className="cambio3-change-password-main">
+        <div className="cambio3-change-password-box">
+          <h2 className="cambio3-change-password-title">Ingrese su nueva contraseña</h2>
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
-              <label htmlFor="contraseña" className="input-label">
+            <div className="cambio3-input-group">
+              <label htmlFor="contraseña" className="cambio3-input-label">
                 Contraseña:
               </label>
               <input
@@ -96,12 +93,12 @@ function CambioContrasena3() {
                 value={contraseña}
                 onChange={(e) => setContraseña(e.target.value)}
                 placeholder="Ingresa tu contraseña"
-                className="input-field"
+                className="cambio3-input-field"
                 required
               />
             </div>
-            <div className="input-group">
-              <label htmlFor="confirmarContraseña" className="input-label">
+            <div className="cambio3-input-group">
+              <label htmlFor="confirmarContraseña" className="cambio3-input-label">
                 Confirmar contraseña:
               </label>
               <input
@@ -110,11 +107,11 @@ function CambioContrasena3() {
                 value={confirmarContraseña}
                 onChange={(e) => setConfirmarContraseña(e.target.value)}
                 placeholder="Ingresa tu contraseña"
-                className="input-field"
+                className="cambio3-input-field"
                 required
               />
             </div>
-            <button type="submit" className="change-password-button">
+            <button type="submit" className="cambio3-change-password-button">
               Confirmar
             </button>
           </form>
@@ -122,7 +119,7 @@ function CambioContrasena3() {
       </main>
 
       {}
-      <footer className="app-footer">
+      <footer className="cambio3-app-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>

@@ -2,11 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 140px);
+  min-height: calc(100vh - 120px);
   background-size: cover;
   background-position: center;
   font-family: 'Roboto', sans-serif;
-  padding: 20px;
+  padding: 0 20px; 
+  box-sizing: border-box; 
 }
 
 .registro-box {
@@ -16,6 +17,8 @@
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  margin-top: 20px; 
+  margin-bottom: 20px; 
   position: relative;
 }
 
@@ -27,7 +30,7 @@
   font-weight: bold;
 }
 
-.back-button {
+.registro-back-button {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -41,20 +44,21 @@
   cursor: pointer;
   transition: background 0.3s ease;
   text-decoration: none;
+  margin-top: 60px;;
 }
 
-.back-button:hover {
+.registro-back-button:hover {
   background: #5a0dbf;
 }
 
-.form-grid {
+.registro-form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-bottom: 15px;
 }
 
-.form-label {
+.registro-form-label {
   margin-top: 10px;
   display: block;
   font-size: 14px;
@@ -63,7 +67,7 @@
   font-weight: bold;
 }
 
-.form-input {
+.registro-form-input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -73,17 +77,17 @@
   transition: border-color 0.3s;
 }
 
-.form-input:focus {
+.registro-form-input:focus {
   border-color: #6a11cb;
   outline: none;
   box-shadow: 0 0 4px rgba(106, 17, 203, 0.2);
 }
 
-.direccion-container {
+.registro-direccion-container {
   margin-bottom: 15px;
 }
 
-.direccion-container input {
+.registro-direccion-container input {
   margin-bottom: 10px;
 }
 
@@ -104,21 +108,14 @@
   background: #5a0dbf;
 }
 
-.mensaje {
-  margin-top: 15px;
-  font-size: 14px;
-  text-align: center;
+.registro-recaptcha-container{
+  margin-left: 40px;
+  margin-bottom: 18px;
 }
 
-.mensaje.success {
-  color: green;
-}
 
-.mensaje.error {
-  color: red;
-}
 
-.app-header {
+.registro-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,26 +125,26 @@
   height: 60px;
 }
 
-.app-header .logo {
+.registro-logo {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.logo-img {
+.registro-logo-img {
   width: 50px;
   height: auto;
   vertical-align: middle;
 }
 
-.app-header .name {
+.registro-name {
   font-family: 'Roboto', sans-serif;
   font-size: 24px;
   font-weight: bold;
   color: #0c5304;
 }
 
-.app-footer {
+.registro-footer {
   background-color: #333;
   color: white;
   text-align: center;
@@ -156,45 +153,53 @@
   width: 100%;
 }
 
-.app-footer p {
+.registro-footer p {
   margin: 5px 0;
 }
 
+.rgoogle {
+  font-family: 'Roboto', sans-serif;
+  font-weight: normal;
+  margin-bottom: 0; 
+  margin-top: 0;
+  display: inline-block; 
+  font-size: 14px; 
+  color: #555;
+}
 
-.google-link {
-  margin-left: 135px;
+.rgoogle-link-container {
+  margin-left: 160px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row; 
+  margin-top: 15px; 
+
+}
+
+.rgoogle-link {
+  margin-left: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px; 
-  padding: 10px 20px;
+  padding: 10px 20px; 
   border: 1px solid #ddd; 
   border-radius: 10px; 
   background-color: #fff; 
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 16px; 
   color: #000; 
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; 
 }
 
-.google-link:hover {
+.rgoogle-link:hover {
   background-color: #f5f5f5; 
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
 }
-
-.google-link img {
-  width: 20px; 
+.rgoogle-link img {
+  width: 20px;
   height: 20px;
 }
 
-.igoogle{
-  font-family: Arial, sans-serif;
-  font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 25px;
-  display: block;
-  font-size: 14px;
-  color: #555;
-
-}

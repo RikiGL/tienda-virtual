@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio2.css";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
 
 function CambioCodigo() {
   const [codigo, setCodigo] = useState("");
-  const [modalMessage, setModalMessage] = useState(""); 
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -22,70 +22,69 @@ function CambioCodigo() {
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate(-1);
   };
 
   const closeModal = () => {
     if (modalMessage.includes("correctamente")) {
-      navigate("/cambio3"); 
+      navigate("/cambio3");
     }
-    setModalMessage(""); 
+    setModalMessage("");
   };
 
   return (
     <div
-      className="change-code-container"
+      className="cambio2-change-code-container"
       style={{ backgroundImage: `url(${fondo})` }}
     >
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+      <header className="cambio2-app-header">
+        <div className="cambio2-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="cambio2-logo-img" />
+          <div className="cambio2-name">TU DESPENSA 🛒</div>
         </div>
       </header>
 
-      <div className="back-button-container">
+      <div className="cambio2-back-button-container">
         <button
           type="button"
           onClick={handleBack}
-          className="back-button"
+          className="cambio2-back-button"
         >
           Volver
         </button>
       </div>
 
-      <main className="change-code-main">
-        <div className="change-code-box">
-          <h2 className="change-code-title">Ingrese el código de verificación</h2>
-          <p className="verification-instruction">
+      <main className="cambio2-change-code-main">
+        <div className="cambio2-change-code-box">
+          <h2 className="cambio2-change-code-title">Ingrese el código de verificación</h2>
+          <p className="cambio2-verification-instruction">
             Ingrese el código de verificación que ha sido enviado a su correo electrónico
           </p>
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
+            <div className="cambio2-input-group">
               <input
                 type="text"
                 id="codigo"
                 value={codigo}
                 onChange={(e) => setCodigo(e.target.value)}
                 placeholder="XXXXXX"
-                className="input-field verification-code-input"
+                className="cambio2-input-field cambio2-verification-code-input"
                 maxLength={6}
                 required
               />
             </div>
-            <button type="submit" className="change-code-button">
+            <button type="submit" className="cambio2-change-code-button">
               Enviar
             </button>
           </form>
         </div>
       </main>
 
-      <footer className="app-footer">
+      <footer className="cambio2-app-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {}
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );
