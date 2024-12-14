@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
 import "./registro1.css";
 import google from '../imagenes/googleI-.png';
 
@@ -17,12 +18,18 @@ function Registro1() {
     descripcion: "",
     referencia: "",
   });
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    if (!recaptchaToken) {
+      setModalMessage("Por favor, completa el reCAPTCHA antes de registrarte.");
+      return;
+    }
+
     // Validaciones
     const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$/; 
     if (!regexNombre.test(nombre)) {
@@ -69,15 +76,15 @@ function Registro1() {
       setModalMessage("La descripción de la dirección es obligatoria.");
       return;
     }
-  
+
+    // Capitalizar Nombre, Apellido y Dirección
     const capitalize = (text) =>
       text
         .toLowerCase()
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
-  
-    // Capitalizar Nombre, Apellido y Dirección
+
     const cliente = {
       nombre: capitalize(nombre),
       apellido: capitalize(apellido),
@@ -91,8 +98,8 @@ function Registro1() {
       },
       carrito: [], 
     };
+
     try {
-      // Solicitud al backend
       const response = await fetch("http://localhost:4000/api/clientes", {
         method: "POST",
         headers: {
@@ -100,9 +107,9 @@ function Registro1() {
         },
         body: JSON.stringify(cliente),
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         setModalMessage("¡Registro exitoso!");
         setTimeout(() => navigate("/login"), 2000);
@@ -114,110 +121,119 @@ function Registro1() {
       setModalMessage("Hubo un problema al conectar con el servidor");
     }
   };
-  
 
   const closeModal = () => {
     setModalMessage("");
   };
 
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+  };
+
   return (
     <div>
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+      <header className="registro-header">
+        <div className="registro-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="registro-logo-img" />
+          <div className="registro-name">TU DESPENSA 🛒</div>
         </div>
       </header>
       <div className="registro-container" style={{ backgroundImage: `url(${fondo})` }}>
-        <button onClick={() => navigate(-1)} className="back-button" title="Volver">
+        <button onClick={() => navigate(-1)} className="registro-back-button" title="Volver">
           ← Volver
         </button>
         <div className="registro-box">
           <h2 className="registro-title">Registro</h2>
           <form onSubmit={handleSubmit}>
-            <div className="form-grid">
+            <div className="registro-form-grid">
               <div>
-                <label className="form-label">Nombre</label>
+                <label className="registro-form-label">Nombre</label>
                 <input
                   type="text"
                   value={nombre}
                   onChange={(e) => setNombre(e.target.value)}
                   placeholder="Ingresa tu nombre"
-                  className="form-input"
+                  className="registro-form-input"
                 />
               </div>
               <div>
-                <label className="form-label">Apellido</label>
+                <label className="registro-form-label">Apellido</label>
                 <input
                   type="text"
                   value={apellido}
                   onChange={(e) => setApellido(e.target.value)}
                   placeholder="Ingresa tu apellido"
-                  className="form-input"
+                  className="registro-form-input"
                 />
               </div>
             </div>
             <div>
-              <label className="form-label">Correo</label>
+              <label className="registro-form-label">Correo</label>
               <input
                 type="text"
                 value={correo}
                 onChange={(e) => setCorreo(e.target.value)}
                 placeholder="Ingresa tu correo"
-                className="form-input"
+                className="registro-form-input"
               />
             </div>
-            <div className="form-grid">
+            <div className="registro-form-grid">
               <div>
-                <label className="form-label">Contraseña</label>
+                <label className="registro-form-label">Contraseña</label>
                 <input
                   type="password"
                   value={contraseña}
                   onChange={(e) => setContraseña(e.target.value)}
                   placeholder="Crea tu contraseña"
-                  className="form-input"
+                  className="registro-form-input"
                 />
               </div>
               <div>
-                <label className="form-label">Confirmar Contraseña</label>
+                <label className="registro-form-label">Confirmar Contraseña</label>
                 <input
                   type="password"
                   value={confirmarContraseña}
                   onChange={(e) => setConfirmarContraseña(e.target.value)}
                   placeholder="Confirma tu contraseña"
-                  className="form-input"
+                  className="registro-form-input"
                 />
               </div>
             </div>
-            <div className="direccion-container">
-              <label className="form-label">Dirección</label>
+            <div className="registro-direccion-container">
+              <label className="registro-form-label">Dirección</label>
               <input
                 type="text"
                 value={direccion.ciudad}
                 onChange={(e) => setDireccion({ ...direccion, ciudad: e.target.value })}
                 placeholder="Ciudad"
-                className="form-input"
+                className="registro-form-input"
               />
               <input
                 type="text"
                 value={direccion.descripcion}
                 onChange={(e) => setDireccion({ ...direccion, descripcion: e.target.value })}
                 placeholder="Describe tu dirección"
-                className="form-input"
+                className="registro-form-input"
               />
               <input
                 type="text"
                 value={direccion.referencia}
                 onChange={(e) => setDireccion({ ...direccion, referencia: e.target.value })}
                 placeholder="Referencia"
-                className="form-input"
+                className="registro-form-input"
+              />
+            </div>
+            <div className="registro-recaptcha-container">
+              <ReCAPTCHA
+                sitekey="6Lf_BZsqAAAAADM6ft64QtrZJ-jpqaDPbrfrQh4m" 
+                onChange={handleRecaptchaChange}
               />
             </div>
             <button type="submit" className="registro-button">
               Registrarse
             </button>
 
-            <div className="igoogle">
+            <div className="rgoogle">
 
 
         
@@ -228,12 +244,12 @@ function Registro1() {
             <button
                 type="button"
                 onClick={() => navigate("/googler")}
-                className="google-link"
+                className="rgoogle-link"
 >
             <img 
                   src={google}
                   alt="Logo de Google" 
-                  className="google" 
+                  className="rgoogle" 
             />Google
            </button>
 
@@ -243,10 +259,11 @@ function Registro1() {
             </div>
 
 
+
           </form>
         </div>
       </div>
-      <footer className="app-footer">
+      <footer className="registro-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>

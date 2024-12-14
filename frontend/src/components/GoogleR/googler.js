@@ -1,8 +1,12 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
+import "./googler.css";
+import google from '../imagenes/googleI-.png';
 
 function GoogleR() {
   const [direccion, setDireccion] = useState({
@@ -58,52 +62,52 @@ function GoogleR() {
 
   return (
     <div>
-      <header className="headerG">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+      <header className="registroGoogle-header">
+        <div className="registroGoogle-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="registroGoogle-logo-img" />
+          <div className="registroGoogle-name">TU DESPENSA 🛒</div>
         </div>
       </header>
-      <div className="registro-container" style={{ backgroundImage: `url(${fondo})` }}>
-        <button onClick={() => navigate(-1)} className="back-button" title="Volver">
+      <div className="registroGoogle-container" style={{ backgroundImage: `url(${fondo})` }}>
+        <button onClick={() => navigate(-1)} className="registroGoogle-back-button" title="Volver">
           ← Volver
         </button>
-        <div className="registro-box">
-          <h2 className="registro-title">Registro de Dirección</h2>
+        <div className="registroGoogle-box">
+          <h2 className="registroGoogle-title">Registro de Dirección</h2>
           <form onSubmit={handleSubmit}>
-            <div className="direccion-container">
-              <label className="form-label">Ciudad</label>
+            <div className="registroGoogle-direccion-container">
+              <label className="registroGoogle-form-label">Ciudad</label>
               <input
                 type="text"
                 value={direccion.ciudad}
                 onChange={(e) => setDireccion({ ...direccion, ciudad: e.target.value })}
                 placeholder="Ciudad"
-                className="form-input"
+                className="registroGoogle-form-input"
               />
-              <label className="form-label">Descripción</label>
+              <label className="registroGoogle-form-label">Descripción</label>
               <input
                 type="text"
                 value={direccion.descripcion}
                 onChange={(e) => setDireccion({ ...direccion, descripcion: e.target.value })}
                 placeholder="Describe tu dirección"
-                className="form-input"
+                className="registroGoogle-form-input"
               />
-              <label className="form-label">Referencia</label>
+              <label className="registroGoogle-form-label">Referencia</label>
               <input
                 type="text"
                 value={direccion.referencia}
                 onChange={(e) => setDireccion({ ...direccion, referencia: e.target.value })}
                 placeholder="Referencia"
-                className="form-input"
+                className="registroGoogle-form-input"
               />
             </div>
-            <button type="submit" className="registro-button" >
+            <button type="submit" className="registroGoogle-button" >
               Guardar Dirección
             </button>
           </form>
         </div>
       </div>
-      <footer className="app-footer">
+      <footer className="registroGoogle-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>

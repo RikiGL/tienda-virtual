@@ -11,13 +11,13 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div className="search-bar">
+    <div className="principal-search-bar">
       <input
         type="text"
         placeholder="Busca tus productos favoritos 🛒"
         value={searchTerm}
         onChange={handleInputChange}
-        className="search-input"
+        className="principal-search-input"
       />
     </div>
   );

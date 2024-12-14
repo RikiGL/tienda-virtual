@@ -10,43 +10,43 @@ const ProductList = ({ products, onAddToCart }) => {
     groups[category].push(product);
     return groups;
   }, {});
-   // Ordenar productos dentro de cada categoría
-Object.keys(groupedProducts).forEach((category) => {
+
+  // Ordenar productos dentro de cada categoría
+  Object.keys(groupedProducts).forEach((category) => {
     groupedProducts[category].sort((a, b) => a.nombre.localeCompare(b.nombre));
   });
+
   return (
-    <div className="product-list">
+    <div className="principal-product-list">
       {Object.keys(groupedProducts).map((category) => (
-        <div key={category} className="category-section">
+        <div key={category} className="principal-category-section">
           <h3>{category}</h3>
-     
-          <div className="products">
+
+          <div className="principal-products">
             {groupedProducts[category].map((product) => (
               <div
                 key={product._id}
-                className={`product-card ${product.inventario === 0 ? 'out-of-stock' : ''}`}
+                className={`principal-product-card ${product.inventario === 0 ? 'principal-out-of-stock' : ''}`}
               >
                 <img src={`./img/${product.imagen_url}`} alt={product.nombre} />
-                <div className="product-info">
+                <div className="principal-product-info">
                   <h4>{product.nombre}</h4>
                   <p>{product.descripcion}</p>
+                </div>
+                <p className="principal-price">${product.precio.toFixed(2)}</p>
+                {product.inventario === 0 ? (
+                  <p className="principal-out-of-stock-message">Producto agotado</p> // Mensaje si está agotado
+                ) : (
+                  <div className="principal-controls">
+                    <button 
+                      onClick={() => onAddToCart(product)} 
+                      disabled={product.inventario === 0}
+                      className={product.inventario === 0 ? 'principal-disabled' : ''}
+                    >
+                      Agregar al Carrito
+                    </button>
                   </div>
-                  <p className="price">${product.precio.toFixed(2)}</p>
-                  {product.inventario === 0 ? (
-                    <p className="out-of-stock-message">Producto agotado</p> // Mensaje si está agotado
-                  ) : (
-                    <div className="controls">
-                      <button 
-                        onClick={() => onAddToCart(product)} 
-                        disabled={product.inventario === 0}
-                        className={product.inventario === 0 ? 'disabled' : ''}
-                      >
-                        Agregar al Carrito
-                      </button>
-                    </div>
-                    
-                  )}
-                
+                )}
               </div>
             ))}
           </div>

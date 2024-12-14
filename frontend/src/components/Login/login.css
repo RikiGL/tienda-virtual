@@ -1,11 +1,9 @@
-
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
 }
 
-
-.app-header {
+.login-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,26 +13,25 @@ body {
   height: 60px;
 }
 
-.app-header .logo {
+.login-logo {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.logo-img {
+.login-logo-img {
   width: 50px;
   height: auto;
   vertical-align: middle;
 }
 
-.app-header .name {
+.login-name {
   font-size: 24px;
   font-weight: bold;
   color: #0c5304;
 }
 
-
-.app-footer {
+.login-footer {
   background-color: #333;
   color: white;
   text-align: center;
@@ -43,42 +40,41 @@ body {
   width: 100%;
 }
 
-.app-footer p {
+.login-footer p {
   margin: 5px 0;
 }
-
 
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 140px); 
+  height: calc(100vh - 140px);
   background-size: cover;
   background-position: center;
 }
 
 .login-box {
-  width: 450px; 
-  padding: 40px; 
+  width: 450px;
+  padding: 40px;
   background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px; 
+  border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .login-title {
   margin-top: -5px;
   text-align: center;
-  margin-bottom: 30px; 
+  margin-bottom: 30px;
   font-size: 28px;
   color: #333;
   font-weight: bold;
 }
 
-.input-group {
-  margin-bottom: 25px; 
+.login-input-group {
+  margin-bottom: 25px;
 }
 
-.input-label {
+.login-input-label {
   margin-bottom: 10px;
   margin-top: 20px;
   display: block;
@@ -87,7 +83,7 @@ body {
   font-weight: bold;
 }
 
-.input-field {
+.login-input-field {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -97,18 +93,25 @@ body {
   transition: border-color 0.3s;
 }
 
-.input-field:focus {
-  border-color: #6a11cb; 
+.login-input-field:focus {
+  border-color: #6a11cb;
   outline: none;
   box-shadow: 0 0 4px rgba(106, 17, 203, 0.2);
 }
 
-.forgot-password {
-  text-align: right;
-  margin-bottom: 25px; 
+.login-error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 
-.forgot-password-link {
+.login-forgot-password {
+  text-align: right;
+  margin-bottom: 25px;
+}
+
+.login-forgot-password-link {
   color: #4e54c8;
   font-size: 14px;
   text-decoration: none;
@@ -117,8 +120,8 @@ body {
 
 .login-button {
   width: 100%;
-  padding: 14px; 
-  background: #6a11cb; 
+  padding: 14px;
+  background: #6a11cb;
   color: white;
   border: none;
   border-radius: 8px;
@@ -132,17 +135,51 @@ body {
   background: #5a0dbf;
 }
 
-.register-container {
-  text-align: center;
-  margin-top: 30px; 
+.login-google-button {
+  margin-left: 135px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  margin-left: 160px;
 }
 
-.register-text {
+.login-google-button:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-google-img {
+  width: 20px;
+  height: 20px;
+}
+
+.login-captcha-container {
+  margin-left: 90px;
+  margin-bottom: 10px;
+}
+
+.login-register-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.login-register-text {
   font-size: 14px;
   color: #555;
 }
 
-.register-link {
+.login-register-link {
   background: none;
   border: none;
   color: #4e54c8;
@@ -152,7 +189,7 @@ body {
   text-decoration: underline;
 }
 
-.back-button {
+.login-back-button {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -166,39 +203,9 @@ body {
   cursor: pointer;
   transition: background 0.3s ease;
   text-decoration: none;
+  margin-top: 60px;
 }
 
-.back-button:hover {
+.login-back-button:hover {
   background: #5a0dbf;
-}
-
-
-
-.google-l {
-  margin-left: 135px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px; 
-  padding: 10px 20px;
-  border: 1px solid #ddd; 
-  border-radius: 10px; 
-  background-color: #fff; 
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  color: #000; 
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 15px;
-  margin-left: 160px;
-}
-
-.google-l:hover {
-  background-color: #f5f5f5; 
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-}
-
-.google-l img {
-  width: 20px; 
-  height: 20px;
 }

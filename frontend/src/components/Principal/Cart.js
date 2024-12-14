@@ -28,34 +28,33 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
     // Aquí podrías realizar alguna acción según la opción seleccionada
     if (option === 'paypal') {
       // Redirigir a la página de pago con PayPal
-   
     }
   };
 
   return (
-    <div className="cart">
-      <button className="close-cart" onClick={onClose}>✖</button>
+    <div className="principal-cart">
+      <button className="principal-close-cart" onClick={onClose}>✖</button>
       <h2>Carrito</h2>
       {validProducts.length === 0 ? (
         <p>No hay productos en el carrito.</p>
       ) : (
         validProducts.map((product) => (
-          <div key={product._id} className="cart-item">
+          <div key={product._id} className="principal-cart-item">
             <img 
               src={`./img/${product.imagen_url}`} 
               alt={product.nombre} 
-              className="cart-item-image" 
+              className="principal-cart-item-image" 
             />
-            <div className="cart-item-details">
-              <span className="cart-item-name">{product.nombre}</span>
-              <span className="cart-item-price">${(product.precio * product.quantity).toFixed(2)}</span>
-              <div className="cart-controls">
+            <div className="principal-cart-item-details">
+              <span className="principal-cart-item-name">{product.nombre}</span>
+              <span className="principal-cart-item-price">${(product.precio * product.quantity).toFixed(2)}</span>
+              <div className="principal-cart-controls">
                 <button onClick={() => onRemoveFromCart(product)}>-</button>
-                <span className="cart-item-quantity">{product.quantity}</span>
+                <span className="principal-cart-item-quantity">{product.quantity}</span>
                 <button 
                   onClick={() => onAddToCart(product)} 
                   disabled={product.inventario === 0}
-                  className={product.inventario === 0 ? 'disabled' : ''}
+                  className={product.inventario === 0 ? 'principal-disabled' : ''}
                 >
                   +
                 </button>
@@ -65,14 +64,14 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
         ))
       )}
 
-      <div className="borrarPedido">
-        <button className="borrar" onClick={onClearCart}>
+      <div className="principal-borrar-pedido">
+        <button className="principal-borrar" onClick={onClearCart}>
           Vaciar carrito
         </button>
       </div>
-      <h3 className="cart-total">Subtotal: ${subtotal.toFixed(2)}</h3>
+      <h3 className="principal-cart-total">Subtotal: ${subtotal.toFixed(2)}</h3>
       {validProducts.length > 0 && (
-        <button className="proceed-to-payment" onClick={handleProceedToPayment}>
+        <button className="principal-proceed-to-payment" onClick={handleProceedToPayment}>
           Proceder al pago
         </button>
       )}

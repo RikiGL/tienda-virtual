@@ -115,7 +115,7 @@ const Principal = () => {
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (!event.target.closest(".user-menu")) {
+      if (!event.target.closest(".principal-user-menu")) {
         setShowMenu(false);
       }
     };
@@ -133,27 +133,27 @@ const Principal = () => {
   };
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+    <div className="principal-app-container">
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name">TU DESPENSA 🛒</div>
         </div>
 
         <SearchBar onSearch={handleSearch} />
         {/* Botón de Login */}
         {usuarioNombre ? (
-          <div className="user-menu">
+          <div className="principal-user-menu">
             <span
-              className="header-button user-name"
+              className="principal-header-button principal-user-name"
               onClick={() => setShowMenu((prev) => !prev)}
             >
               ¡Hola, {usuarioNombre}!
             </span>
             {showMenu && (
-              <div className="dropdown-menu">
+              <div className="principal-dropdown-menu">
                 <button
-                  className="dropdown-item"
+                  className="principal-dropdown-item"
                   onClick={() => {
                     localStorage.removeItem("usuarioNombre");
                     setUsuarioNombre("");
@@ -166,7 +166,7 @@ const Principal = () => {
             )}
           </div>
         ) : (
-          <button className="header-button" onClick={() => navigate("/login")}>
+          <button className="principal-header-button" onClick={() => navigate("/login")}>
             Iniciar Sesión
           </button>
         )}
@@ -174,7 +174,7 @@ const Principal = () => {
         {/* Botón para abrir/cerrar el carrito */}
         {!cartVisible && (
           <button
-            className="cart-button"
+            className="principal-cart-button"
             onClick={() => setCartVisible(!cartVisible)}
             aria-label="Ver Carrito"
           >
@@ -183,15 +183,15 @@ const Principal = () => {
         )}
       </header>
 
-      <div className="main-container">
-        <aside className="sidebar">
+      <div className="principal-main-container">
+        <aside className="principal-sidebar">
           <h3>Categorías</h3>
-          <ul className="category-list">
+          <ul className="principal-category-list">
             {categories.map((category) => (
               <li
                 key={category}
-                className={`category-item ${
-                  selectedCategory === category ? "active" : ""
+                className={`principal-category-item ${
+                  selectedCategory === category ? "principal-active" : ""
                 }`}
                 onClick={() => handleCategoryChange(category)}
               >
@@ -201,7 +201,7 @@ const Principal = () => {
           </ul>
         </aside>
 
-        <main className="content">
+        <main className="principal-content">
           {/* Lista de productos */}
           <ProductList
             products={filteredProducts}
@@ -220,7 +220,7 @@ const Principal = () => {
           onClose={() => setCartVisible(false)} // Función para cerrar el carrito
         />
       )}
-      <footer className="app-footer">
+      <footer className="principal-app-footer">
         <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
