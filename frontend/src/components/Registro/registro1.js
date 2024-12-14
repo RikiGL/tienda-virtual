@@ -6,6 +6,7 @@ import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal";
 import "./registro1.css";
 import google from '../imagenes/googleI-.png';
+import { GoogleLogin } from "@react-oauth/google";
 
 function Registro1() {
   const [nombre, setNombre] = useState("");
@@ -241,21 +242,39 @@ function Registro1() {
             </div>
                       <div className="iniciarGoogle">
 
-            <button
-                type="button"
-                onClick={() => navigate("/googler")}
-                className="rgoogle-link"
->
-            <img 
-                  src={google}
-                  alt="Logo de Google" 
-                  className="rgoogle" 
-            />Google
-           </button>
 
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+              console.log(credentialResponse); // Token recibido de Google
+              // Aquí puedes enviar el token a tu backend para validarlo
 
-
-
+              // Enviar el token al backend para validación
+          fetch("http://localhost:4000/api/auth/google", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              token: credentialResponse.credential, // Envía el token
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                console.log("Inicio de sesión exitoso", data.user);
+                // Manejar la lógica de sesión del usuario
+              } else {
+                console.error("Error de autenticación", data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Error al conectar con el backend:", error);
+            });
+          }}
+          onError={() => {
+              console.log("Error al iniciar sesión con Google");
+          }}
+      />
             </div>
 
 

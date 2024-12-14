@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google"; // Importa el proveedor
 import Principal from "./components/Principal/principal";
 import Login from "./components/Login/login";
 import CambioContraseña from "./components/Cambiocontraseña/cambio";
@@ -10,6 +11,7 @@ import CambioContrasena3 from "./components/CambioContraseña3/cambio3";
 import GoogleR from "./components/GoogleR/googler"
 function App() {
   return (
+    <GoogleOAuthProvider clientId="215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com">
     <Router>
       <Routes>
         <Route path="/" element={<Principal />} /> {}
@@ -23,6 +25,7 @@ function App() {
        
              </Routes>
     </Router>
+    </GoogleOAuthProvider>
   );
 }
 
