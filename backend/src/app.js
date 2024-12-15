@@ -40,6 +40,7 @@ app.use("/api/facturas", require("./routes/factura.route"));
 app.use("/api/productos", require("./routes/productos.route"));
 
 
+// Registrarse con Google
 app.post("/api/auth/google", async (req, res) => {
   const { token, domicilio } = req.body;
 
@@ -54,19 +55,6 @@ app.post("/api/auth/google", async (req, res) => {
     const payload = ticket.getPayload();
     console.log("Datos del usuario en el back:", payload);
 
-    // Ejemplo: Manejo de usuario en tu sistema
-    /*
-    const user = {
-      nombre: payload.given_name,
-      apellido: payload.family_name,
-      email: payload.email,
-      domicilio:{
-        ciudad:domicilio.ciudad,
-        direccion:domicilio.direccion,
-        referencia:domicilio.referencia
-      }
-    };
-    */
     const user = new Cliente ({
       nombre: payload.given_name,
       apellido: payload.family_name,
@@ -82,7 +70,7 @@ app.post("/api/auth/google", async (req, res) => {
     const clienteExistente = await Cliente.findOne({ email: user.email });
     if (clienteExistente) {
       console.log("Analisis de cliente existente");
-      res.status(400).json({ success: false, message: "El correo ya está registrado" });
+      res.status(302).json({user});
     }else{
       console.log("Cliente no existente");
       await user.save();
@@ -98,6 +86,50 @@ app.post("/api/auth/google", async (req, res) => {
     res.status(401).json({ success: false, message: "Token inválido" });
   }
 });
+
+
+// Login Con Google
+app.post("/api/auth/google-reg", async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verificar el token con Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+    });
+
+    // Obtener los datos del usuario
+    const payload = ticket.getPayload();
+    console.log("Datos del usuario en el back:", payload);
+
+    
+
+    const clienteExistente = await Cliente.findOne({ email: payload.email });
+    if (clienteExistente) {
+      
+      res.status(302).json({clienteExistente});
+    }else{
+      console.log("Cliente no existente");
+      
+      res.status(404).json({ success: false,  message: "Cliente no encontrado " });
+    }
+
+    console.log("Esquema de usuario: ", clienteExistente);
+    // Aquí podrías registrar al usuario en tu base de datos si es nuevo
+
+  } catch (error) {
+    console.error("Error al validar el token:", error);
+    res.status(401).json({ success: false, message: "Token inválido" });
+  }
+});
+
+
+
+
+
+
+
 
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
