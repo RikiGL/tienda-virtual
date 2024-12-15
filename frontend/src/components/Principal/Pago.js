@@ -11,8 +11,6 @@ const Pago = ({ subtotal, onClose, onSelectPaymentOption }) => {
         <div className="principal-payment-options">
           <button onClick={() => onSelectPaymentOption('paypal')}>Pagar con PayPal</button>
         </div>
-
-        <button onClick={onClose} className="principal-close-button">✖</button>
       </div>
     </div>
   );
