@@ -1,0 +1,152 @@
+
+.pagoC-page {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+
+  .pagoC-app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pagoC-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .pagoC-logo-img {
+    width: 50px;
+    height: auto;
+  }
+  
+  .pagoC-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+
+  .pagoC-app-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: 14px;
+  }
+  
+  .pagoC-app-footer p {
+    margin: 5px 0;
+  }
+  
+  .pagoC-social-icons {
+    margin-top: 10px;
+    font-size: 16px;
+    color: white;
+  }
+  
+ 
+  .pagoC-payment-confirmation {
+    margin-bottom: 100px;
+    max-width: 700px;
+    margin: -52px auto;
+    margin-bottom: 10px;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .pagoC-payment-confirmation h1 {
+    text-align: center;
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  
+  .pagoC-payment-confirmation h2 {
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  .pagoC-user-info,
+  .pagoC-product-info,
+  .pagoC-payment-method,
+  .pagoC-total-amount {
+    margin-bottom: 25px;
+  }
+  
+  .pagoC-product-info table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  
+  .pagoC-product-info th,
+  .pagoC-product-info td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .pagoC-product-info th {
+    background-color: #f5f5f5;
+    color: #333;
+  }
+  
+  
+  .pagoC-confirm-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagoC-confirm-button:hover {
+    background-color: #218838;
+  }
+ 
+.pagoC-back-button-container {
+    max-width: 700px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: flex-start; 
+  }
+  
+
+  .pagoC-back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    background: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: -660px;
+    margin-top: -18px;
+  }
+  
+  .pagoC-back-button:hover {
+    background: #e1e1e1;
+    border-color: #aaa;
+  }
+  

@@ -8,6 +8,9 @@ import CambioCodigo from "./components/CambioContraseña2/cambio2";
 //import CambioContrasena from "./components/Cambio_contraseña/cambio";
 import CambioContrasena3 from "./components/CambioContraseña3/cambio3";
 import GoogleR from "./components/GoogleR/googler"
+import Pago from "./components/Pago/pagoF"
+
+
 function App() {
   return (
     <Router>
@@ -20,7 +23,7 @@ function App() {
        <Route path="/cambio2" element={<CambioCodigo />}/>
        <Route path="/cambio3" element={<CambioContrasena3 />}/>
        <Route path="/googler" element={<GoogleR />}/>
-       
+       <Route path="/pagoF" element={<Pago />}/>
              </Routes>
     </Router>
   );
