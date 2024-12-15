@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import fondo from "../imagenes/fondo212.jpg";
@@ -15,13 +15,13 @@ function Login() {
   const [modalMessage, setModalMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [recaptchaToken, setRecaptchaToken] = useState("");
+  const recaptchaRef = useRef(null); // Crear una referencia para el reCAPTCHA
 
   const validateEmail = (email) => {
     const regex = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
     return regex.test(email);
   };
 
-  
   const handleRecaptchaChange = (token) => {
     setRecaptchaToken(token); 
   };
@@ -32,16 +32,19 @@ function Login() {
     // Validación de campos
     if (!email.trim()) {
       setModalMessage("Por favor, ingresa un correo electrónico.");
+      recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA
       return;
     }
 
     if (!password.trim()) {
       setModalMessage("Por favor, ingresa una contraseña.");
+      recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA
       return;
     }
 
     if (!validateEmail(email)) {
       setModalMessage("Por favor, ingresa un correo válido.");
+      recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA
       return;
     }
 
@@ -64,20 +67,25 @@ function Login() {
         const data = await response.json();
         // Guardar el nombre del usuario
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
+        localStorage.setItem("usuarioApellido", data.usuario.apellido);
+        localStorage.setItem("usuarioEmail", data.usuario.email);
         navigate("/principal");
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
+        recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA si hay un error
       }
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
       setErrorMessage("Error de conexión con el servidor");
+      recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA en caso de error
     }
   };
 
   const closeModal = () => {
     setModalMessage("");
   };
+
 
   const handleGoogleLogin = async (credentialResponse) => {
     try {
@@ -108,8 +116,6 @@ function Login() {
       setModalMessage("Hubo un problema al enviar los datos.");
     }
 }
-
-
 
 
   return (
@@ -179,6 +185,7 @@ function Login() {
               <ReCAPTCHA
                 sitekey="6Lf_BZsqAAAAADM6ft64QtrZJ-jpqaDPbrfrQh4m"
                 onChange={handleRecaptchaChange}
+                ref={recaptchaRef} 
               />
             </div>
 

@@ -251,10 +251,12 @@ body {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  border-radius:  25px; 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .principal-close-cart {
+    margin-top: -54px;
   align-self: flex-end;
   font-size: 30px;
   cursor: pointer;
@@ -550,7 +552,8 @@ button:disabled, button.principal-disabled {
   color: white; 
 }
 
-.principal-borrar-pedido .principal-borrar {
+.principal-borrar-pedido 
+.principal-borrar {
   font-size: 16px;
   background-color: #ff4500;
   color: white;
@@ -558,8 +561,12 @@ button:disabled, button.principal-disabled {
   border-radius: 5px;
   cursor: pointer;
   padding: 8px 12px;
+
 }
 
 
+.tituloCarrito{
+  text-align: center;
 
-
+  
+}

@@ -1,60 +1,60 @@
-import React, { useState } from 'react';
-import Pago from './Pago';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [paymentOption, setPaymentOption] = useState(null);
-  // Aseguramos que products es un array
+  const navigate = useNavigate();
+
   const validProducts = Array.isArray(products) ? products : [];
 
-  // Calculamos el subtotal solo si hay productos en el carrito
   const subtotal = validProducts.reduce(
     (sum, item) => sum + item.precio * item.quantity,
     0
   );
+
   const handleProceedToPayment = () => {
-    setShowModal(true); // Muestra el modal
-  };
 
-  const handleCloseModal = () => {
-    setShowModal(false); // Cierra el modal
-  };
-
-  const handleSelectPaymentOption = (option) => {
-    setPaymentOption(option); // Guarda la opción seleccionada
-    alert(`Opción de pago seleccionada: ${option}`);
-    handleCloseModal(); // Cierra el modal después de seleccionar una opción
-
-    // Aquí podrías realizar alguna acción según la opción seleccionada
-    if (option === 'paypal') {
-      // Redirigir a la página de pago con PayPal
-    }
+    const user = {
+      nombre: localStorage.getItem("usuarioNombre"),
+      apellido: localStorage.getItem("usuarioApellido"),
+      email: localStorage.getItem("usuarioEmail")
+    };
+  
+    navigate("/pagoF", { state: { products: validProducts, subtotal, user } }); 
   };
 
   return (
     <div className="principal-cart">
-      <button className="principal-close-cart" onClick={onClose}>✖</button>
-      <h2>Carrito</h2>
+      <h2 className="tituloCarrito">Carrito</h2>
+      <button className="principal-close-cart" onClick={onClose}>
+        ✖
+      </button>
+      
       {validProducts.length === 0 ? (
         <p>No hay productos en el carrito.</p>
       ) : (
         validProducts.map((product) => (
           <div key={product._id} className="principal-cart-item">
-            <img 
-              src={`./img/${product.imagen_url}`} 
-              alt={product.nombre} 
-              className="principal-cart-item-image" 
+            <img
+              src={`./img/${product.imagen_url}`}
+              alt={product.nombre}
+              className="principal-cart-item-image"
             />
             <div className="principal-cart-item-details">
               <span className="principal-cart-item-name">{product.nombre}</span>
-              <span className="principal-cart-item-price">${(product.precio * product.quantity).toFixed(2)}</span>
+              <span className="principal-cart-item-price">
+                ${(product.precio * product.quantity).toFixed(2)}
+              </span>
               <div className="principal-cart-controls">
                 <button onClick={() => onRemoveFromCart(product)}>-</button>
-                <span className="principal-cart-item-quantity">{product.quantity}</span>
-                <button 
-                  onClick={() => onAddToCart(product)} 
+                <span className="principal-cart-item-quantity">
+                  {product.quantity}
+                </span>
+                <button
+                  onClick={() => onAddToCart(product)}
                   disabled={product.inventario === 0}
-                  className={product.inventario === 0 ? 'principal-disabled' : ''}
+                  className={
+                    product.inventario === 0 ? "principal-disabled" : ""
+                  }
                 >
                   +
                 </button>
@@ -63,7 +63,6 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
           </div>
         ))
       )}
-
       <div className="principal-borrar-pedido">
         <button className="principal-borrar" onClick={onClearCart}>
           Vaciar carrito
@@ -71,17 +70,12 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
       </div>
       <h3 className="principal-cart-total">Subtotal: ${subtotal.toFixed(2)}</h3>
       {validProducts.length > 0 && (
-        <button className="principal-proceed-to-payment" onClick={handleProceedToPayment}>
+        <button
+          className="principal-proceed-to-payment"
+          onClick={handleProceedToPayment}
+        >
           Proceder al pago
         </button>
-      )}
-      
-      {showModal && (
-        <Pago
-          subtotal={subtotal}
-          onClose={handleCloseModal}
-          onSelectPaymentOption={handleSelectPaymentOption}
-        />
       )}
     </div>
   );
