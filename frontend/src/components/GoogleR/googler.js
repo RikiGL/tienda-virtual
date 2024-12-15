@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
@@ -9,6 +9,10 @@ import "./googler.css";
 import google from '../imagenes/googleI-.png';
 
 function GoogleR() {
+  const location = useLocation();
+  const token = location.state?.token || localStorage.getItem("googleToken");
+
+
   const [direccion, setDireccion] = useState({
     ciudad: "",
     descripcion: "",
@@ -17,7 +21,7 @@ function GoogleR() {
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const regexCiudad = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
@@ -49,12 +53,46 @@ function GoogleR() {
       direccion: capitalize(direccion.descripcion),
       referencia: direccion.referencia ? capitalize(direccion.referencia) : "",
     };
+    if (!token) {
+      setModalMessage("No se encontró el token de Google. Por favor, vuelve a iniciar sesión.");
+      return;
+    }else{
+      console.log( token)
 
-    console.log("Domicilio registrado:", domicilio);
-    setModalMessage("¡Dirección registrada exitosamente!");
-    setTimeout(() => navigate("/login"), 500);
+      console.log(typeof token)
+    }
   
+    // Combina el token con la dirección y envía al backend
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token, domicilio }),
+      });
+  
+      const data = await response.json();
+
+      if (response.ok && response.status !== 302) {
+        setModalMessage("¡Dirección y token enviados exitosamente!");
+        console.log("Respuesta del backend:", data);
+        alert("Registro Exitoso")
+        setTimeout(() => navigate("/login"), 500);
+
+      } else {
+        console.error("Error en la solicitud:", data.message);
+        setModalMessage(data.message || "Error al enviar los datos al servidor.");
+      }
+    } catch (error) {
+      console.error("Error al conectar con el servidor:", error);
+      setModalMessage("Hubo un problema al enviar los datos.");
+    }
   };
+
+    
+  
+  
 
   const closeModal = () => {
     setModalMessage("");
@@ -116,5 +154,6 @@ function GoogleR() {
     </div>
   );
 }
+
 
 export default GoogleR;
