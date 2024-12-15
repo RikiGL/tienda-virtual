@@ -24,8 +24,6 @@ const PaymentConfirmation = () => {
           <div className="pagoC-name">TU DESPENSA 🛒</div>
         </div>
       </header>
-
-
       <div className="pagoC-back-button-container">
         <button className="pagoC-back-button" onClick={handleBackClick}>
           Volver
@@ -77,12 +75,25 @@ const PaymentConfirmation = () => {
 
   
         <div className="pagoC-total-amount">
-          <h2>Total a Pagar</h2>
-          <p>${subtotal.toFixed(2)}</p>
+        <h2>Total a Pagar</h2>
+        {/* Subtotal */}
+        <div className="pagoC-row">
+          <span>Subtotal:</span>
+          <span>${subtotal.toFixed(2)}</span>
         </div>
-
+        {/* Costo de Envío */}
+        <div className="pagoC-row">
+          <span>Costo de Envío:</span>
+          <span>$1.50</span>
+        </div>
+        {/* Total */}
+        <div className="pagoC-row pagoC-final-total">
+          <span>Total:</span>
+          <span>${(subtotal + 1.5).toFixed(2)}</span>
+        </div>
+      </div>
      
-        <button className="pagoC-confirm-button">Confirmar Pago</button>
+        <button className="pagoC-confirm-button">Pagar con PayPal</button>
       </main>
 
       <footer className="pagoC-app-footer">
