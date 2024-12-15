@@ -1,6 +1,7 @@
 //Llama a los modulos que instalamos mediante npm
 const express = require("express");
 const cors = require("cors");
+const Cliente = require("./models/cliente.model");
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
@@ -54,20 +55,44 @@ app.post("/api/auth/google", async (req, res) => {
     console.log("Datos del usuario en el back:", payload);
 
     // Ejemplo: Manejo de usuario en tu sistema
+    /*
     const user = {
       nombre: payload.given_name,
       apellido: payload.family_name,
       email: payload.email,
       domicilio:{
         ciudad:domicilio.ciudad,
-        direccion:domicilio.descripcion,
+        direccion:domicilio.direccion,
         referencia:domicilio.referencia
       }
     };
+    */
+    const user = new Cliente ({
+      nombre: payload.given_name,
+      apellido: payload.family_name,
+      email: payload.email,
+      rol: "cliente",
+      domicilio:{
+        ciudad:domicilio.ciudad,
+        direccion:domicilio.direccion,
+        referencia:domicilio.referencia
+      }
+    });
 
+    const clienteExistente = await Cliente.findOne({ email: user.email });
+    if (clienteExistente) {
+      console.log("Analisis de cliente existente");
+      res.status(400).json({ success: false, message: "El correo ya está registrado" });
+    }else{
+      console.log("Cliente no existente");
+      await user.save();
+      console.log("Usuario guardado");
+      res.status(201).json({ success: true, user, message: "cliente creado exitosamente" });
+    }
+
+    console.log("Esquema de usuario: ", user);
     // Aquí podrías registrar al usuario en tu base de datos si es nuevo
 
-    res.json({ success: true, user });
   } catch (error) {
     console.error("Error al validar el token:", error);
     res.status(401).json({ success: false, message: "Token inválido" });
