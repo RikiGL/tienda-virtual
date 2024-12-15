@@ -6,6 +6,7 @@ import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./login.css";
 import google from "../imagenes/googleI-.png";
+import { GoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const navigate = useNavigate();
@@ -85,6 +86,38 @@ function Login() {
     setModalMessage("");
   };
 
+
+  const handleGoogleLogin = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential; // Accediendo al token
+      const response = await fetch("http://localhost:4000/api/auth/google-reg", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }), // Enviando solo el token al backend
+      });
+  
+      const data = await response.json();
+
+      if (response.status === 302) {
+        setModalMessage("¡Dirección y token enviados exitosamente!");
+        console.log("Respuesta del backend:", data);
+        // Guardar el nombre del usuario
+        localStorage.setItem("usuarioNombre", data.clienteExistente.nombre);
+        navigate("/principal");
+
+      } else {
+        console.error("Error en la solicitud:", data.message);
+        setModalMessage(data.message || "Error al enviar los datos al servidor.");
+      }
+    } catch (error) {
+      console.error("Error al conectar con el servidor:", error);
+      setModalMessage("Hubo un problema al enviar los datos.");
+    }
+}
+
+
   return (
     <div>
       <header className="login-header">
@@ -94,7 +127,10 @@ function Login() {
         </div>
       </header>
 
-      <div className="login-container" style={{ backgroundImage: `url(${fondo})` }}>
+      <div
+        className="login-container"
+        style={{ backgroundImage: `url(${fondo})` }}
+      >
         <button
           className="login-back-button"
           title="Volver"
@@ -131,7 +167,9 @@ function Login() {
                 className="login-input-field"
               />
             </div>
-            {errorMessage && <p className="login-error-message">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="login-error-message">{errorMessage}</p>
+            )}
 
             <div className="login-forgot-password">
               <button
@@ -142,28 +180,37 @@ function Login() {
                 ¿Olvidaste tu contraseña?
               </button>
             </div>
-           
+
             <div className="login-captcha-container">
               <ReCAPTCHA
-                sitekey="6Lf_BZsqAAAAADM6ft64QtrZJ-jpqaDPbrfrQh4m" 
+                sitekey="6Lf_BZsqAAAAADM6ft64QtrZJ-jpqaDPbrfrQh4m"
                 onChange={handleRecaptchaChange}
                 ref={recaptchaRef} 
               />
             </div>
-            
+
             <button type="submit" className="login-button">
               Iniciar Sesión
             </button>
-            <button
-              type="button"
-              onClick={() => navigate("/login")}
-              className="login-google-button"
-            >
-              <img src={google} alt="Logo de Google" className="login-google-img" />
-              Google
-            </button>
+
+            <GoogleLogin
+            buttonText="Iniciar sesión con Google"
+              onSuccess={(credentialResponse) => {
+                console.log(credentialResponse); // Token recibido de Google
+                // Aquí puedes enviar el token a tu backend para validarlo
+                const token = credentialResponse.credential;
+                handleGoogleLogin(credentialResponse)
+                 
+              }}
+              onError={() => {
+                console.log("Error al iniciar sesión con Google");
+              }}
+            />
+
             <div className="login-register-container">
-              <span className="login-register-text">¿No tienes una cuenta?</span>{" "}
+              <span className="login-register-text">
+                ¿No tienes una cuenta?
+              </span>{" "}
               <button
                 type="button"
                 onClick={() => navigate("/registro1")}
