@@ -247,33 +247,18 @@ function Registro1() {
           onSuccess={(credentialResponse) => {
               console.log(credentialResponse); // Token recibido de Google
               // Aquí puedes enviar el token a tu backend para validarlo
-
-              // Enviar el token al backend para validación
-          fetch("http://localhost:4000/api/auth/google", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              token: credentialResponse.credential, // Envía el token
-            }),
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.success) {
-                console.log("Inicio de sesión exitoso", data.user);
-                // Manejar la lógica de sesión del usuario
-              } else {
-                console.error("Error de autenticación", data.message);
-              }
-            })
-            .catch((error) => {
-              console.error("Error al conectar con el backend:", error);
-            });
-          }}
+              const token = credentialResponse.credential;
+              // Guardar temporalmente el token en el localStorage o contexto (opcional)
+              localStorage.setItem("googleToken", token);
+               // Redirigir a la ruta donde se recogerán más datos
+            navigate("/googler", { state: { token } });
+             }}
           onError={() => {
-              console.log("Error al iniciar sesión con Google");
-          }}
+          console.log("Error al iniciar sesión con Google");
+            }}
+
+
+              
       />
             </div>
 

@@ -40,7 +40,7 @@ app.use("/api/productos", require("./routes/productos.route"));
 
 
 app.post("/api/auth/google", async (req, res) => {
-  const { token } = req.body;
+  const { token, domicilio } = req.body;
 
   try {
     // Verificar el token con Google
@@ -55,8 +55,14 @@ app.post("/api/auth/google", async (req, res) => {
 
     // Ejemplo: Manejo de usuario en tu sistema
     const user = {
+      nombre: payload.given_name,
+      apellido: payload.family_name,
       email: payload.email,
-      name: payload.name,
+      domicilio:{
+        ciudad:domicilio.ciudad,
+        direccion:domicilio.descripcion,
+        referencia:domicilio.referencia
+      }
     };
 
     // Aquí podrías registrar al usuario en tu base de datos si es nuevo
