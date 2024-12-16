@@ -4,6 +4,9 @@ const cors = require("cors");
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
+//onst clienteRoutes = require("./routes/cliente.route");
+//const codigoRoutes = require("./routes/codigo.route");
+
 
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
@@ -33,7 +36,8 @@ app.use("/api/facturas", require("./routes/factura.route"));
 
 //rutas para la API de productos
 app.use("/api/productos", require("./routes/productos.route"));
-
+// Otras configuraciones...
+//app.use("/api/cambio", require("./routes/cliente.route"));
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
 module.exports = app;

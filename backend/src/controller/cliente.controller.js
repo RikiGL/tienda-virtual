@@ -214,38 +214,6 @@ clienteCtrl.eliminarCliente = async (req, res) => {
   }
 };
 
-// Controlador para el login del cliente.
-clienteCtrl.loginCliente = async (req, res) => {
-  const { email, contrasenia } = req.body;
-
-  if (!email || !contrasenia) {
-    return res.status(400).json({ mensaje: "Correo y contraseña son obligatorios" });
-  }
-
-  try {
-    const cliente = await Cliente.findOne({ email });
-
-    if (!cliente) {
-      return res.status(404).json({ mensaje: "El correo no está registrado" });
-    }
-
-
-    if (cliente.contrasenia !== contrasenia) {
-      return res.status(401).json({ mensaje: "Contraseña incorrecta" });
-    }
-
-    res.status(200).json({ 
-      mensaje: "Inicio de sesión exitoso", 
-      usuario: { 
-        nombre: cliente.nombre 
-      } 
-    });
-    
-    
-  } catch (error) {
-    res.status(500).json({ mensaje: "Error en el servidor", error: error.message });
-  }
-};
 
 // Exportar el controlador
 module.exports = clienteCtrl;
