@@ -88,34 +88,28 @@ function CambioContrasena() {
 
   return (
     <div
-      className="change-password-container"
+      className="cambio1-change-password-container"
       style={{ backgroundImage: `url(${fondo})` }}
     >
-      {/* Encabezado */}
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+      <header className="cambio1-app-header">
+        <div className="cambio1-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="cambio1-logo-img" />
+          <div className="cambio1-name">TU DESPENSA 🛒</div>
         </div>
       </header>
 
-      {/* Botón Volver */}
-      <div className="back-button-container">
-        <button type="button" onClick={handleBack} className="back-button">
+      <div className="cambio1-back-button-container">
+        <button type="button" onClick={handleBack} className="cambio1-back-button">
           Volver
         </button>
       </div>
 
-      {/* Contenido principal */}
-      <main className="change-password-main">
-        <div className="change-password-box">
-          <h2 className="change-password-title">Cambio de contraseña</h2>
-          <p className="verification-instruction">
-            Ingresa tu correo electrónico para enviarte un código de recuperación.
-          </p>
+      <main className="cambio1-change-password-main">
+        <div className="cambio1-change-password-box">
+          <h2 className="cambio1-change-password-title">Cambio de contraseña</h2>
           <form onSubmit={handleSubmit} noValidate>
-            <div className="input-group">
-              <label htmlFor="email" className="input-label">
+            <div className="cambio1-input-group">
+              <label htmlFor="email" className="cambio1-input-label">
                 Correo Electrónico:
               </label>
               <input
@@ -124,19 +118,17 @@ function CambioContrasena() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Ingresa tu correo electrónico"
-                className="input-field"
-                required
+                className="cambio1-input-field"
               />
             </div>
-            <button type="submit" className="change-password-button">
+            <button type="submit" className="cambio1-change-password-button">
               Enviar mensaje
             </button>
           </form>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="app-footer">
+      <footer className="cambio1-app-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>

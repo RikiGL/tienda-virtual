@@ -1,17 +1,19 @@
 //Llama a los modulos que instalamos mediante npm
 const express = require("express");
 const cors = require("cors");
+const Cliente = require("./models/cliente.model");
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
-//onst clienteRoutes = require("./routes/cliente.route");
-//const codigoRoutes = require("./routes/codigo.route");
-
-
+const { OAuth2Client } = require("google-auth-library");
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
 //de lo contrario, usará el puerto 4000
 app.set("port", process.env.PORT || 4000);
+
+// Google OAuth
+const client = new OAuth2Client("215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com"); // Usa tu Client ID aquí
+
 
 //middlewares
 app.use(cors()); // Para hacer consultas entre servidores
@@ -36,8 +38,99 @@ app.use("/api/facturas", require("./routes/factura.route"));
 
 //rutas para la API de productos
 app.use("/api/productos", require("./routes/productos.route"));
-// Otras configuraciones...
-//app.use("/api/cambio", require("./routes/cliente.route"));
+
+
+// Registrarse con Google
+app.post("/api/auth/google", async (req, res) => {
+  const { token, domicilio } = req.body;
+
+  try {
+    // Verificar el token con Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+    });
+
+    // Obtener los datos del usuario
+    const payload = ticket.getPayload();
+    console.log("Datos del usuario en el back:", payload);
+
+    const user = new Cliente ({
+      nombre: payload.given_name,
+      apellido: payload.family_name,
+      email: payload.email,
+      rol: "cliente",
+      domicilio:{
+        ciudad:domicilio.ciudad,
+        direccion:domicilio.direccion,
+        referencia:domicilio.referencia
+      }
+    });
+
+    const clienteExistente = await Cliente.findOne({ email: user.email });
+    if (clienteExistente) {
+      console.log("Analisis de cliente existente");
+      res.status(302).json({user});
+    }else{
+      console.log("Cliente no existente");
+      await user.save();
+      console.log("Usuario guardado");
+      res.status(201).json({ success: true, user, message: "cliente creado exitosamente" });
+    }
+
+    console.log("Esquema de usuario: ", user);
+    // Aquí podrías registrar al usuario en tu base de datos si es nuevo
+
+  } catch (error) {
+    console.error("Error al validar el token:", error);
+    res.status(401).json({ success: false, message: "Token inválido" });
+  }
+});
+
+
+// Login Con Google
+app.post("/api/auth/google-reg", async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    // Verificar el token con Google
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+    });
+
+    // Obtener los datos del usuario
+    const payload = ticket.getPayload();
+    console.log("Datos del usuario en el back:", payload);
+
+    
+
+    const clienteExistente = await Cliente.findOne({ email: payload.email });
+    if (clienteExistente) {
+      
+      res.status(302).json({clienteExistente});
+    }else{
+      console.log("Cliente no existente");
+      
+      res.status(404).json({ success: false,  message: "Cliente no encontrado " });
+    }
+
+    console.log("Esquema de usuario: ", clienteExistente);
+    // Aquí podrías registrar al usuario en tu base de datos si es nuevo
+
+  } catch (error) {
+    console.error("Error al validar el token:", error);
+    res.status(401).json({ success: false, message: "Token inválido" });
+  }
+});
+
+
+
+
+
+
+
+
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
 module.exports = app;

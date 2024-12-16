@@ -33,7 +33,7 @@ const clienteSchema = new mongoose.Schema({
   },
   contrasenia: {
     type: String, // Contrasenia cifrada del cliente
-    required: true, // Campo obligatorio
+   
   },
   rol: {
     type: String, // Rol del usuario (ej: cliente, administrador)
