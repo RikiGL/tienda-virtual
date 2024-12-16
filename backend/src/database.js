@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require('dotenv').config();
 
 // Cadena de conexión
 const URI = process.env.MONGODB_URI;

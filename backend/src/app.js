@@ -2,6 +2,8 @@
 const express = require("express");
 const cors = require("cors");
 const Cliente = require("./models/cliente.model");
+require('dotenv').config();
+const { google } = require('googleapis');
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
@@ -39,6 +41,8 @@ app.use("/api/facturas", require("./routes/factura.route"));
 //rutas para la API de productos
 app.use("/api/productos", require("./routes/productos.route"));
 
+// Usar las rutas de autenticación
+app.use("/api/auth", require("./routes/auth.route"));
 
 // Registrarse con Google
 app.post("/api/auth/google", async (req, res) => {
@@ -123,13 +127,6 @@ app.post("/api/auth/google-reg", async (req, res) => {
     res.status(401).json({ success: false, message: "Token inválido" });
   }
 });
-
-
-
-
-
-
-
 
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
