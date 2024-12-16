@@ -33,11 +33,6 @@ function CambioCodigo() {
     setModalMessage("");
   };
 
-  // Volver a la página anterior
-  const handleBack = () => {
-    navigate(-1);
-  };
-
   return (
     <div
       className="cambio2-change-code-container"
