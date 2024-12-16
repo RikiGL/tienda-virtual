@@ -12,7 +12,7 @@ function CambioContrasena3() {
   const navigate = useNavigate();
 
 
-  const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const regexContraseña = /^(?=.[a-zA-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
     const handlePopState = () => {
@@ -60,7 +60,7 @@ function CambioContrasena3() {
   return (
     <div
       className="change-password-container"
-      style={{ backgroundImage: `url(${fondo})` }}
+      style={{ backgroundImage: 'url(${fondo})' }}
     >
       {}
       <header className="app-header">

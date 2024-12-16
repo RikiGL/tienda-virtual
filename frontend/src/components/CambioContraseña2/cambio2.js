@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio2.css";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
 
 function CambioCodigo() {
-  const [codigo, setCodigo] = useState("");
-  const [modalMessage, setModalMessage] = useState(""); 
+  const [codigo, setCodigo] = useState(""); // Estado para el código ingresado
+  const [modalMessage, setModalMessage] = useState(""); // Estado para mensajes en el modal
+  const [email] = useState(localStorage.getItem("email") || ""); // Obtener el correo desde localStorage
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // Manejar la solicitud de verificación
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (codigo.length !== 6) {
@@ -18,25 +20,49 @@ function CambioCodigo() {
       return;
     }
 
-    setModalMessage(`Código ingresado correctamente: ${codigo}`);
+    try {
+      // Petición al backend usando fetch
+      const response = await fetch("http://localhost:4000/api/codigo/verify-code", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email, code: codigo }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error al verificar el código.");
+      }
+
+      // Mostrar mensaje de éxito
+      setModalMessage(data.message || "Código verificado correctamente.");
+    } catch (error) {
+      // Capturar errores y mostrar el mensaje en el modal
+      setModalMessage(error.message || "Error al verificar el código.");
+    }
   };
 
-  const handleBack = () => {
-    navigate(-1); 
-  };
-
+  // Navegación al cerrar el modal
   const closeModal = () => {
     if (modalMessage.includes("correctamente")) {
-      navigate("/cambio3"); 
+      navigate("/cambio3"); // Navegar a cambioContraseña3 si el código es correcto
     }
-    setModalMessage(""); 
+    setModalMessage("");
+  };
+
+  // Volver a la página anterior
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
     <div
       className="change-code-container"
-      style={{ backgroundImage: `url(${fondo})` }}
+      style={{ backgroundImage: 'url(${fondo})' }}
     >
+      {/* Encabezado */}
       <header className="app-header">
         <div className="logo">
           <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
@@ -44,6 +70,7 @@ function CambioCodigo() {
         </div>
       </header>
 
+      {/* Botón para volver */}
       <div className="back-button-container">
         <button
           type="button"
@@ -54,6 +81,7 @@ function CambioCodigo() {
         </button>
       </div>
 
+      {/* Contenido principal */}
       <main className="change-code-main">
         <div className="change-code-box">
           <h2 className="change-code-title">Ingrese el código de verificación</h2>
@@ -80,12 +108,13 @@ function CambioCodigo() {
         </div>
       </main>
 
+      {/* Footer */}
       <footer className="app-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {}
+      {/* Modal */}
       {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
   );

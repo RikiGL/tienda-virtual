@@ -1,10 +1,12 @@
 //Llama a los modulos que instalamos mediante npm
 const express = require("express");
 const cors = require("cors");
+require('dotenv').config();
+const { google } = require('googleapis');
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
-
+//const authRoutes = require("./routes/auth.route"); // Asegúrate de que la ruta esté correcta
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
 //de lo contrario, usará el puerto 4000
@@ -34,6 +36,8 @@ app.use("/api/facturas", require("./routes/factura.route"));
 //rutas para la API de productos
 app.use("/api/productos", require("./routes/productos.route"));
 
+// Usar las rutas de autenticación
+app.use("/api/auth", require("./routes/auth.route")); // Asegúrate de que la ruta esté correcta
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto
 module.exports = app;
