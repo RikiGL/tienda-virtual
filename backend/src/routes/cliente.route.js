@@ -20,7 +20,4 @@ router.delete("/:id", clienteCtrl.eliminarCliente);
 //Ruta del Login
 router.post("/:login", clienteCtrl.loginCliente);
 
-//Ruta para cambiar la contraseña
-router.patch("/:cambio3", clienteCtrl.cambiarContrasenia);
-
 module.exports = router;
