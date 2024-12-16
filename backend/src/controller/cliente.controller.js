@@ -85,7 +85,9 @@ clienteCtrl.loginCliente = async (req, res) => {
     // Aquí puedes generar un token JWT si es necesario
     res.status(200).json({
       mensaje: "Inicio de sesión exitoso",
-      cliente,
+      usuario: {
+        nombre: cliente.nombre,
+      },
     });
   } catch (error) {
     res.status(500).json({
