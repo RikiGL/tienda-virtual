@@ -214,14 +214,14 @@ clienteCtrl.eliminarCliente = async (req, res) => {
   }
 };
 
-// Función para actualizar la contraseña
+// Controlador para el login del cliente.
 clienteCtrl.cambiarContrasenia = async (req, res) => {
   const { email, contrasenia } = req.body;
 
-   // Log para ver los datos que se están recibiendo
-   console.log("Email recibido:", email);
-   console.log("Contraseña recibida:", contrasenia);
- 
+  // Log para ver los datos que se están recibiendo
+  console.log("Email recibido:", email);
+  console.log("Contraseña recibida:", contrasenia);
+
   if (!email || !contrasenia) {
     return res.status(400).json({ mensaje: "Correo y nueva contraseña son obligatorios" });
   }
@@ -239,7 +239,7 @@ clienteCtrl.cambiarContrasenia = async (req, res) => {
 
     // Actualizar la contraseña del cliente
     cliente.contrasenia = hashedPassword;
-    
+
     // Guardar el cliente con la nueva contraseña
     await cliente.save();
 

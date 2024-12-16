@@ -3,21 +3,19 @@ import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio.css";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal";
+import Modal from "../Modal/modal"; 
 
 function CambioContrasena() {
-  const [email, setEmail] = useState(""); // Estado para el correo electrónico
-  const [mostrarModal, setMostrarModal] = useState(false); // Estado para mostrar el modal
-  const [modalMessage, setModalMessage] = useState(""); // Estado para mensajes en el modal
+  const [email, setEmail] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false); 
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
-  // Regex para validar dominios permitidos de correo
   const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
 
-  // Manejar el comportamiento del botón "Atrás"
   useEffect(() => {
     const handlePopState = () => {
-      navigate("/login");
+      navigate("/login"); 
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -27,63 +25,34 @@ function CambioContrasena() {
     };
   }, [navigate]);
 
-  // Función para cerrar el modal
-  const handleModalClose = () => {
-    setMostrarModal(false);
-    if (modalMessage.includes("enlace de recuperación")) {
-      localStorage.setItem("email", email); // Almacenar correo para la siguiente pantalla
-      navigate("/cambio2"); // Navegar a la siguiente pantalla
-    }
-  };
-
-  // Función para el botón "Volver"
-  const handleBack = () => {
-    navigate("/login");
-  };
-
-  // Función para enviar la solicitud al backend
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validaciones del correo electrónico
     if (!email) {
       setModalMessage("Por favor, ingresa tu correo electrónico.");
-      setMostrarModal(true);
+      setMostrarModal(true); 
       return;
     }
 
     if (!regexCorreo.test(email)) {
-      setModalMessage("El correo electrónico no es válido. Usa dominios permitidos como Gmail, Hotmail, Yahoo, etc.");
-      setMostrarModal(true);
+      setModalMessage("El correo electrónico no es válido.");
+      setMostrarModal(true); 
       return;
     }
 
-    try {
-      // Petición al servidor usando fetch
-      const response = await fetch("http://localhost:4000/api/codigo/sendSecurityCode", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+    setModalMessage(`Se ha enviado un enlace de recuperación a: ${email}`);
+    setMostrarModal(true); 
+  };
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Mostrar mensaje de éxito si todo sale bien
-        setModalMessage("Se ha enviado un enlace de recuperación a tu correo.");
-        setMostrarModal(true);
-      } else {
-        // Mostrar mensaje de error si hay un problema en el servidor
-        setModalMessage(data.message || "Ocurrió un error al enviar el enlace.");
-        setMostrarModal(true);
-      }
-    } catch (error) {
-      // Capturar errores de conexión
-      setModalMessage("Error de conexión con el servidor. Inténtalo de nuevo más tarde.");
-      setMostrarModal(true);
+  const handleModalClose = () => {
+    setMostrarModal(false); 
+    if (modalMessage.includes("enlace de recuperación")) {
+      navigate("/cambio2"); 
     }
+  };
+
+  const handleBack = () => {
+    navigate("/login"); 
   };
 
   return (
@@ -133,7 +102,7 @@ function CambioContrasena() {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {/* Modal */}
+      {}
       {mostrarModal && (
         <Modal
           message={modalMessage}

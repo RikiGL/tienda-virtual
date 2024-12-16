@@ -7,4 +7,3 @@ const securityCodeSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model("SecurityCode", securityCodeSchema);
-
