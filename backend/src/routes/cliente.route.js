@@ -25,15 +25,7 @@ router.delete("/:id", clienteCtrl.eliminarCliente);
 //Ruta del Login
 router.post("/:login", clienteCtrl.loginCliente);
 
-//router.post("/:CambioContraseña2", requestPasswordReset);
-
-//router.post("/request-code", requestPasswordReset);
-
-//router.post("/verify-code", codigoController.verifyCode);
-
-router.post("/:send-code", requestPasswordReset);
-
-router.post("/:verify-code", verifyCode);
-
+//Ruta para cambiar la contraseña
+router.patch("/:cambio3", clienteCtrl.cambiarContrasenia);
 
 module.exports = router;

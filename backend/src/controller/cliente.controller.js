@@ -214,6 +214,41 @@ clienteCtrl.eliminarCliente = async (req, res) => {
   }
 };
 
+// Función para actualizar la contraseña
+clienteCtrl.cambiarContrasenia = async (req, res) => {
+  const { email, contrasenia } = req.body;
+
+   // Log para ver los datos que se están recibiendo
+   console.log("Email recibido:", email);
+   console.log("Contraseña recibida:", contrasenia);
+ 
+  if (!email || !contrasenia) {
+    return res.status(400).json({ mensaje: "Correo y nueva contraseña son obligatorios" });
+  }
+
+  try {
+    // Buscar cliente por correo
+    const cliente = await Cliente.findOne({ email });
+
+    if (!cliente) {
+      return res.status(404).json({ mensaje: "Cliente no encontrado" });
+    }
+
+    // Encriptar la nueva contraseña
+    const hashedPassword = await bcrypt.hash(contrasenia, 10);
+
+    // Actualizar la contraseña del cliente
+    cliente.contrasenia = hashedPassword;
+    
+    // Guardar el cliente con la nueva contraseña
+    await cliente.save();
+
+    res.status(200).json({ mensaje: "Contraseña actualizada exitosamente" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al actualizar la contraseña", error: error.message });
+  }
+};
 
 // Exportar el controlador
 module.exports = clienteCtrl;

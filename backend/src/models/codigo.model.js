@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 
-const CodeSchema = new mongoose.Schema({
-  email: { type: String, required: true },
-  code: { type: String, required: true },
-  expiration: { type: Date, required: true },
-});
+const securityCodeSchema = new mongoose.Schema({
+    email: { type: String, required: true },
+    code: { type: String, required: true },
+    expiration: { type: Date, required: true },
+}, { timestamps: true });
 
-module.exports = mongoose.model("SecurityCode", CodeSchema);
+module.exports = mongoose.model("SecurityCode", securityCodeSchema);
+
