@@ -1,0 +1,142 @@
+.registroGoogle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 140px);
+    background-size: cover;
+    background-position: center;
+    font-family: 'Roboto', sans-serif;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  
+  .registroGoogle-box {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    
+}
+  
+  .registroGoogle-title {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .registroGoogle-back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #6a11cb;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-decoration: none;
+    margin-top: 60px;
+  }
+  
+  .registroGoogle-back-button:hover {
+    background: #5a0dbf;
+  }
+  
+  .registroGoogle-direccion-container {
+    margin-bottom: 15px;
+  }
+  
+  .registroGoogle-form-label {
+    margin-top: 10px;
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+  }
+  
+  .registroGoogle-form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+  }
+  
+  .registroGoogle-form-input:focus {
+    border-color: #6a11cb;
+    outline: none;
+    box-shadow: 0 0 4px rgba(106, 17, 203, 0.2);
+  }
+  
+  .registroGoogle-button {
+    width: 100%;
+    padding: 10px;
+    background: #6a11cb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .registroGoogle-button:hover {
+    background: #5a0dbf;
+  }
+  
+  .registroGoogle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f1c40f;
+    color: white;
+    height: 60px;
+  }
+  
+  .registroGoogle-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .registroGoogle-logo-img {
+    width: 50px;
+    height: auto;
+    vertical-align: middle;
+  }
+  
+  .registroGoogle-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #0c5304;
+  }
+  
+  .registroGoogle-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .registroGoogle-footer p {
+    margin: 5px 0;
+  }
+  

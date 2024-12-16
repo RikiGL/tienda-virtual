@@ -1,22 +1,25 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // Importar useNavigate
-import ProductList from "./ProductList"; // Importa el componente ProductList
-import SearchBar from "./SearchBar"; // Importa el componente SearchBar
-import Cart from "./Cart"; // Importa el componente Carrito
+import { useNavigate } from "react-router-dom";
+import ProductList from "./ProductList";
+import SearchBar from "./SearchBar";
+import Cart from "./Cart";
 import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
+import Modal from "../Modal/modal"; 
 
 const Principal = () => {
   const [productsState, setProducts] = useState([]);
+  const [initialProducts, setInitialProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [searchQuery, setSearchQuery] = useState("");
-  const [cartVisible, setCartVisible] = useState(false); // Estado para la visibilidad del carrito
-  const [isLoading, setIsLoading] = useState(true); // Estado para indicar carga
-  const [error, setError] = useState(null); // Estado para errores
+  const [cartVisible, setCartVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [usuarioNombre, setUsuarioNombre] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
 
   const categories = [
     "Todas",
@@ -29,32 +32,74 @@ const Principal = () => {
     "Abastos",
   ];
 
-  const [showMenu, setShowMenu] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  
 
-  // Hook para cargar productos desde el backend
+  const saveCartToLocalStorage = (updatedProducts) => {
+    const cartItems = updatedProducts
+      .filter((product) => product.quantity > 0)
+      .map((product) => ({
+        _id: product._id,
+        nombre: product.nombre,
+        precio: product.precio,
+        quantity: product.quantity,
+      }));
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setIsLoading(true); // Mostrar indicador de carga
-        setError(null); // Limpiar errores previos
+        setIsLoading(true);
+        setError(null);
 
         const response = await fetch("http://localhost:4000/api/productos/");
         if (!response.ok) throw new Error("Error al cargar los productos");
 
         const data = await response.json();
         if (!Array.isArray(data)) throw new Error("Formato de datos inválido");
-        setProducts(data); // Actualizamos los productos
-        setFilteredProducts(data); // Inicializamos el estado filtrado
+
+        setInitialProducts(data);
+
+        const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+        const syncedProducts = data.map((product) => {
+          const cartItem = storedCart.find((item) => item._id === product._id);
+          return cartItem
+            ? {
+                ...product,
+                quantity: cartItem.quantity,
+                inventario: Math.max(0, product.inventario - cartItem.quantity),
+              }
+            : product;
+        });
+
+        setProducts(syncedProducts);
+        setFilteredProducts(syncedProducts);
       } catch (error) {
         setError(error.message);
         console.error("Error al cargar los productos:", error);
       } finally {
-        setIsLoading(false); // Ocultar indicador de carga
+        setIsLoading(false);
       }
     };
 
     fetchProducts();
-  }, []); // Este efecto solo se ejecuta al montar el componente
+  }, []);
+
+  useEffect(() => {
+    const filterProducts = () => {
+      const lowerQuery = searchQuery.toLowerCase();
+      const filtered = productsState.filter(
+        (product) =>
+          product.nombre.toLowerCase().includes(lowerQuery) &&
+          (selectedCategory === "Todas" || product.categoria === selectedCategory)
+      );
+      setFilteredProducts(filtered);
+    };
+
+    filterProducts();
+  }, [searchQuery, selectedCategory, productsState]);
 
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
@@ -62,22 +107,6 @@ const Principal = () => {
       setUsuarioNombre(nombre);
     }
   }, []);
-
-  // Filtrar productos según la búsqueda y categoría seleccionada
-  const filterProducts = useCallback(() => {
-    const lowerQuery = searchQuery.toLowerCase();
-    const filtered = productsState.filter(
-      (product) =>
-        product.nombre.toLowerCase().includes(lowerQuery) &&
-        (selectedCategory === "Todas" || product.categoria === selectedCategory)
-    );
-    setFilteredProducts(filtered);
-  }, [searchQuery, selectedCategory, productsState]);
-
-  // Efecto para actualizar los productos filtrados
-  useEffect(() => {
-    filterProducts();
-  }, [filterProducts]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -88,17 +117,23 @@ const Principal = () => {
   };
 
   const handleAddToCart = (product) => {
+    if (!usuarioNombre) {
+      setModalMessage("Primero inicia sesión para agregar al carrito los productos.");
+      setIsModalVisible(true);
+      return; // Evita que continúe si no ha iniciado sesión
+    }
     if (product.inventario > 0) {
       const updatedProducts = productsState.map((p) =>
         p._id === product._id
           ? {
               ...p,
-              inventario: p.inventario - 1,
+              inventario: Math.max(0, p.inventario - 1),
               quantity: (p.quantity || 0) + 1,
             }
           : p
       );
       setProducts(updatedProducts);
+      saveCartToLocalStorage(updatedProducts);
     }
   };
 
@@ -106,75 +141,77 @@ const Principal = () => {
     if (product.quantity > 0) {
       const updatedProducts = productsState.map((p) =>
         p._id === product._id
-          ? { ...p, inventario: p.inventario + 1, quantity: p.quantity - 1 }
+          ? {
+              ...p,
+              inventario: p.inventario + 1,
+              quantity: Math.max(0, p.quantity - 1),
+            }
           : p
       );
       setProducts(updatedProducts);
+      saveCartToLocalStorage(updatedProducts);
     }
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (!event.target.closest(".user-menu")) {
-        setShowMenu(false);
-      }
-    };
-    document.addEventListener("click", handleOutsideClick);
-    return () => document.removeEventListener("click", handleOutsideClick);
-  }, []);
-
   const handleClearCart = () => {
-    const clearedProducts = productsState.map((product) => ({
-      ...product,
-      quantity: 0, // Restablece la cantidad a 0
-      inventario: product.inventario + product.quantity, // Devuelve los productos al inventario
-    }));
-    setProducts(clearedProducts); // Actualiza el estado de los productos
+    const clearedProducts = productsState.map((product) => {
+      const initialProduct = initialProducts.find((p) => p._id === product._id);
+      return {
+        ...product,
+        quantity: 0,
+        inventario: initialProduct ? initialProduct.inventario : product.inventario,
+      };
+    });
+    setProducts(clearedProducts);
+    localStorage.removeItem("cart");
   };
 
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <div className="logo">
-          <img src={logo} alt="Tu Despensa Logo" className="logo-img" />
-          <div className="name">TU DESPENSA 🛒</div>
+    <div className="principal-app-container">
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name">TU DESPENSA 🛒</div>
         </div>
 
         <SearchBar onSearch={handleSearch} />
-        {/* Botón de Login */}
         {usuarioNombre ? (
-          <div className="user-menu">
+          <div className="principal-user-menu">
             <span
-              className="header-button user-name"
+              className="principal-header-button principal-user-name"
               onClick={() => setShowMenu((prev) => !prev)}
             >
               ¡Hola, {usuarioNombre}!
             </span>
             {showMenu && (
-              <div className="dropdown-menu">
-                <button
-                  className="dropdown-item"
-                  onClick={() => {
-                    localStorage.removeItem("usuarioNombre");
-                    setUsuarioNombre("");
-                    setShowMenu(false);
-                  }}
-                >
-                  Cerrar Sesión
-                </button>
-              </div>
-            )}
+  <div className="principal-dropdown-menu">
+    <button
+      className="principal-dropdown-item"
+      onClick={() => {
+        localStorage.removeItem("usuarioNombre");
+        setUsuarioNombre("");
+        setShowMenu(false);
+        handleClearCart(); // Limpiar el carrito al cerrar sesión
+      }}
+    >
+      Cerrar Sesión
+    </button>
+  </div>
+)}
+
           </div>
         ) : (
-          <button className="header-button" onClick={() => navigate("/login")}>
+          <button
+            className="principal-header-button"
+            onClick={() => navigate("/login")}
+          >
             Iniciar Sesión
           </button>
         )}
 
-        {/* Botón para abrir/cerrar el carrito */}
         {!cartVisible && (
           <button
-            className="cart-button"
+            className="principal-cart-button"
             onClick={() => setCartVisible(!cartVisible)}
             aria-label="Ver Carrito"
           >
@@ -183,15 +220,15 @@ const Principal = () => {
         )}
       </header>
 
-      <div className="main-container">
-        <aside className="sidebar">
+      <div className="principal-main-container">
+        <aside className="principal-sidebar">
           <h3>Categorías</h3>
-          <ul className="category-list">
+          <ul className="principal-category-list">
             {categories.map((category) => (
               <li
                 key={category}
-                className={`category-item ${
-                  selectedCategory === category ? "active" : ""
+                className={`principal-category-item ${
+                  selectedCategory === category ? "principal-active" : ""
                 }`}
                 onClick={() => handleCategoryChange(category)}
               >
@@ -201,30 +238,43 @@ const Principal = () => {
           </ul>
         </aside>
 
-        <main className="content">
-          {/* Lista de productos */}
-          <ProductList
-            products={filteredProducts}
-            onAddToCart={handleAddToCart}
-          />
+        <main className="principal-content">
+          {isLoading ? (
+            <p>Cargando productos...</p>
+          ) : error ? (
+            <p>Error: {error}</p>
+          ) : (
+            <ProductList
+              products={filteredProducts}
+              onAddToCart={handleAddToCart}
+            />
+          )}
         </main>
       </div>
 
-      {/* Renderizar el carrito si está visible */}
       {cartVisible && (
         <Cart
           products={productsState.filter((product) => product.quantity > 0)}
           onAddToCart={handleAddToCart}
           onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
-          onClose={() => setCartVisible(false)} // Función para cerrar el carrito
+          onClose={() => setCartVisible(false)}
         />
       )}
-      <footer className="app-footer">
+
+{isModalVisible && (
+        <Modal
+          message={modalMessage}
+          onClose={() => setIsModalVisible(false)}
+        />
+      )}
+
+      <footer className="principal-app-footer">
         <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
     </div>
   );
 };
+
 export default Principal;

@@ -12,6 +12,10 @@ const app = express(); //En app se almacena las funcionalidad de express
 //de lo contrario, usará el puerto 4000
 app.set("port", process.env.PORT || 4000);
 
+// Google OAuth
+const client = new OAuth2Client("215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com"); // Usa tu Client ID aquí
+
+
 //middlewares
 app.use(cors()); // Para hacer consultas entre servidores
 app.use(express.json()); // Envio de JSON cuando se hace peticiones
