@@ -10,7 +10,8 @@ function CambioCodigo() {
   const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  // Manejar la solicitud de verificación
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (codigo.length !== 6) {
