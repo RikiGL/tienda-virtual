@@ -1,40 +1,95 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio2.css";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal";
 
 function CambioCodigo() {
-  const [codigo, setCodigo] = useState("");
+  const [codigo, setCodigo] = useState(""); 
+  const [mostrarModal, setMostrarModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const [intentosRestantes, setIntentosRestantes] = useState(3); // Intentos permitidos
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e) => {
+  const email = location.state?.email || "";
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (!email) {
+      navigate("/cambio");
+    }
+  }, [email, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const codigoTrimmed = codigo.trim();
 
-    if (codigo.length !== 6) {
+    if (codigoTrimmed.length !== 6) {
       setModalMessage("El código debe contener exactamente 6 caracteres.");
+      setMostrarModal(true);
       return;
     }
 
-    setModalMessage(`Código ingresado correctamente: ${codigo}`);
-  };
+    setIsSubmitting(true);
+    setModalMessage(null); // Ocultar mensajes previos
 
-  const handleBack = () => {
-    navigate(-1);
+    try {
+      console.log("Código enviado:", codigoTrimmed);
+      console.log("Email enviado:", email);
+      
+      const response = await fetch("http://localhost:4000/api/auth/cambio2", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: codigoTrimmed }), 
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        setModalMessage("Código verificado correctamente.");
+        setMostrarModal(true);
+      } else {
+        setModalMessage(data.error || "Código incorrecto.");
+        setMostrarModal(true);
+      }
+    } catch (error) {
+      setModalMessage("Hubo un problema con el servidor.");
+      setMostrarModal(true);
+      setCodigo(""); // Reiniciar campo del código
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const closeModal = () => {
-    if (modalMessage.includes("correctamente")) {
-      navigate("/cambio3");
+    setMostrarModal(false); // Ocultar el modal
+    setCodigo(""); // Reiniciar el valor del input
+  
+    // Forzar enfoque en el input si aún existe en el DOM
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
-    setModalMessage("");
+  
+    // Navegación si el código es correcto
+    if (modalMessage.includes("correctamente")) {
+      navigate("/cambio3", { state: { email } });
+    } else if (modalMessage.includes("incorrecto")) {
+      const nuevosIntentos = intentosRestantes - 1;
+      setIntentosRestantes(nuevosIntentos);
+  
+      if (nuevosIntentos <= 0) {
+        navigate("/login");
+      }
+    }
   };
+  
 
-  // Volver a la página anterior
   const handleBack = () => {
-    navigate(-1);
+    navigate("/cambio"); 
   };
 
   return (
@@ -48,7 +103,7 @@ function CambioCodigo() {
           <div className="cambio2-name">TU DESPENSA 🛒</div>
         </div>
       </header>
-
+  
       <div className="cambio2-back-button-container">
         <button
           type="button"
@@ -58,7 +113,7 @@ function CambioCodigo() {
           Volver
         </button>
       </div>
-
+  
       <main className="cambio2-change-code-main">
         <div className="cambio2-change-code-box">
           <h2 className="cambio2-change-code-title">Ingrese el código de verificación</h2>
@@ -76,23 +131,27 @@ function CambioCodigo() {
                 className="cambio2-input-field cambio2-verification-code-input"
                 maxLength={6}
                 required
+                ref={inputRef} // Referencia al input
               />
             </div>
-            <button type="submit" className="cambio2-change-code-button">
-              Enviar
+            <button type="submit" className="cambio2-change-code-button"
+              disabled={isSubmitting} // Deshabilita el botón mientras se envía
+            >
+             {isSubmitting ? "Verificando..." : "Verificar"} {/* Cambiar texto mientras se envía */}
             </button>
           </form>
         </div>
       </main>
-
+  
       <footer className="cambio2-app-footer">
         <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
-
-      {modalMessage && <Modal message={modalMessage} onClose={closeModal} />}
+  
+      {/* Mostrar el modal solo si 'modalMessage' es verdadero */}
+      {mostrarModal && <Modal message={modalMessage} onClose={closeModal} />}
     </div>
-  );
-}
+  );  
+} 
 
 export default CambioCodigo;

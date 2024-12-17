@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const clienteCtrl = require("../controller/cliente.controller");
-const codigoCtrl = require("../controller/codigo.controller");
-const { verifyCode } = require("../controller/cliente.controller");
-const { requestPasswordReset } = require("../controller/codigo.controller");
+//const codigoCtrl = require("../controller/codigo.controller");
+//const { verifyCode } = require("../controller/cliente.controller");
+//const { requestPasswordReset } = require("../controller/codigo.controller");
 
 
-router.post("/:send-code", codigoCtrl.sendSecurityCode)
+//router.post("/:send-code", codigoCtrl.sendSecurityCode)
 // Crear un nuevo cliente
 router.post("/", clienteCtrl.crearCliente);
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio3.css";
 import logo from "../imagenes/asdlogo.png";
@@ -8,10 +9,13 @@ import Modal from "../Modal/modal";
 function CambioContrasena3() {
   const [contraseña, setContraseña] = useState("");
   const [confirmarContraseña, setConfirmarContraseña] = useState("");
-  const [modalMessage, setModalMessage] = useState(""); 
+  const [modalMessage, setModalMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  // Recuperamos el email desde el estado de la navegación
+  const email = location.state?.email || "";
 
-  const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const regexContraseña = /^(?=.[a-zA-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
     const handlePopState = () => {
@@ -25,7 +29,7 @@ function CambioContrasena3() {
     };
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!regexContraseña.test(contraseña)) {
@@ -40,7 +44,24 @@ function CambioContrasena3() {
       return;
     }
 
-    setModalMessage("¡Contraseña cambiada exitosamente!");
+    try {
+      // Enviar solo la nueva contraseña al backend
+      const response = await fetch("http://localhost:4000/api/clientes/cambio3", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, contrasenia: contraseña }),  // Cambiado a 'contrasenia'
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setModalMessage("¡Contraseña cambiada exitosamente!");
+      } else {
+        setModalMessage(data.message || "Error al cambiar la contraseña.");
+      }
+    } catch (error) {
+      setModalMessage("Hubo un problema con el servidor. Inténtalo más tarde.");
+    }  
   };
 
   const closeModal = () => {

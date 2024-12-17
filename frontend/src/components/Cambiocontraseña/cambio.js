@@ -9,6 +9,7 @@ function CambioContrasena() {
   const [email, setEmail] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false); 
   const [modalMessage, setModalMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);  // Estado para controlar el clic en el botón
   const navigate = useNavigate();
 
   const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
@@ -25,8 +26,11 @@ function CambioContrasena() {
     };
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Evita múltiples envíos
+    if (isSubmitting) return;
 
     if (!email) {
       setModalMessage("Por favor, ingresa tu correo electrónico.");
@@ -40,14 +44,35 @@ function CambioContrasena() {
       return;
     }
 
-    setModalMessage(`Se ha enviado un enlace de recuperación a: ${email}`);
-    setMostrarModal(true); 
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("http://localhost:4000/api/auth/cambio", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setModalMessage(`Se ha enviado un código de verificación a: ${email}`);
+      } else {
+        setModalMessage(data.message || "El correo no está registrado.");
+      }
+    } catch (error) {
+      setModalMessage("Hubo un problema con el servidor. Inténtalo más tarde.");
+    } finally {
+      setMostrarModal(true);
+      setIsSubmitting(false);
+    }
+
   };
 
   const handleModalClose = () => {
-    setMostrarModal(false); 
-    if (modalMessage.includes("enlace de recuperación")) {
-      navigate("/cambio2"); 
+    setMostrarModal(false);
+    if (modalMessage.includes("código de verificación")) {
+      navigate("/cambio2", { state: { email } }); // Pasamos el correo al siguiente paso
     }
   };
 
@@ -90,8 +115,10 @@ function CambioContrasena() {
                 className="cambio1-input-field"
               />
             </div>
-            <button type="submit" className="cambio1-change-password-button">
-              Enviar mensaje
+            <button type="submit" className="cambio1-change-password-button"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Enviando..." : "Enviar mensaje"}
             </button>
           </form>
         </div>
