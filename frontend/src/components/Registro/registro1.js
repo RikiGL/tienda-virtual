@@ -122,6 +122,31 @@ function Registro1() {
       setModalMessage("Hubo un problema al conectar con el servidor");
     }
   };
+  const handleVerificarUsuarioGoogle = async (credentialResponse) => {
+    try {
+      const token = credentialResponse.credential; // Accediendo al token
+      const response = await fetch("http://localhost:4000/api/auth/google-reg", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }), // Enviando solo el token al backend
+      });
+  
+      const data = await response.json();
+
+      if (response.status === 302) {//302 existe un usuario
+        console.log("Respuesta del backend:", data);
+        setModalMessage("Usuario ya registrado. Por favor, diríjase a la pantalla de inicio de sesión.");
+      } else {
+        localStorage.setItem("googleToken", token);
+        navigate("/googler", { state: { token } });
+      }
+    } catch (error) {
+      console.error("Error al conectar con el servidor:", error);
+      setModalMessage("Hubo un problema al enviar los datos.");
+    }
+  };
 
   const closeModal = () => {
     setModalMessage("");
@@ -246,20 +271,12 @@ function Registro1() {
         <GoogleLogin
           onSuccess={(credentialResponse) => {
               console.log(credentialResponse); // Token recibido de Google
-              // Aquí puedes enviar el token a tu backend para validarlo
-              const token = credentialResponse.credential;
-              // Guardar temporalmente el token en el localStorage o contexto (opcional)
-              localStorage.setItem("googleToken", token);
-               // Redirigir a la ruta donde se recogerán más datos
-            navigate("/googler", { state: { token } });
-             }}
+              handleVerificarUsuarioGoogle(credentialResponse);
+          }}
           onError={() => {
-          console.log("Error al iniciar sesión con Google");
+          console.log("Error al registrase con Google");
             }}
-
-
-              
-      />
+        />
             </div>
 
 
