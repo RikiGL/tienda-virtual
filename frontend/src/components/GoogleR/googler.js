@@ -75,10 +75,10 @@ function GoogleR() {
       const data = await response.json();
 
       if (response.ok && response.status !== 302) {
-        setModalMessage("¡Dirección y token enviados exitosamente!");
+        console.log("¡Dirección y token enviados exitosamente!");
         console.log("Respuesta del backend:", data);
-        alert("Registro Exitoso")
-        setTimeout(() => navigate("/login"), 500);
+        setModalMessage("Registro Exitoso");
+        setTimeout(() => navigate("/login"), 800);
 
       } else {
         console.error("Error en la solicitud:", data.message);
