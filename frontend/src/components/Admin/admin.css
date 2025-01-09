@@ -1,0 +1,179 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+
+
+.admin-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-height: calc(100vh - 120px); /* Espacio mínimo para mantener el footer en su lugar */
+    display: flex;
+    flex-direction: column; /* Asegura una distribución vertical */
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin:0 0 20px;
+}
+
+h2 {
+    color: #0c5304;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.admin-form-section, .admin-product-list {
+    margin-top: 0px;
+}
+
+.admin-form-control {
+    margin-bottom: 15px;
+}
+
+.admin-form-control label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.admin-form-control input, 
+.admin-form-control select, 
+.admin-form-control textarea,
+.admin-search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.admin-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #0c5304;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.admin-btn:hover {
+    background-color: #0c5304;
+}
+
+.admin-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.admin-search-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.admin-search-bar input {
+    flex: 1;
+    max-width: 500px;
+}
+
+.admin-product-list table {
+    width: 100%;
+    border-collapse: collapse;
+
+    font-size: 14px;
+   
+}
+
+/**/
+
+
+.admin-form-section, .admin-product-list {
+    flex: 1; /* Asegura que el contenido ocupe el espacio restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Alínea el contenido hacia arriba */
+    align-items: left; /* Centra horizontalmente */
+}
+.admin-product-list th, .admin-product-list td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+
+.admin-product-list th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.admin-actions i {
+    cursor: pointer;
+    margin: 0 8px;
+    font-size: 18px;
+    color: #007BFF;
+    transition: color 0.3s ease;
+}
+
+.admin-actions i:hover {
+    color: #0056b3;
+}
+
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    color: white;
+    height: 60px;
+  }
+  
+  .admin-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .admin-logo-img {
+    width: 50px;
+    height: auto;
+    vertical-align: middle;
+  }
+  
+  .admin-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0c5304;
+  }
+  
+  .admin-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    width: 100%;
+    position: relative; /* Asegura que el footer no se solape con otros elementos */
+    bottom: 0;
+    left: 0;
+  }
+  
+  .admin-footer p {
+    margin: 5px 0;
+  }
