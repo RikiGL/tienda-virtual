@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import ProductList from "./ProductList";

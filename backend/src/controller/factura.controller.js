@@ -23,12 +23,12 @@ facturaCtrl.crearFactura = async (req, res) => {
     await nuevaFactura.save();
     res
       .status(201)
-      .json({ mensaje: "Factura creada exitosamente", factura: nuevaFactura });
+      .json({ mensaje: "Factura creada exitosamente", nuevaFactura });
   } catch (error) {
     // Manejo de errores (por ejemplo, si el correo ya existe)
     res
       .status(500)
-      .json({ mensaje: "Error al crear la factura", error: error.message });
+      .json("Error al crear la factura", error.message );
   }
 };
 
