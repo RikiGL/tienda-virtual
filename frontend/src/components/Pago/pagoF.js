@@ -1,20 +1,110 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom"; 
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css";
-import { useState, useEffect } from "react"; 
+//import { useEffect } from "react"; 
 import logo from "../imagenes/asdlogo.png";
 
 const PaymentConfirmation = () => {
   const navigate = useNavigate();
-  const { state } = useLocation(); 
+  const { state } = useLocation();
   const { products = [], subtotal = 0, user = {} } = state || {};
-  console.log("Datos del usuario en pagoF:", user);
+  const totalAmount = (subtotal + 1.5).toFixed(2); // Total con costo de envío
+  
+  
+  //const clientId = "ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U";
+  useEffect(() => {
+    const loadPayPalScript = () => {
+      // Verificar si el script ya está cargado
+      if (document.getElementById("paypal-sdk")) {
+        initializePayPalButtons();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.id = "paypal-sdk";
+      script.src = `https://www.paypal.com/sdk/js?client-id=ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U&currency=USD`;
+      script.async = true;
+      script.onload = initializePayPalButtons;
+      script.onerror = () => {
+        console.error("Error al cargar el SDK de PayPal.");
+      };
+      document.body.appendChild(script);
+    };
+
+    const initializePayPalButtons = () => {
+      const buttonContainer = document.getElementById("paypal-button-container");
+      if (buttonContainer) {
+        buttonContainer.innerHTML = ""; // Limpia cualquier contenido previo
+      }
+      if (window.paypal) {
+        window.paypal
+          .Buttons({
+            createOrder: (data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: totalAmount, // Total a pagar
+                    },
+                  },
+                ],
+              });
+            },
+            onApprove: async (data, actions) => {
+              try {
+                const details = await actions.order.capture();
+                alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
+
+                // Crear la factura en el backend
+                const factura = {
+                  id_cliente: "6", // Asumiendo que tienes el ID del cliente en el objeto `user`
+                  total: totalAmount,
+                  metodo_pago: "paypal",
+                };
+
+                const response = await fetch("http://localhost:4000/api/facturas", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(factura),
+                });
+
+                if (!response.ok) {
+                  throw new Error("Error al guardar la factura.");
+                }
+
+                const responseData = await response.json();
+                console.log("Factura creada:", responseData);
+
+                // Redirigir después del pago
+                navigate("/principal");
+              } catch (error) {
+                console.error("Error al procesar la factura:", error);
+                alert("El pago fue exitoso, pero ocurrió un error al guardar la factura.");
+              }
+            },
+            onError: (err) => {
+              console.error("Error durante el pago:", err);
+              alert("Hubo un error al procesar el pago. Por favor, inténtalo nuevamente.");
+            },
+          })
+          .render("#paypal-button-container")
+          .catch((err) => {
+            console.error("Error al renderizar el botón de PayPal:", err);
+          });
+      } else {
+        console.error("El SDK de PayPal no está disponible.");
+      }
+    };
+
+    // Cargar el script de PayPal cuando el componente se monta
+    loadPayPalScript();
+  }, [totalAmount, user.id, navigate]);
 
   const handleBackClick = () => {
-    navigate("/principal"); 
+    navigate("/principal");
   };
-
-  
 
   return (
     <div className="pagoC-page">
@@ -33,21 +123,18 @@ const PaymentConfirmation = () => {
       <main className="pagoC-payment-confirmation">
         <h1>Confirmación de Pago</h1>
 
- 
         <div className="pagoC-user-info">
           <h2>Información del Usuario</h2>
           <p>
-         
-            <strong>Nombre:</strong>  {user.nombre} {user.apellido}
+            <strong>Nombre:</strong> {user.nombre & user.apellido}
           </p>
           <p>
-          <strong>Correo electrónico:</strong> 
+            <strong>Correo electrónico:</strong> {user.correo || "No disponible"}
           </p>
           <p>
-          <strong>Dirección:</strong> 
+            <strong>Dirección:</strong> {user.domicilio || "No disponible"}
           </p>
         </div>
-
 
         <div className="pagoC-product-info">
           <h2>Productos</h2>
@@ -73,27 +160,27 @@ const PaymentConfirmation = () => {
           </table>
         </div>
 
-  
         <div className="pagoC-total-amount">
-        <h2>Total a Pagar</h2>
-        {/* Subtotal */}
-        <div className="pagoC-row">
-          <span>Subtotal:</span>
-          <span>${subtotal.toFixed(2)}</span>
+          {/* Subtotal */}
+          <h2>Total a Pagar</h2>
+          {/* Subtotal */}
+          <div className="pagoC-row">
+            <span>Subtotal:</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="pagoC-row">
+            <span>Costo de Envío:</span>
+            <span>$1.50</span>
+          </div>
+          <div className="pagoC-row pagoC-final-total">
+            <span>Total:</span>
+            <span>${totalAmount}</span>
+          </div>
         </div>
-        {/* Costo de Envío */}
-        <div className="pagoC-row">
-          <span>Costo de Envío:</span>
-          <span>$1.50</span>
-        </div>
-        {/* Total */}
-        <div className="pagoC-row pagoC-final-total">
-          <span>Total:</span>
-          <span>${(subtotal + 1.5).toFixed(2)}</span>
-        </div>
-      </div>
-     
-        <button className="pagoC-confirm-button">Pagar con PayPal</button>
+
+        {/* Contenedor para el botón de PayPal */}
+        <div id="paypal-button-container" ></div>
+
       </main>
 
       <footer className="pagoC-app-footer">

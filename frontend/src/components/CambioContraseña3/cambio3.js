@@ -15,7 +15,7 @@ function CambioContrasena3() {
   // Recuperamos el email desde el estado de la navegación
   const email = location.state?.email || "";
 
-  const regexContraseña = /^(?=.[a-zA-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
   useEffect(() => {
     const handlePopState = () => {

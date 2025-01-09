@@ -5,7 +5,7 @@ import fondo from "../imagenes/fondo212.jpg";
 import logo from "../imagenes/asdlogo.png";
 import Modal from "../Modal/modal"; 
 import "./login.css";
-import google from "../imagenes/googleI-.png";
+//import google from "../imagenes/googleI-.png";
 import { GoogleLogin } from "@react-oauth/google";
 
 function Login() {
