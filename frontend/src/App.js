@@ -14,6 +14,7 @@ import Pago from "./components/Pago/pagoF"
 
 function App() {
   return (
+    // Con este clientID se obtienen los datos de una cuenta de google para login y registro de OAuth
     <GoogleOAuthProvider clientId="215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com">
     <Router>
       <Routes>
