@@ -10,7 +10,7 @@ import CambioCodigo from "./components/CambioContraseña2/cambio2";
 import CambioContrasena3 from "./components/CambioContraseña3/cambio3";
 import GoogleR from "./components/GoogleR/googler"
 import Pago from "./components/Pago/pagoF"
-
+import AdminProductos from "./components/Admin/admin";
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
        <Route path="/cambio3" element={<CambioContrasena3 />}/>
        <Route path="/googler" element={<GoogleR />}/>
        <Route path="/pagoF" element={<Pago />}/>
+       <Route path="/admin" element={<AdminProductos/>}/>
              </Routes>
     </Router>
     </GoogleOAuthProvider>
