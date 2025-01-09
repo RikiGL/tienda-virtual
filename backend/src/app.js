@@ -14,7 +14,8 @@ const { OAuth2Client } = require("google-auth-library");
 app.set("port", process.env.PORT || 4000);
 
 // Google OAuth
-const client = new OAuth2Client("215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com"); // Usa tu Client ID aquí
+const client = new OAuth2Client (process.env.GOOGLE_CLIENT_ID);// Usa tu Client ID aquí
+
 
 
 //middlewares
@@ -52,7 +53,7 @@ app.post("/api/auth/google", async (req, res) => {
     // Verificar el token con Google
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+      audience: process.env.GOOGLE_CLIENT_ID, // Asegúrate de usar el mismo Client ID
     });
 
     // Obtener los datos del usuario
@@ -100,7 +101,7 @@ app.post("/api/auth/google-reg", async (req, res) => {
     // Verificar el token con Google
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: "215959712464-3spuv70q1mf9al6u6jbf31ot30eruouu.apps.googleusercontent.com", // Asegúrate de usar el mismo Client ID
+      audience: process.env.GOOGLE_CLIENT_ID, // Asegúrate de usar el mismo Client ID
     });
 
     // Obtener los datos del usuario
