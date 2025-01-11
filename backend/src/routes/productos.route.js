@@ -17,6 +17,6 @@ router.get("/:id", productoCtrl.obtenerProductoPorId);
 router.put("/:id", productoCtrl.actualizarProducto);
 
 // Ruta para eliminar un producto
-router.delete("/:id", productoCtrl.eliminarProducto);
+router.delete("/:id", productoCtrl.eliminarProductos);
 
 module.exports = router;

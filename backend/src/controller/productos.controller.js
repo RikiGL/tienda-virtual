@@ -102,22 +102,33 @@ productoCtrl.actualizarProducto = async (req, res) => {
     });
 };
 
-// Eliminar un producto por ID
-productoCtrl.eliminarProducto = async (req, res) => {
-  const { id } = req.params;
+// Eliminar un productos por ID
+productoCtrl.eliminarProductos = async (req, res) => {
+  const { productIdsWithQuantities } = req.body;
 
-  Producto.findByIdAndDelete(id)
-    .then((productoEliminado) => {
-      if (!productoEliminado) {
-        return res.status(404).json({ message: "Producto no encontrado" });
-      }
-      res.status(200).json({ message: "Producto eliminado exitosamente" });
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .json({ message: "Error al eliminar el producto", error: err });
+  if (!productIdsWithQuantities || !Array.isArray(productIdsWithQuantities)) {
+    return res.status(400).json({ error: "Lista de productos con cantidades no válida." });
+  }
+
+  try {
+    // Lógica para actualizar el inventario de los productos según la cantidad comprada
+    const updatePromises = productIdsWithQuantities.map(({ productId, quantity }) => {
+      return Producto.findByIdAndUpdate(
+        productId,
+        { $inc: { inventario: -quantity } }, // Reducir el inventario por la cantidad comprada
+        { new: true }
+      );
     });
+
+    // Esperar a que se actualicen todos los productos
+    await Promise.all(updatePromises);
+
+    res.status(200).json({ message: "Inventario actualizado correctamente." });
+  } catch (error) {
+    console.error("Error al actualizar el inventario:", error);
+    res.status(500).json({ error: "Error interno del servidor." });
+  }
 };
+
 
 module.exports = productoCtrl;
