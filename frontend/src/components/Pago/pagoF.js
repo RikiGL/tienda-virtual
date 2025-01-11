@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css";
-//import { useEffect } from "react"; 
 import logo from "../imagenes/asdlogo.png";
 
 const PaymentConfirmation = () => {
@@ -9,9 +8,10 @@ const PaymentConfirmation = () => {
   const { state } = useLocation();
   const { products = [], subtotal = 0, user = {} } = state || {};
   const totalAmount = (subtotal + 1.5).toFixed(2); // Total con costo de envío
-  
-  
-  //const clientId = "ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U";
+
+  // Usar memoización para evitar reejecuciones innecesarias
+  const memoizedProducts = useMemo(() => products, [products]);
+
   useEffect(() => {
     const loadPayPalScript = () => {
       // Verificar si el script ya está cargado
@@ -57,7 +57,7 @@ const PaymentConfirmation = () => {
 
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: "6", // Asumiendo que tienes el ID del cliente en el objeto `user`
+                  id_cliente: 6, // Usar el ID del cliente
                   total: totalAmount,
                   metodo_pago: "paypal",
                 };
@@ -77,6 +77,25 @@ const PaymentConfirmation = () => {
                 const responseData = await response.json();
                 console.log("Factura creada:", responseData);
 
+                // Eliminar los productos de la base de datos según la cantidad
+                const productIdsWithQuantities = memoizedProducts.map((product) => ({
+                  productId: product._id,
+                  quantity: product.quantity,
+                }));
+
+                const deleteResponse = await fetch("http://localhost:4000/api/productos/id", {
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ productIdsWithQuantities }),
+                });
+
+                if (!deleteResponse.ok) {
+                  throw new Error("Error al eliminar los productos.");
+                }
+
+                console.log("Productos eliminados correctamente");
                 // Redirigir después del pago
                 navigate("/principal");
               } catch (error) {
@@ -100,7 +119,7 @@ const PaymentConfirmation = () => {
 
     // Cargar el script de PayPal cuando el componente se monta
     loadPayPalScript();
-  }, [totalAmount, user.id, navigate]);
+  }, [totalAmount, user.id, navigate, memoizedProducts]);
 
   const handleBackClick = () => {
     navigate("/principal");
@@ -126,7 +145,7 @@ const PaymentConfirmation = () => {
         <div className="pagoC-user-info">
           <h2>Información del Usuario</h2>
           <p>
-            <strong>Nombre:</strong> {user.nombre & user.apellido}
+            <strong>Nombre:</strong> {user.nombre && user.apellido}
           </p>
           <p>
             <strong>Correo electrónico:</strong> {user.correo || "No disponible"}
@@ -161,9 +180,7 @@ const PaymentConfirmation = () => {
         </div>
 
         <div className="pagoC-total-amount">
-          {/* Subtotal */}
           <h2>Total a Pagar</h2>
-          {/* Subtotal */}
           <div className="pagoC-row">
             <span>Subtotal:</span>
             <span>${subtotal.toFixed(2)}</span>
@@ -178,9 +195,7 @@ const PaymentConfirmation = () => {
           </div>
         </div>
 
-        {/* Contenedor para el botón de PayPal */}
-        <div id="paypal-button-container" ></div>
-
+        <div id="paypal-button-container"></div>
       </main>
 
       <footer className="pagoC-app-footer">

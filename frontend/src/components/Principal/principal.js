@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 import Cart from "./Cart";
 import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
 
 const Principal = () => {
   const [productsState, setProducts] = useState([]);
@@ -34,7 +34,6 @@ const Principal = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
-  
 
   const saveCartToLocalStorage = (updatedProducts) => {
     const cartItems = updatedProducts
@@ -103,10 +102,28 @@ const Principal = () => {
 
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
+    console.log("Nombre recuperado de localStorage:", nombre); // DEBUG
     if (nombre) {
       setUsuarioNombre(nombre);
+    } else {
+      console.warn("No se encontró un nombre en localStorage");
     }
   }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (usuarioNombre) {
+        navigator.sendBeacon("http://localhost:4000/api/login", JSON.stringify({ usuario: usuarioNombre }));
+        localStorage.removeItem("usuarioNombre");
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [usuarioNombre]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -129,22 +146,6 @@ const Principal = () => {
               ...p,
               inventario: Math.max(0, p.inventario - 1),
               quantity: (p.quantity || 0) + 1,
-            }
-          : p
-      );
-      setProducts(updatedProducts);
-      saveCartToLocalStorage(updatedProducts);
-    }
-  };
-
-  const handleRemoveFromCart = (product) => {
-    if (product.quantity > 0) {
-      const updatedProducts = productsState.map((p) =>
-        p._id === product._id
-          ? {
-              ...p,
-              inventario: p.inventario + 1,
-              quantity: Math.max(0, p.quantity - 1),
             }
           : p
       );
@@ -184,21 +185,20 @@ const Principal = () => {
               ¡Hola, {usuarioNombre}!
             </span>
             {showMenu && (
-  <div className="principal-dropdown-menu">
-    <button
-      className="principal-dropdown-item"
-      onClick={() => {
-        localStorage.removeItem("usuarioNombre");
-        setUsuarioNombre("");
-        setShowMenu(false);
-        handleClearCart(); // Limpiar el carrito al cerrar sesión
-      }}
-    >
-      Cerrar Sesión
-    </button>
-  </div>
-)}
-
+              <div className="principal-dropdown-menu">
+                <button
+                  className="principal-dropdown-item"
+                  onClick={() => {
+                    localStorage.removeItem("usuarioNombre");
+                    setUsuarioNombre("");
+                    setShowMenu(false);
+                    handleClearCart(); // Limpiar el carrito al cerrar sesión
+                  }}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <button
@@ -256,13 +256,12 @@ const Principal = () => {
         <Cart
           products={productsState.filter((product) => product.quantity > 0)}
           onAddToCart={handleAddToCart}
-          onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
           onClose={() => setCartVisible(false)}
         />
       )}
 
-{isModalVisible && (
+      {isModalVisible && (
         <Modal
           message={modalMessage}
           onClose={() => setIsModalVisible(false)}
