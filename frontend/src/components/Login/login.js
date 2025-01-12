@@ -55,7 +55,7 @@ function Login() {
 
     try {
       // Enviar el token al backend para validación
-      const response = await fetch("http://localhost:4000/api/clientes/login", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ function Login() {
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       const token = credentialResponse.credential; // Accediendo al token
-      const response = await fetch("http://localhost:4000/api/auth/google-reg", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}auth/google-reg`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

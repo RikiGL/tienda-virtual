@@ -101,7 +101,7 @@ function Registro1() {
     };
 
     try {
-      const response = await fetch("http://localhost:4000/api/clientes", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function Registro1() {
   const handleVerificarUsuarioGoogle = async (credentialResponse) => {
     try {
       const token = credentialResponse.credential; // Accediendo al token
-      const response = await fetch("http://localhost:4000/api/auth/google-reg", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}auth/google-reg`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

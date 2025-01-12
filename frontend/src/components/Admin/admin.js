@@ -20,7 +20,7 @@ function AdminProductos() {
     const obtenerProductos = async () => {
       try {
         // Realizamos la solicitud GET para obtener los productos
-        const response = await fetch('http://localhost:4000/api/productos'); // Cambia la URL según sea necesario
+        const response = await fetch(`${process.env.REACT_APP_API_URL}productos`);
         const data = await response.json();
 
         // Actualizamos el estado con los productos obtenidos
@@ -51,7 +51,7 @@ function AdminProductos() {
 
     setProductos([...productos, productoConId]);
     try {
-      const response = await fetch ("http://localhost:4000/api/productos/", {
+      const response = await fetch (`${process.env.REACT_APP_API_URL}productos`, {
         method:"POST",
         headers:{
           "Content-Type": "application/json"

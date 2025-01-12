@@ -62,7 +62,7 @@ const PaymentConfirmation = () => {
                   metodo_pago: "paypal",
                 };
 
-                const response = await fetch("http://localhost:4000/api/facturas", {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}facturas`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -83,7 +83,7 @@ const PaymentConfirmation = () => {
                   quantity: product.quantity,
                 }));
 
-                const deleteResponse = await fetch("http://localhost:4000/api/productos/id", {
+                const deleteResponse = await fetch(`${process.env.REACT_APP_API_URL}productos/id`, {
                   method: "DELETE",
                   headers: {
                     "Content-Type": "application/json",
