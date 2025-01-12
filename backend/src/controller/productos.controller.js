@@ -130,5 +130,22 @@ productoCtrl.eliminarProductos = async (req, res) => {
   }
 };
 
+// Eliminar un producto por ID
+productoCtrl.eliminarProductoAdmin = async (req, res) => {
+  const { id } = req.params;
+
+  Producto.findByIdAndDelete(id)
+    .then((productoEliminado) => {
+      if (!productoEliminado) {
+        return res.status(404).json({ message: "Producto no encontrado" });
+      }
+      res.status(200).json({ message: "Producto eliminado exitosamente" });
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({ message: "Error al eliminar el producto", error: err });
+    });
+}
 
 module.exports = productoCtrl;

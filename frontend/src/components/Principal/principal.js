@@ -54,12 +54,12 @@ const Principal = () => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!isAuthenticated()) {
       navigate("/login");
     }
   }, [navigate]);
-  
+  */
 
   useEffect(() => {
     const fetchProducts = async () => {
