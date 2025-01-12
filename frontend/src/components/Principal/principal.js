@@ -107,21 +107,6 @@ const Principal = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (usuarioNombre) {
-        navigator.sendBeacon("http://localhost:4000/api/logout", JSON.stringify({ usuario: usuarioNombre }));
-        localStorage.removeItem("usuarioNombre");
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [usuarioNombre]);
-  
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
