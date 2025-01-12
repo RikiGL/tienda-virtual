@@ -160,7 +160,21 @@ function AdminProductos() {
   };
   
   const eliminarProducto = (id) => {
-    setProductos((prevProductos) => prevProductos.filter((producto) => producto.id !== id));
+    fetch(`http://localhost:4000/api/productos/admin/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Producto eliminado correctamente");
+          setProductos((prevProductos) => prevProductos.filter((producto) => producto._id !== id));
+        } else {
+          console.log("Error al eliminar el producto");
+        }
+      })
+      .catch((error) => {
+        console.error("Error al eliminar el producto:", error);
+        alert("Error al eliminar el producto");
+      });
   };
 
   const renderVista = () => {
@@ -311,7 +325,7 @@ function AdminProductos() {
                           <td className="admin-actions">
                             <button
                               className="eliminar-btn"
-                              onClick={() => eliminarProducto(producto.id)}
+                              onClick={() => eliminarProducto(producto._id)}
                             >
                               Eliminar
                             </button>
