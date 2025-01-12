@@ -20,6 +20,8 @@ const Principal = () => {
   const navigate = useNavigate();
   const [usuarioNombre, setUsuarioNombre] = useState("");
   const [showMenu, setShowMenu] = useState(false);
+  const [showMenuHamburguesa, setShowMenuHamburguesa] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Controla el estado del tamaño de la pantalla
 
   const categories = [
     "Todas",
@@ -48,6 +50,7 @@ const Principal = () => {
   };
 
   useEffect(() => {
+
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
@@ -113,6 +116,7 @@ const Principal = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    setShowMenu(false);
   };
 
   const handleAddToCart = (product) => {
@@ -164,6 +168,15 @@ const Principal = () => {
     setProducts(clearedProducts);
     localStorage.removeItem("cart");
   };
+  // Detecta el tamaño de la pantalla
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 912);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="principal-app-container">
@@ -217,22 +230,62 @@ const Principal = () => {
           </button>
         )}
       </header>
+      <div>
+      {/* Botón hamburguesa solo en pantallas pequeñas */}
+      {isMobile && (
+        <div className="menu-toggle" onClick={() =>  {
+          setShowMenuHamburguesa((prev) => !prev); // Alterna el menú hamburguesa
+          setShowMenu(false); // Asegúrate de cerrar el menú de usuario
+        }}>
+          ☰
+        </div>
+      )}
 
-      <div className="principal-main-container">
-        <aside className="principal-sidebar">
-          <h3>Categorías</h3>
-          <ul className="principal-category-list">
-            {categories.map((category) => (
-              <li
-                key={category}
-                className={`principal-category-item ${selectedCategory === category ? "principal-active" : ""}`}
-                onClick={() => handleCategoryChange(category)}
-              >
-                {category}
+      {/* Menú de navegación */}
+      {isMobile && showMenuHamburguesa && (
+    <div className="nav-menu active">
+      <button className="close-btn" onClick={() => setShowMenuHamburguesa(false)}>
+        ×
+      </button>
+      <h3 className="category-title">Categorías</h3>
+      <ul className="principal-category-list">
+        {categories.map((category, index) => (
+          <li
+            className="principal-category-item"
+            key={index}
+            onClick={() => {
+              handleCategoryChange(category);
+              setShowMenuHamburguesa(false); // Cerrar el menú al seleccionar una categoría
+            }}
+          >
+            {category}
               </li>
             ))}
           </ul>
-        </aside>
+        </div>
+      )}
+    </div>
+
+    <div className="principal-main-container">
+    {/* Barra lateral solo visible en pantallas grandes */}
+    {!isMobile && (
+      <aside className="principal-sidebar">
+        <h3>Categorías</h3>
+        <ul className="principal-category-list">
+          {categories.map((category) => (
+            <li
+              key={category}
+              className={`principal-category-item ${
+                selectedCategory === category ? "principal-active" : ""
+              }`}
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
 
         <main className="principal-content">
           {isLoading ? (
@@ -270,6 +323,7 @@ const Principal = () => {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
     </div>
+    
   );
 };
 

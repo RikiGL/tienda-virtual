@@ -202,4 +202,232 @@
   width: 20px;
   height: 20px;
 }
+/* Media query para pantallas pequeñas (hasta 920px) */
+/* Pantallas menores o iguales a 900px */
+@media (max-width: 900px) {
+  .registro-box {
+    width: 85%; /* Ajustar ancho al 85% */
+    padding: 20px;
+  }
 
+  .registro-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .registro-form-grid {
+    display: flex; /* Los campos se muestran como columnas */
+    gap: 10px;
+  }
+
+  .registro-form-label {
+    font-size: 13px;
+  }
+
+  .registro-form-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .registro-recaptcha-container > div {
+    transform: scale(0.8); /* Reducir tamaño del reCAPTCHA */
+    margin: 15px 0;
+  }
+
+  .registro-button {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .registro-footer {
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
+  .registro-back-button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}
+
+/* Media query para pantallas muy pequeñas (hasta 600px) */
+@media (max-width: 600px) {
+  .registro-box {
+    width: 95%; /* Formulario ocupa casi todo el ancho */
+    padding: 15px;
+  }
+
+  .registro-title {
+    font-size: 18px; /* Reducir tamaño del título */
+  }
+
+  .registro-form-input {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .registro-button {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .registro-recaptcha-container > div {
+    transform: scale(0.7); /* Reducir aún más el tamaño del reCAPTCHA */
+  }
+
+  .registro-footer {
+    font-size: 10px;
+    margin-top: 10px;
+  }
+
+  .registro-back-button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+/* Para pantallas menores de 400px */
+@media (max-width: 400px) {
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevenir scroll horizontal */
+  }
+
+  .registro-box {
+    width: 90%; /* Ocupa solo el 90% del ancho */
+    max-width: 280px; /* Limitar el ancho máximo */
+    padding: 8px; /* Reducir el padding */
+    margin: 0 auto; /* Centrar el formulario */
+    border-radius: 5px; /* Bordes más pequeños */
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Reducir la sombra */
+  }
+
+  .registro-title {
+    font-size: 12px; /* Texto más pequeño */
+    text-align: center;
+    margin-bottom: 5px; /* Reducir espacio inferior */
+  }
+
+  .registro-form-grid {
+    display: flex;
+    flex-direction: column; /* Diseño vertical */
+    gap: 2px; /* Espacio casi inexistente entre campos */
+  }
+
+  .registro-form-label {
+    font-size: 10px; /* Etiquetas más pequeñas */
+    margin-bottom: 1px; /* Reducir margen inferior */
+  }
+
+  .registro-form-input {
+    width: 100%; /* Asegurar ancho completo */
+    font-size: 10px; /* Fuente más pequeña */
+    padding: 4px; /* Reducir padding interno */
+    margin-bottom: 4px; /* Reducir espacio entre campos */
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+
+  .registro-direccion-container {
+    margin-top: 5px; /* Reducir margen superior */
+  }
+
+  .registro-direccion-container input {
+    margin-bottom: 4px; /* Reducir espacio entre campos de dirección */
+    padding: 4px; /* Reducir padding */
+  }
+
+  .registro-recaptcha-container > div {
+    transform: scale(0.45); /* Reducir tamaño del reCAPTCHA aún más */
+    transform-origin: center;
+    margin: 3px 0; /* Reducir márgenes */
+  }
+
+  .registro-button {
+    font-size: 10px; /* Reducir tamaño de fuente */
+    padding: 6px; /* Reducir padding */
+    margin-top: 5px; /* Reducir margen superior */
+    width: 100%; /* Botón ocupa todo el ancho */
+    border-radius: 3px;
+    background-color: #6a11cb;
+    color: #fff;
+    border: none;
+  }
+
+  .registro-button:hover {
+    background-color: #5a0dbf;
+  }
+
+  .registro-back-button {
+    font-size: 8px; /* Reducir tamaño del texto */
+    padding: 4px; /* Padding más pequeño */
+    top: 5px; /* Ajustar posición */
+    left: 5px;
+    position: absolute;
+  }
+
+  .registro-footer {
+    font-size: 8px; /* Texto muy pequeño para el pie */
+    text-align: center;
+    padding: 5px;
+    margin-top: 5px; /* Reducir margen superior */
+  }
+
+  .iniciarGoogle {
+    margin-top: 5px; /* Reducir margen superior */
+    display: flex;
+    justify-content: center;
+  }
+
+  .registro-container {
+    padding: 5px;
+  }
+}
+/* Pantallas menores o iguales a 1024px */
+@media (min-width: 1024px) {
+  .registro-box {
+    width: 70%; /* Ajustar ancho al 70% */
+    padding: 30px;
+  }
+
+  .registro-title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .registro-form-grid {
+    display: flex; /* Los campos se muestran en columnas */
+    gap: 15px;
+  }
+
+  .registro-form-label {
+    font-size: 14px;
+  }
+
+  .registro-form-input {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .registro-recaptcha-container > div {
+    transform: scale(0.9); /* Tamaño ligeramente reducido */
+    margin: 20px 0;
+  }
+
+  .registro-button {
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .registro-footer {
+    font-size: 12px;
+    margin-top: 25px;
+  }
+
+  .registro-back-button {
+    font-size: 14px;
+    padding: 10px 15px;
+  }
+}
