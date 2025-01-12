@@ -28,17 +28,22 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
       <button className="principal-close-cart" onClick={onClose}>
         ✖
       </button>
-      
+
       {validProducts.length === 0 ? (
         <p>No hay productos en el carrito.</p>
       ) : (
         validProducts.map((product) => (
           <div key={product._id} className="principal-cart-item">
             <img
-              src={`./img/${product.imagen_url}`}
-              alt={product.nombre}
+              src={
+                product.imagen_url && product.imagen_url.startsWith("http")
+                  ? product.imagen_url
+                  : ` /img/${product.imagen_url || "default-image.jpg"}`
+              }
+              alt={product.nombre || "Producto sin nombre"}
               className="principal-cart-item-image"
             />
+
             <div className="principal-cart-item-details">
               <span className="principal-cart-item-name">{product.nombre}</span>
               <span className="principal-cart-item-price">

@@ -69,7 +69,11 @@ function Login() {
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
         localStorage.setItem("usuarioApellido", data.usuario.apellido);
         localStorage.setItem("usuarioEmail", data.usuario.email);
-        navigate("/principal");
+        if (data.usuario.rol ==="admin"){
+          navigate("/admin")
+        }else{
+          navigate("/principal");
+        }
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
