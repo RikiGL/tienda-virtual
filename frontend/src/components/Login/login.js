@@ -105,7 +105,7 @@ function Login() {
         },
         body: JSON.stringify({ token }), // Enviando solo el token al backend
       });
-  
+
       const data = await response.json();
 
       if (response.status === 302) {
@@ -113,7 +113,17 @@ function Login() {
         console.log("Respuesta del backend:", data);
         // Guardar el nombre del usuario
         localStorage.setItem("usuarioNombre", data.clienteExistente.nombre);
-        navigate("/principal");
+        localStorage.setItem("usuarioApellido", data.clienteExistente.apellido);
+        localStorage.setItem("usuarioEmail", data.clienteExistente.email);
+        localStorage.setItem("userRole", data.clienteExistente.rol); // Almacenar el rol
+        localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
+        console.log("Usuario autenticado:", data.clienteExistente);
+
+        if (data.clienteExistente.rol === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/principal");
+        }
 
       } else {
         console.error("Error en la solicitud:", data.message);
