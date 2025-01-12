@@ -111,8 +111,7 @@ function AdminProductos() {
   };
 
   const actualizarInventario = async (id, accion) => {
-    const productoActualizado = productos.find((producto) => producto.id === id);
-  
+    const productoActualizado = productos.find((producto) => producto._id === id);
     if (!productoActualizado) {
       alert("Producto no encontrado");
       return;
@@ -126,15 +125,6 @@ function AdminProductos() {
   
     console.log("ID enviado al servidor:", id);
     console.log("Cuerpo enviado al servidor:", JSON.stringify({ inventario: nuevoInventario }));
-  
-    // Reflejar el cambio en el frontend
-    setProductos((prevProductos) =>
-      prevProductos.map((producto) =>
-        producto.id === id
-          ? { ...producto, inventario: nuevoInventario }
-          : producto
-      )
-    );
   
     // Enviar el cambio al backend
     try {
@@ -152,6 +142,15 @@ function AdminProductos() {
         alert(`Error del servidor: ${errorMessage}`);
         return;
       }
+
+      // Reflejar el cambio en el frontend
+      setProductos((prevProductos) =>
+        prevProductos.map((producto) =>
+          producto._id === id
+            ? { ...producto, inventario: nuevoInventario }
+            : producto
+        )
+      );
   
       console.log("Inventario actualizado en el servidor correctamente.");
     } catch (error) {
@@ -268,10 +267,10 @@ function AdminProductos() {
                       <td>{producto.nombre}</td>
                       <td>{producto.inventario}</td>
                       <td className="admin-actions">
-                        <button className="aumentar-btn " onClick={() => actualizarInventario(producto.id, "incrementar")}>
+                        <button className="aumentar-btn " onClick={() => actualizarInventario(producto._id, "incrementar")}>
                           Aumentar
                         </button>
-                        <button className="disminuir-btn"onClick={() => actualizarInventario(producto.id, "decrementar")}>
+                        <button className="disminuir-btn"onClick={() => actualizarInventario(producto._id, "decrementar")}>
                           Disminuir
                         </button>
                       </td>
