@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import logo from "../imagenes/asdlogo.png";
 import "./admin.css";
+import { useNavigate } from "react-router-dom";
 
 
 function AdminProductos() {
@@ -15,6 +16,15 @@ function AdminProductos() {
     inventario: "",
     imagen: "",
   });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+      navigate("/login"); // Redirige al login si no está autenticado
+    }
+  }, [navigate]);
+  
 
   useEffect(() => {
     const obtenerProductos = async () => {
@@ -34,6 +44,13 @@ function AdminProductos() {
   }, []); // El array vacío asegura que se ejecute solo una vez al montar el componente
 
   
+  const handleCerrarSesion = () => {
+    localStorage.clear(); // Elimina toda la información almacenada
+    navigate("/login");   // Redirige al login
+  };
+  
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNuevoProducto({ ...nuevoProducto, [name]: value });
@@ -87,18 +104,56 @@ function AdminProductos() {
     );
   };
 
-  const actualizarInventario = (id, accion) => {
+  const actualizarInventario = async (id, accion) => {
+    const productoActualizado = productos.find((producto) => producto.id === id);
+  
+    if (!productoActualizado) {
+      alert("Producto no encontrado");
+      return;
+    }
+  
+    // Calcular el nuevo inventario
+    const nuevoInventario =
+      accion === "incrementar"
+        ? productoActualizado.inventario + 1
+        : Math.max(productoActualizado.inventario - 1, 0);
+  
+    console.log("ID enviado al servidor:", id);
+    console.log("Cuerpo enviado al servidor:", JSON.stringify({ inventario: nuevoInventario }));
+  
+    // Reflejar el cambio en el frontend
     setProductos((prevProductos) =>
-      prevProductos.map((producto) => {
-        if (producto.id === id) {
-          const nuevoInventario = accion === "incrementar" ? producto.inventario + 1 : producto.inventario - 1;
-          return { ...producto, inventario: Math.max(nuevoInventario, 0) };
-        }
-        return producto;
-      })
+      prevProductos.map((producto) =>
+        producto.id === id
+          ? { ...producto, inventario: nuevoInventario }
+          : producto
+      )
     );
+  
+    // Enviar el cambio al backend
+    try {
+      const response = await fetch(`http://localhost:4000/api/productos/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ inventario: nuevoInventario }),
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Error al actualizar el inventario:", errorMessage);
+        alert(`Error del servidor: ${errorMessage}`);
+        return;
+      }
+  
+      console.log("Inventario actualizado en el servidor correctamente.");
+    } catch (error) {
+      console.error("Error en la solicitud al servidor:", error);
+      alert("Error al comunicarse con el servidor.");
+    }
   };
-
+  
   const eliminarProducto = (id) => {
     setProductos((prevProductos) => prevProductos.filter((producto) => producto.id !== id));
   };
@@ -180,88 +235,90 @@ function AdminProductos() {
           </div>
         );
 
-      case "modificar":
-        return (
-          <div className="admin-form-section">
-            <h2>Modificar Inventario</h2>
-            <div className="admin-search-bar">
-              <input
-                type="text"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                placeholder="Buscar producto por nombre"
-              />
-            </div>
-            <div className="admin-product-list">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Inventario</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
+        case "modificar":
+          return (
+            <div className="admin-form-section">
+              <h2>Modificar Inventario</h2>
+              <div className="admin-search-bar">
+                <input
+                  type="text"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  placeholder="Buscar producto por nombre"
+                />
+              </div>
+              <div className="admin-product-list">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Inventario</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                   {filtrarProductos().map((producto) => (
                     <tr key={producto.id}>
                       <td>{producto.nombre}</td>
                       <td>{producto.inventario}</td>
                       <td className="admin-actions">
-                        <i
-                          className="fas fa-plus"
-                          onClick={() => actualizarInventario(producto.id, "incrementar")}
-                        ></i>
-                        <i
-                          className="fas fa-minus"
-                          onClick={() => actualizarInventario(producto.id, "decrementar")}
-                        ></i>
+                        <button className="aumentar-btn " onClick={() => actualizarInventario(producto.id, "incrementar")}>
+                          Aumentar
+                        </button>
+                        <button className="disminuir-btn"onClick={() => actualizarInventario(producto.id, "decrementar")}>
+                          Disminuir
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
-              </table>
-            </div>
-          </div>
-        );
 
-      case "eliminar":
-        return (
-          <div className="admin-form-section">
-            <h2>Eliminar Producto</h2>
-            <div className="admin-search-bar">
-              <input
-                type="text"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                placeholder="Buscar producto por nombre"
-              />
+                </table>
+              </div>
             </div>
-            <div className="admin-product-list">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtrarProductos().map((producto) => (
-                    <tr key={producto.id}>
-                      <td>{producto.nombre}</td>
-                      <td className="admin-actions">
-                        <i
-                          className="fas fa-trash"
-                          onClick={() => eliminarProducto(producto.id)}
-                        ></i>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
+          );
+        
 
+          case "eliminar":
+            return (
+              <div className="admin-form-section">
+                <h2>Eliminar Producto</h2>
+                <div className="admin-search-bar">
+                  <input
+                    type="text"
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                    placeholder="Buscar producto por nombre"
+                  />
+                </div>
+                <div className="admin-product-list">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filtrarProductos().map((producto) => (
+                        <tr key={producto.id}>
+                          <td>{producto.nombre}</td>
+                          <td className="admin-actions">
+                            <button
+                              className="eliminar-btn"
+                              onClick={() => eliminarProducto(producto.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          
       default:
         return null;
     }
@@ -269,11 +326,22 @@ function AdminProductos() {
 
   return (
     <div>
-      <header className="admin-header">
+    <header className="admin-header">
         <div className="admin-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="login-logo-img" />
-          <div className="login-name">TU DESPENSA 🛒</div>
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name">TU DESPENSA </div>
         </div>
+
+        
+          <button
+            className="principal-admin-button"
+            onClick={() => navigate("/login")}
+          >
+            Cerrar Sesión
+          </button>
+        
+
+   
       </header>
 
       <div className="admin-container">

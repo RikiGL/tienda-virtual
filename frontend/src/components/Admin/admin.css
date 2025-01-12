@@ -177,3 +177,56 @@ h2 {
   .admin-footer p {
     margin: 5px 0;
   }
+
+  .eliminar-btn,
+  .aumentar-btn,
+  .disminuir-btn {
+    background-color: #b21f2d; /* Rojo como base */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .eliminar-btn:hover,
+ 
+  .disminuir-btn:hover {
+    background-color: #b21f2d; /* Un rojo más intenso al pasar el cursor */
+  }
+  
+  
+
+  .aumentar-btn{
+    margin-right: 15px;
+    background-color: #0c5304;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  .aumentar-btn:hover{
+    background-color: #0c5304
+  }
+
+  .principal-admin-button {
+    background-color: #0c5304;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .principal-admin-button:hover {
+    background-color: #f39c12;
+  }
