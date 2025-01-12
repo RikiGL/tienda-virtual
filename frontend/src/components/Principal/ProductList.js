@@ -28,7 +28,8 @@ const ProductList = ({ products, onAddToCart }) => {
                 key={product._id}
                 className={`principal-product-card ${product.inventario === 0 ? 'principal-out-of-stock' : ''}`}
               >
-                <img src={`./img/${product.imagen_url}`} alt={product.nombre} />
+                <img src={product.imagen_url && product.imagen_url.startsWith('http') ? product.imagen_url : ` /img/${product.imagen_url || 'default-image.jpg'}` } alt={product.nombre || 'Producto sin nombre'} />
+              
                 <div className="principal-product-info">
                   <h4>{product.nombre}</h4>
                   <p>{product.descripcion}</p>

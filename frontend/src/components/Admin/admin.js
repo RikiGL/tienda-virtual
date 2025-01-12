@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../imagenes/asdlogo.png";
 import "./admin.css";
+
 
 function AdminProductos() {
   const [productos, setProductos] = useState([]);
@@ -12,34 +13,73 @@ function AdminProductos() {
     precio: "",
     categoria: "",
     inventario: "",
-    imagen: null,
+    imagen: "",
   });
 
+  useEffect(() => {
+    const obtenerProductos = async () => {
+      try {
+        // Realizamos la solicitud GET para obtener los productos
+        const response = await fetch('http://localhost:4000/api/productos'); // Cambia la URL según sea necesario
+        const data = await response.json();
+
+        // Actualizamos el estado con los productos obtenidos
+        setProductos(data);
+      } catch (error) {
+        console.error('Error al obtener los productos:', error);
+      }
+    };
+
+    obtenerProductos();
+  }, []); // El array vacío asegura que se ejecute solo una vez al montar el componente
+
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNuevoProducto({ ...nuevoProducto, [name]: value });
   };
-
-  const handleFileChange = (e) => {
-    setNuevoProducto({ ...nuevoProducto, imagen: e.target.files[0] });
-  };
-
-  const crearProducto = () => {
-    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria) {
+  const crearProducto = async () => {
+    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria || !nuevoProducto.inventario) {
       alert("Por favor completa los campos obligatorios.");
       return;
     }
-
     const productoConId = {
       ...nuevoProducto,
-      id: Date.now(),
       precio: parseFloat(nuevoProducto.precio),
       inventario: parseInt(nuevoProducto.inventario, 10) || 0,
     };
 
     setProductos([...productos, productoConId]);
-    setNuevoProducto({ nombre: "", descripcion: "", precio: "", categoria: "", inventario: "", imagen: null });
+    try {
+      const response = await fetch ("http://localhost:4000/api/productos/", {
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body:JSON.stringify({
+          nombre: productoConId.nombre,
+          descripcion: productoConId.descripcion,
+          precio: productoConId.precio,
+          categoria: productoConId.categoria,
+          inventario: productoConId.inventario,
+          imagen_url: productoConId.imagen
+        })
+
+      }) 
+      console.log("Json enviado al back:",productoConId)
+      const data = await response.json();
+      if(response.status === 201){
+        alert("Producto Creado");
+        console.log("respuesta del back", data);
+        setNuevoProducto({ nombre: "", descripcion: "", precio: "", categoria: "", inventario: "", imagen: "" });  
+      }
+    } catch (error) {
+      console.error("Error en la solicitud: ", error)
+    }
   };
+
+
+
 
   const filtrarProductos = () => {
     return productos.filter((producto) =>
@@ -122,7 +162,8 @@ function AdminProductos() {
             </div>
             <div className="admin-form-control">
               <label htmlFor="imagen">Imagen (opcional):</label>
-              <input type="file" id="imagen" accept="image/*" onChange={handleFileChange} />
+              <input type="text" id="imagen" name = "imagen" value={nuevoProducto.imagen} onChange={handleInputChange} placeholder="Ingrese la url de la imagen" />
+
             </div>
             <div className="admin-form-control">
               <label htmlFor="inventario">Inventario:</label>

@@ -30,7 +30,7 @@ const productoSchema = new mongoose.Schema({
   },
   imagen_url: {
     type: String, // URL en formato de texto para la imagen del producto
-    required: true, // Campo obligatorio
+    //required: true, // Campo obligatorio
     validate: {
       validator: function (v) {
         return /^https?:\/\/.+\.(jpg|jpeg|png|webp|gif)$/i.test(v); // Validar formato de URL
