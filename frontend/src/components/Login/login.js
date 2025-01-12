@@ -65,16 +65,20 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        // Guardar el nombre del usuario
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
         localStorage.setItem("usuarioApellido", data.usuario.apellido);
         localStorage.setItem("usuarioEmail", data.usuario.email);
-        if (data.usuario.rol ==="admin"){
-          navigate("/admin")
-        }else{
+        localStorage.setItem("userRole", data.usuario.rol); // Almacenar el rol
+        localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
+      
+        // Redirigir según el rol
+        if (data.usuario.rol === "admin") {
+          navigate("/admin");
+        } else {
           navigate("/principal");
         }
-      } else {
+      }
+       else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
         recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA si hay un error
@@ -101,7 +105,7 @@ function Login() {
         },
         body: JSON.stringify({ token }), // Enviando solo el token al backend
       });
-  
+
       const data = await response.json();
 
       if (response.status === 302) {
@@ -109,7 +113,17 @@ function Login() {
         console.log("Respuesta del backend:", data);
         // Guardar el nombre del usuario
         localStorage.setItem("usuarioNombre", data.clienteExistente.nombre);
-        navigate("/principal");
+        localStorage.setItem("usuarioApellido", data.clienteExistente.apellido);
+        localStorage.setItem("usuarioEmail", data.clienteExistente.email);
+        localStorage.setItem("userRole", data.clienteExistente.rol); // Almacenar el rol
+        localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
+        console.log("Usuario autenticado:", data.clienteExistente);
+
+        if (data.clienteExistente.rol === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/principal");
+        }
 
       } else {
         console.error("Error en la solicitud:", data.message);
