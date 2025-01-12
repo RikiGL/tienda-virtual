@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import logo from "../imagenes/asdlogo.png";
 import "./admin.css";
 import { useNavigate } from "react-router-dom";
-
+import { isAdmin } from "../auth";
 
 function AdminProductos() {
   const [productos, setProductos] = useState([]);
@@ -22,6 +22,12 @@ function AdminProductos() {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
     if (!isLoggedIn) {
       navigate("/login"); // Redirige al login si no está autenticado
+    }
+  }, [navigate]);
+  
+  useEffect(() => {
+    if (!isAdmin()) {
+      navigate("/login");
     }
   }, [navigate]);
   

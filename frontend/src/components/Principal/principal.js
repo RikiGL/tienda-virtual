@@ -7,7 +7,7 @@ import Cart from "./Cart";
 import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
 import Modal from "../Modal/modal";
-
+import { isAdmin, isAuthenticated } from "../auth";
 const Principal = () => {
   const [productsState, setProducts] = useState([]);
   const [initialProducts, setInitialProducts] = useState([]);
@@ -32,6 +32,13 @@ const Principal = () => {
     "Abastos",
   ];
 
+  const handleCerrarSesion = () => {
+    localStorage.clear(); // Limpiar todos los datos
+    setUsuarioNombre(""); // Resetear usuarioNombre
+    navigate("/login"); // Redirigir al login
+  };
+  
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
@@ -46,6 +53,13 @@ const Principal = () => {
       }));
     localStorage.setItem("cart", JSON.stringify(cartItems));
   };
+
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate("/login");
+    }
+  }, [navigate]);
+  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -102,10 +116,16 @@ const Principal = () => {
 
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
-    if (nombre) {
+    const userRole = localStorage.getItem("userRole");
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+  
+    if (nombre && userRole !== "admin" && isLoggedIn === "true") {
       setUsuarioNombre(nombre);
+    } else {
+      setUsuarioNombre(""); // Limpiar usuarioNombre si no está autenticado o es admin
     }
   }, []);
+  
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -185,16 +205,12 @@ const Principal = () => {
             {showMenu && (
               <div className="principal-dropdown-menu">
                 <button
-                  className="principal-dropdown-item"
-                  onClick={() => {
-                    localStorage.removeItem("usuarioNombre");
-                    setUsuarioNombre("");
-                    setShowMenu(false);
-                    handleClearCart(); // Limpiar el carrito al cerrar sesión
-                  }}
-                >
-                  Cerrar Sesión
-                </button>
+  className="principal-dropdown-item"
+  onClick={handleCerrarSesion}
+>
+  Cerrar Sesión
+</button>
+
               </div>
             )}
           </div>

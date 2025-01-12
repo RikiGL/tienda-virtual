@@ -65,16 +65,20 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        // Guardar el nombre del usuario
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
         localStorage.setItem("usuarioApellido", data.usuario.apellido);
         localStorage.setItem("usuarioEmail", data.usuario.email);
-        if (data.usuario.rol ==="admin"){
-          navigate("/admin")
-        }else{
+        localStorage.setItem("userRole", data.usuario.rol); // Almacenar el rol
+        localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
+      
+        // Redirigir según el rol
+        if (data.usuario.rol === "admin") {
+          navigate("/admin");
+        } else {
           navigate("/principal");
         }
-      } else {
+      }
+       else {
         const errorData = await response.json();
         setErrorMessage(errorData.mensaje || "Error al iniciar sesión");
         recaptchaRef.current?.reset(); // Reiniciar el reCAPTCHA si hay un error
