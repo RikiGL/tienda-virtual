@@ -102,18 +102,15 @@ const Principal = () => {
 
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
-    console.log("Nombre recuperado de localStorage:", nombre); // DEBUG
     if (nombre) {
       setUsuarioNombre(nombre);
-    } else {
-      console.warn("No se encontró un nombre en localStorage");
     }
   }, []);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (usuarioNombre) {
-        navigator.sendBeacon("http://localhost:4000/api/login", JSON.stringify({ usuario: usuarioNombre }));
+        navigator.sendBeacon("http://localhost:4000/api/logout", JSON.stringify({ usuario: usuarioNombre }));
         localStorage.removeItem("usuarioNombre");
       }
     };
@@ -124,7 +121,7 @@ const Principal = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [usuarioNombre]);
-
+  
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -146,6 +143,22 @@ const Principal = () => {
               ...p,
               inventario: Math.max(0, p.inventario - 1),
               quantity: (p.quantity || 0) + 1,
+            }
+          : p
+      );
+      setProducts(updatedProducts);
+      saveCartToLocalStorage(updatedProducts);
+    }
+  };
+
+  const handleRemoveFromCart = (product) => {
+    if (product.quantity > 0) {
+      const updatedProducts = productsState.map((p) =>
+        p._id === product._id
+          ? {
+              ...p,
+              inventario: p.inventario + 1,
+              quantity: Math.max(0, p.quantity - 1),
             }
           : p
       );
@@ -227,9 +240,7 @@ const Principal = () => {
             {categories.map((category) => (
               <li
                 key={category}
-                className={`principal-category-item ${
-                  selectedCategory === category ? "principal-active" : ""
-                }`}
+                className={`principal-category-item ${selectedCategory === category ? "principal-active" : ""}`}
                 onClick={() => handleCategoryChange(category)}
               >
                 {category}
@@ -256,6 +267,7 @@ const Principal = () => {
         <Cart
           products={productsState.filter((product) => product.quantity > 0)}
           onAddToCart={handleAddToCart}
+          onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
           onClose={() => setCartVisible(false)}
         />
