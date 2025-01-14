@@ -59,6 +59,8 @@ body {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 380px;
 }
 
 .login-title {
@@ -208,4 +210,173 @@ body {
 
 .login-back-button:hover {
   background: #5a0dbf;
+}
+/* Para pantallas pequeñas (menores de 768px) */
+@media (max-width: 912px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-box {
+    width: 95%; /* El formulario ocupa el 95% del ancho */
+    padding: 15px;
+  }
+
+  .login-title {
+    font-size: 20px; /* Ajustar tamaño del título */
+  }
+
+  .login-input-field {
+    font-size: 14px; /* Reducir tamaño de fuente */
+    padding: 8px;
+  }
+
+  .login-button {
+    font-size: 14px; /* Reducir tamaño de botón */
+    padding: 10px;
+  }
+
+  .login-captcha-container > div {
+    transform: scale(0.65); /* Reducir tamaño del reCAPTCHA */
+  }
+
+  .login-footer {
+    font-size: 10px; /* Reducir tamaño del texto del footer */
+  }
+
+  .login-back-button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+@media (min-width: 1024px) {
+  .login-box {
+    width: 400px;
+  }
+
+  .login-title {
+    font-size: 24px;
+  }
+
+  .login-input-field {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .login-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+  .login-captcha-container > div {
+    transform: scale(0.65); /* Reducir tamaño del reCAPTCHA */
+  }
+  
+}
+/* Para pantallas muy pequeñas (menores a 400px) */
+@media (max-width: 400px) {
+  .login-box {
+    width: 95%; /* Asegura que el formulario ocupe casi todo el ancho */
+    padding: 10px; /* Reduce el padding interno */
+    border-radius: 8px; /* Ajustar bordes redondeados */
+  }
+
+  .login-title {
+    font-size: 18px; /* Reduce el tamaño del título */
+    margin-bottom: 15px; /* Reduce el espacio inferior */
+  }
+
+  .login-input-field {
+    font-size: 13px; /* Ajusta el tamaño del texto */
+    padding: 8px; /* Reduce el padding interno */
+  }
+
+  .login-button {
+    font-size: 14px; /* Reduce el tamaño del botón */
+    padding: 8px; /* Reduce el espacio interno del botón */
+  }
+
+  .login-captcha-container > div {
+    transform: scale(0.50); /* Escala aún más el reCAPTCHA */
+     
+  }
+
+  .login-google-button {
+    margin: 10px auto; /* Asegura que se centre horizontalmente */
+    font-size: 12px; /* Ajusta el tamaño del texto del botón de Google */
+    padding: 8px; /* Reduce el padding del botón */
+  }
+
+  .login-footer {
+    font-size: 10px; /* Reduce el tamaño del texto del footer */
+  }
+
+  .login-register-container {
+    margin-top: 15px; /* Reduce el margen superior */
+  }
+
+  .login-back-button {
+    font-size: 12px; /* Reduce el tamaño del botón de volver */
+    padding: 8px 10px; /* Ajusta el padding */
+    top: 10px; /* Baja la posición del botón */
+    left: 10px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Asegura que el formulario esté centrado verticalmente */
+    padding: 20px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .login-box {
+    width: 60%; /* Ocupa el 60% del ancho para centrarse mejor */
+    max-width: 500px; /* Límite máximo de ancho */
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .login-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .login-input-field {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .login-button {
+    font-size: 16px;
+    padding: 12px;
+  }
+
+  .login-captcha-container > div {
+    transform: scale(0.9); /* Reduce ligeramente el tamaño del reCAPTCHA */
+    transform-origin: 0 0;
+    margin: 10px 0;
+  }
+
+  .login-google-button {
+    font-size: 14px;
+    padding: 10px;
+    margin: 10px auto;
+    text-align: center;
+  }
+
+  .login-footer {
+    font-size: 12px;
+    margin-top: 20px;
+  }
+
+  .login-back-button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
 }
