@@ -228,3 +228,34 @@ body {
     transform: translateY(0);
   }
 }
+@media (max-width: 400px) {
+  .pagoC-payment-confirmation {
+    width: 95%; /* Más compacto */
+    padding: 15px;
+  }
+
+  .pagoC-back-button {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+
+  .pagoC-user-info h2,
+  .pagoC-product-info h2,
+  .pagoC-total-amount h2 {
+    font-size: 16px; /* Títulos más pequeños */
+  }
+
+  .pagoC-product-info th,
+  .pagoC-product-info td {
+    font-size: 12px; /* Texto más pequeño */
+    padding: 6px;
+  }
+
+  .pagoC-row {
+    font-size: 14px; /* Reducir el tamaño del subtotal */
+  }
+
+  #paypal-button-container {
+    transform: scale(0.9); /* Reducir el tamaño del botón PayPal */
+  }
+}
