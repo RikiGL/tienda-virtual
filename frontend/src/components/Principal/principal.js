@@ -43,6 +43,16 @@ const Principal = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const handleRemoveAllFromCart = (product) => {
+    const updatedProducts = productsState.map((p) =>
+      p._id === product._id
+        ? { ...p, quantity: 0, inventario: p.inventario + p.quantity }
+        : p
+    );
+    setProducts(updatedProducts);
+    saveCartToLocalStorage(updatedProducts);
+  };
+
 
   const saveCartToLocalStorage = (updatedProducts) => {
     const cartItems = updatedProducts
@@ -129,7 +139,7 @@ const Principal = () => {
     }
   }, []);
   
-
+   
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -157,6 +167,8 @@ const Principal = () => {
       );
       setProducts(updatedProducts);
       saveCartToLocalStorage(updatedProducts);
+      setModalMessage(`"${product.nombre}" agregado correctamente`);
+    setIsModalVisible(true);
     }
   };
 
@@ -323,6 +335,7 @@ const Principal = () => {
           onAddToCart={handleAddToCart}
           onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
+          onRemoveAllFromCart={handleRemoveAllFromCart}
           onClose={() => setCartVisible(false)}
         />
       )}
