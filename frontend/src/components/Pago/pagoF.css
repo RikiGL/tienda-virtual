@@ -98,13 +98,15 @@ body {
 
 /* Información del cliente y productos */
 .pagoC-user-info,
+
 .pagoC-product-info {
   margin-bottom: 25px;
   font-size: 18px;
   color: #333333; /* Gris oscuro */
   
 }
-.pagoC-user-info{
+.pagoC-user-info
+{
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   font-style: italic;
@@ -276,4 +278,34 @@ body {
   #paypal-button-container {
     transform: scale(0.9); /* Reducir el tamaño del botón PayPal */
   }
+}
+
+
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+.pagoC-row input {
+  padding: 5px;
+  width: 50%;
+  margin-top: 0px;
+}
+
+
+.pagoC-row {
+  margin-bottom: 10px;
+}
+
+.pagoC-row label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.pagoC-row input {
+  width: 50%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

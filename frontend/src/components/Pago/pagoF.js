@@ -158,6 +158,28 @@ const PaymentConfirmation = () => {
           <strong>Dirección:</strong> {user.domicilio || "No disponible"}
           </p>
           
+
+
+          <div className="pagoC-row">
+    <label htmlFor="cedula">Cédula:</label>
+    <input
+      type="text"
+      id="cedula"
+      placeholder="Ingrese su cédula"
+      required
+    />
+  </div>
+  <div className="pagoC-row">
+    <label htmlFor="telefono">Número de Celular:</label>
+    <input
+      type="text"
+      id="telefono"
+      placeholder="Ingrese su número de celular"
+      required
+    />
+  </div>
+
+          
         </div>
         <div className="change-address-button">
           <button onClick={handleChangeAddress}>Cambiar Dirección</button>
