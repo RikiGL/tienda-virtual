@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTrashAlt } from 'react-icons/fa';  // Icono de eliminar
+import { FaTimesCircle } from "react-icons/fa";  // Icono de "X" 
 
 const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart, onRemoveAllFromCart }) => {
   const navigate = useNavigate();
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   const validProducts = Array.isArray(products) ? products : [];
 
@@ -25,25 +28,32 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart, o
   // Función modificada para manejar la eliminación con confirmación
   const handleRemoveFromCart = (product) => {
     if (product.quantity === 1) {
-      const confirmation = window.confirm(
-        `¿Estás seguro de que deseas eliminar ${product.nombre}?`
-      );
-      if (confirmation) {
+      // Mostrar la notificación en lugar de usar window.confirm
+      setNotificationMessage(`${product.nombre} eliminado correctamente`);
+      setIsNotificationVisible(true);
+
+      // Lógica para eliminar el producto después de 3 segundos
+      setTimeout(() => {
         onRemoveFromCart(product);
-      }
+        setIsNotificationVisible(false); // Ocultamos la notificación después de 3 segundos
+      }, 3000);
     } else {
       onRemoveFromCart(product);
     }
   };
 
+
   // Nueva función para eliminar todas las unidades de un producto
   const handleRemoveAllFromCart = (product) => {
-    const confirmation = window.confirm(
-      `¿Estás seguro de que deseas eliminar todas las unidades de ${product.nombre}?`
-    );
-    if (confirmation) {
+    // Mostrar la notificación en lugar de usar window.confirm
+    setNotificationMessage(` ${product.nombre} eliminado correctamente`);
+    setIsNotificationVisible(true);
+
+    // Lógica para eliminar todas las unidades después de 3 segundos
+    setTimeout(() => {
       onRemoveAllFromCart(product);
-    }
+      setIsNotificationVisible(false); // Ocultamos la notificación después de 3 segundos
+    }, 3000);
   };
 
   return (
@@ -100,6 +110,12 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart, o
         >
           Proceder al pago
         </button>
+      )}
+      {isNotificationVisible && (
+        <div className="notification-container-eliminar">
+          <FaTimesCircle className="notification-icon-eli" />
+          <span>{notificationMessage}</span>
+        </div>
       )}
     </div>
   );

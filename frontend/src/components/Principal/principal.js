@@ -8,6 +8,7 @@ import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
 import Modal from "../Modal/modal";
 import { isAdmin, isAuthenticated } from "../auth";
+import { FaCheckCircle } from 'react-icons/fa';
 const Principal = () => {
   const [productsState, setProducts] = useState([]);
   const [initialProducts, setInitialProducts] = useState([]);
@@ -22,6 +23,8 @@ const Principal = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showMenuHamburguesa, setShowMenuHamburguesa] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Controla el estado del tamaño de la pantalla
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   const categories = [
     "Todas",
@@ -167,8 +170,13 @@ const Principal = () => {
       );
       setProducts(updatedProducts);
       saveCartToLocalStorage(updatedProducts);
-      setModalMessage(`"${product.nombre}" agregado correctamente`);
-    setIsModalVisible(true);
+      setNotificationMessage(`"${product.nombre}" agregado correctamente`);
+      setIsNotificationVisible(true);
+
+      // Hacer desaparecer el mensaje después de 3 segundos
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 3000);
     }
   };
 
@@ -346,6 +354,13 @@ const Principal = () => {
           onClose={() => setIsModalVisible(false)}
         />
       )}
+      {isNotificationVisible && (
+        <div className="notification-container">
+          <FaCheckCircle className="notification-icon" />  {/* Mostrar ícono de check */}
+          <span>{notificationMessage}</span>
+        </div>
+      )}
+    
 
       <footer className="principal-app-footer">
         <p>© 2024 Tudespensa. Todos los derechos reservados.</p>
