@@ -71,11 +71,13 @@ body, html {
     flex-direction: column;
     gap: 10px;
     margin: 3px;
+    
   }
   
   .direccion-container input {
     background-color: #f1f1f1;
     height: 40px;
+    width: 100%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -103,9 +105,34 @@ body, html {
     margin: 10px;
   }
   
-  button:hover {
+  .Volver-btn , .Actualizar-btn:hover {
     background-color: #45a049;
   }
+  /* Estilos para el contenedor de la notificación */
+.notification-container-act {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px;
+  position: fixed; /* Asegura que la notificación se muestre en la parte superior */
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  border-left: 7px solid green; /* Borde izquierdo verde */
+}
+
+/* Estilos para el ícono dentro de la notificación */
+.notification-icon-act {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  color: green; /* Color verde para el ícono de check */
+}
   
   /* Footer */
   .cd-footer {

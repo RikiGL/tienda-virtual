@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CambioDireccion.css';
 import logo from "../imagenes/asdlogo.png";
+import { FaCheckCircle } from 'react-icons/fa';
 
 const CambioDireccion = () => {
   const [newAddress, setNewAddress] = useState({
@@ -11,6 +12,8 @@ const CambioDireccion = () => {
   });
 
   const navigate = useNavigate();
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   useEffect(() => {
     // Cargar el script de Google Maps
@@ -69,7 +72,14 @@ const CambioDireccion = () => {
   }, [newAddress.referencia]);  // Se ejecuta cuando la referencia cambie
 
   const handleSaveAddress = () => {
-    alert(`Dirección actualizada a: ${newAddress.direccion}, ${newAddress.ciudad}, ${newAddress.referencia}`);
+    // Mostrar notificación de éxito con el mensaje de dirección actualizada
+    setNotificationMessage(`Dirección actualizada a: ${newAddress.direccion}, ${newAddress.ciudad}, ${newAddress.referencia}`);
+    setIsNotificationVisible(true);
+
+    // Ocultar la notificación después de 3 segundos
+    setTimeout(() => {
+      setIsNotificationVisible(false);
+    }, 3000);
   };
 
   const handleVolver = () => {
@@ -135,12 +145,19 @@ const CambioDireccion = () => {
             <button className='Volver-btn' onClick={handleVolver}>Volver</button>
             <button className='Actualizar-btn' onClick={handleSaveAddress}>Actualizar</button>
           </div>
+          {isNotificationVisible && (
+          <div className="notification-container-act">
+            <FaCheckCircle className="notification-icon-act" />
+            <span>{notificationMessage}</span>
+          </div>
+        )}
         </div>
-        <footer className="cd-footer">
+        
+      </div>
+      <footer className="cd-footer">
           <p>© 2024 TuDespensa. Todos los derechos reservados.</p>
           <p>Contacto: info@tudespensa.com</p>
         </footer>
-      </div>
     </div>
   );
 };
