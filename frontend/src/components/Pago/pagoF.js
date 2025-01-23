@@ -8,7 +8,7 @@ const PaymentConfirmation = () => {
   const { state } = useLocation();
   const { products = [], subtotal = 0, user = {} } = state || {};
   const totalAmount = (subtotal + 1.5).toFixed(2); // Total con costo de envío
-
+ 
   // Usar memoización para evitar reejecuciones innecesarias
   const memoizedProducts = useMemo(() => products, [products]);
 
@@ -19,7 +19,7 @@ const PaymentConfirmation = () => {
         initializePayPalButtons();
         return;
       }
-
+       
       const script = document.createElement("script");
       script.id = "paypal-sdk";
       script.src = `https://www.paypal.com/sdk/js?client-id=ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U&currency=USD`;
@@ -30,7 +30,7 @@ const PaymentConfirmation = () => {
       };
       document.body.appendChild(script);
     };
-
+    
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
       if (buttonContainer) {
@@ -120,10 +120,14 @@ const PaymentConfirmation = () => {
     // Cargar el script de PayPal cuando el componente se monta
     loadPayPalScript();
   }, [totalAmount, user.id, navigate, memoizedProducts]);
-
+   // Funciones para manejar el cambio de dirección
+   const handleChangeAddress = () => {
+    navigate("/CambioDireccion");
+  };
   const handleBackClick = () => {
     navigate("/principal");
   };
+  
 
   return (
     <div className="pagoC-page">
@@ -151,9 +155,36 @@ const PaymentConfirmation = () => {
             <strong>Correo electrónico:</strong> {user.correo || "No disponible"}
           </p>
           <p>
-            <strong>Dirección:</strong> {user.domicilio || "No disponible"}
+          <strong>Dirección:</strong> {user.domicilio || "No disponible"}
           </p>
+          
+
+
+          <div className="pagoC-row">
+    <label htmlFor="cedula">Cédula:</label>
+    <input
+      type="text"
+      id="cedula"
+      placeholder="Ingrese su cédula"
+      required
+    />
+  </div>
+  <div className="pagoC-row">
+    <label htmlFor="telefono">Número de Celular:</label>
+    <input
+      type="text"
+      id="telefono"
+      placeholder="Ingrese su número de celular"
+      required
+    />
+  </div>
+
+          
         </div>
+        <div className="change-address-button">
+          <button onClick={handleChangeAddress}>Cambiar Dirección</button>
+          </div>
+        
 
         <div className="pagoC-product-info">
           <h2>Productos</h2>

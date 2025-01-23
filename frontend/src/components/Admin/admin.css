@@ -179,7 +179,7 @@ h2 {
   }
 
   .eliminar-btn,
-  .aumentar-btn,
+  .guardar-btn,
   .disminuir-btn {
     background-color: #b21f2d; /* Rojo como base */
     color: white;
@@ -200,7 +200,7 @@ h2 {
   
   
 
-  .aumentar-btn{
+  .guardar-btn{
     margin-right: 15px;
     background-color: #0c5304;
     color: white;
@@ -212,7 +212,7 @@ h2 {
     font-weight: bold;
     transition: background-color 0.3s ease;
   }
-  .aumentar-btn:hover{
+  .guardar-btn:hover{
     background-color: #0c5304
   }
 

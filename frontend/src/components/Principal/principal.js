@@ -8,6 +8,7 @@ import logo from "../imagenes/asdlogo.png";
 import "./principal.css";
 import Modal from "../Modal/modal";
 import { isAdmin, isAuthenticated } from "../auth";
+import { FaCheckCircle } from 'react-icons/fa';
 const Principal = () => {
   const [productsState, setProducts] = useState([]);
   const [initialProducts, setInitialProducts] = useState([]);
@@ -22,6 +23,8 @@ const Principal = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showMenuHamburguesa, setShowMenuHamburguesa] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Controla el estado del tamaño de la pantalla
+  const [notificationMessage, setNotificationMessage] = useState('');
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   const categories = [
     "Todas",
@@ -43,6 +46,16 @@ const Principal = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
+  const handleRemoveAllFromCart = (product) => {
+    const updatedProducts = productsState.map((p) =>
+      p._id === product._id
+        ? { ...p, quantity: 0, inventario: p.inventario + p.quantity }
+        : p
+    );
+    setProducts(updatedProducts);
+    saveCartToLocalStorage(updatedProducts);
+  };
+
 
   const saveCartToLocalStorage = (updatedProducts) => {
     const cartItems = updatedProducts
@@ -129,7 +142,7 @@ const Principal = () => {
     }
   }, []);
   
-
+   
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
@@ -157,6 +170,13 @@ const Principal = () => {
       );
       setProducts(updatedProducts);
       saveCartToLocalStorage(updatedProducts);
+      setNotificationMessage(`"${product.nombre}" agregado correctamente`);
+      setIsNotificationVisible(true);
+
+      // Hacer desaparecer el mensaje después de 3 segundos
+      setTimeout(() => {
+        setIsNotificationVisible(false);
+      }, 3000);
     }
   };
 
@@ -323,6 +343,7 @@ const Principal = () => {
           onAddToCart={handleAddToCart}
           onRemoveFromCart={handleRemoveFromCart}
           onClearCart={handleClearCart}
+          onRemoveAllFromCart={handleRemoveAllFromCart}
           onClose={() => setCartVisible(false)}
         />
       )}
@@ -333,6 +354,13 @@ const Principal = () => {
           onClose={() => setIsModalVisible(false)}
         />
       )}
+      {isNotificationVisible && (
+        <div className="notification-container">
+          <FaCheckCircle className="notification-icon" />  {/* Mostrar ícono de check */}
+          <span>{notificationMessage}</span>
+        </div>
+      )}
+    
 
       <footer className="principal-app-footer">
         <p>© 2024 Tudespensa. Todos los derechos reservados.</p>

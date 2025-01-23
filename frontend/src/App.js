@@ -12,6 +12,7 @@ import GoogleR from "./components/GoogleR/googler"
 import Pago from "./components/Pago/pagoF"
 import AdminProductos from "./components/Admin/admin";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CambioDireccion from "./components/CambioDirección/CambioDireccion"; 
 function App() {
   return (
     // Con este clientID se obtienen los datos de una cuenta de google para login y registro de OAuth
@@ -27,6 +28,7 @@ function App() {
        <Route path="/cambio3" element={<CambioContrasena3 />}/>
        <Route path="/googler" element={<GoogleR />}/>
        <Route path="/pagoF" element={<Pago />}/>
+       <Route path="/CambioDireccion" element={<CambioDireccion />} />
        <Route
           path="/admin"
           element={

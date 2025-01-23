@@ -26,7 +26,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: #f1c40f; /* Morado intenso */
+  background-color: #f1c40f; 
   color: #FFFFFF;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   height: 100px;
@@ -98,13 +98,15 @@ body {
 
 /* Información del cliente y productos */
 .pagoC-user-info,
+
 .pagoC-product-info {
   margin-bottom: 25px;
   font-size: 18px;
   color: #333333; /* Gris oscuro */
   
 }
-.pagoC-user-info{
+.pagoC-user-info
+{
   font-family: "Roboto", sans-serif;
   font-weight: 100;
   font-style: italic;
@@ -216,7 +218,25 @@ body {
   color: #FFFFFF;
   transform: scale(1.05);
 }
+/* Estilo para el botón de "Cambiar Dirección" */
 
+.change-address-button button{
+  margin-left: 10px;
+  padding: 5px 10px;
+  font-size: 15px;
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-items: center;
+  width: 100%;
+}
+/* Hover para el botón */
+.change-address-button button:hover {
+  background-color: #e67e22;
+}
 /* Animación de entrada */
 @keyframes fadeIn {
   from {
@@ -258,4 +278,34 @@ body {
   #paypal-button-container {
     transform: scale(0.9); /* Reducir el tamaño del botón PayPal */
   }
+}
+
+
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+.pagoC-row input {
+  padding: 5px;
+  width: 50%;
+  margin-top: 0px;
+}
+
+
+.pagoC-row {
+  margin-bottom: 10px;
+}
+
+.pagoC-row label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.pagoC-row input {
+  width: 50%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

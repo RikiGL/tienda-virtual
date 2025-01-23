@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaTrashAlt } from 'react-icons/fa';  // Icono de eliminar
+import { FaTimesCircle } from "react-icons/fa";  // Icono de "X" 
 
-const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart }) => {
+const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart, onRemoveAllFromCart }) => {
   const navigate = useNavigate();
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
 
   const validProducts = Array.isArray(products) ? products : [];
 
@@ -12,14 +16,44 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
   );
 
   const handleProceedToPayment = () => {
-
     const user = {
       nombre: localStorage.getItem("usuarioNombre"),
       apellido: localStorage.getItem("usuarioApellido"),
       email: localStorage.getItem("usuarioEmail")
     };
-  
-    navigate("/pagoF", { state: { products: validProducts, subtotal, user } }); 
+
+    navigate("/pagoF", { state: { products: validProducts, subtotal, user } });
+  };
+
+  // Función modificada para manejar la eliminación con confirmación
+  const handleRemoveFromCart = (product) => {
+    if (product.quantity === 1) {
+      // Mostrar la notificación en lugar de usar window.confirm
+      setNotificationMessage(`${product.nombre} eliminado correctamente`);
+      setIsNotificationVisible(true);
+
+      // Lógica para eliminar el producto después de 3 segundos
+      setTimeout(() => {
+        onRemoveFromCart(product);
+        setIsNotificationVisible(false); // Ocultamos la notificación después de 3 segundos
+      }, 3000);
+    } else {
+      onRemoveFromCart(product);
+    }
+  };
+
+
+  // Nueva función para eliminar todas las unidades de un producto
+  const handleRemoveAllFromCart = (product) => {
+    // Mostrar la notificación en lugar de usar window.confirm
+    setNotificationMessage(` ${product.nombre} eliminado correctamente`);
+    setIsNotificationVisible(true);
+
+    // Lógica para eliminar todas las unidades después de 3 segundos
+    setTimeout(() => {
+      onRemoveAllFromCart(product);
+      setIsNotificationVisible(false); // Ocultamos la notificación después de 3 segundos
+    }, 3000);
   };
 
   return (
@@ -35,35 +69,30 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
         validProducts.map((product) => (
           <div key={product._id} className="principal-cart-item">
             <img
-              src={
-                product.imagen_url && product.imagen_url.startsWith("http")
-                  ? product.imagen_url
-                  : ` /img/${product.imagen_url || "default-image.jpg"}`
-              }
+              src={product.imagen_url && product.imagen_url.startsWith("http") ? product.imagen_url : `/img/${product.imagen_url || "default-image.jpg"}`}
               alt={product.nombre || "Producto sin nombre"}
               className="principal-cart-item-image"
             />
 
             <div className="principal-cart-item-details">
               <span className="principal-cart-item-name">{product.nombre}</span>
-              <span className="principal-cart-item-price">
-                ${(product.precio * product.quantity).toFixed(2)}
-              </span>
+              <span className="principal-cart-item-price">${(product.precio * product.quantity).toFixed(2)}</span>
               <div className="principal-cart-controls">
-                <button onClick={() => onRemoveFromCart(product)}>-</button>
-                <span className="principal-cart-item-quantity">
-                  {product.quantity}
-                </span>
+                <button onClick={() => handleRemoveFromCart(product)}>-</button>
+                <span className="principal-cart-item-quantity">{product.quantity}</span>
                 <button
                   onClick={() => onAddToCart(product)}
                   disabled={product.inventario === 0}
-                  className={
-                    product.inventario === 0 ? "principal-disabled" : ""
-                  }
+                  className={product.inventario === 0 ? "principal-disabled" : ""}
                 >
                   +
                 </button>
+               
               </div>
+               {/* Botón para eliminar todas las unidades de un producto */}
+               <button className="remove-all-button" onClick={() => handleRemoveAllFromCart(product)}>
+                  <FaTrashAlt /> {/* Icono de la papelera */}
+                </button>
             </div>
           </div>
         ))
@@ -81,6 +110,12 @@ const Cart = ({ products, onAddToCart, onRemoveFromCart, onClose, onClearCart })
         >
           Proceder al pago
         </button>
+      )}
+      {isNotificationVisible && (
+        <div className="notification-container-eliminar">
+          <FaTimesCircle className="notification-icon-eli" />
+          <span>{notificationMessage}</span>
+        </div>
       )}
     </div>
   );
