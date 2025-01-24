@@ -349,7 +349,7 @@ body {
 
 .principal-cart-button {
   position: absolute;
-  top: 70px;
+  top: 130px;
   right: 20px;
   background-color: #371d03f0;
   color: white;
@@ -527,7 +527,7 @@ button:disabled, button.principal-disabled {
 .principal-dropdown-menu {
   position: absolute;
   top: 100%;
-  right: -20px; 
+  right: -60px; 
   background-color: #ffedcc; 
   border: 1px solid #e5a100; 
   border-radius: 8px;
@@ -703,6 +703,7 @@ button:disabled, button.principal-disabled {
 }
 /* Ocultar menú hamburguesa en pantallas grandes */
 @media (min-width: 1024px) {
+
   .menu-toggle {
     display: none; /* Esconde el botón hamburguesa en pantallas grandes */
   }
@@ -860,11 +861,17 @@ button:disabled, button.principal-disabled {
   }
 
   .principal-cart {
-    width: 85%; /* El carrito ocupa el 85% del ancho */
-    max-width: 500px; /* Limita el ancho máximo */
-    margin: 0 auto; /* Centra el carrito */
-    padding: 10px; /* Reduce el padding */
-    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px; /* Reduce el ancho del carrito */
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    background-color: #fff;
+    border-left: 1px solid #ddd; /* Borde lateral más discreto */
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1); /* Sombra en el borde izquierdo */
   }
 
   .tituloCarrito {
@@ -914,3 +921,34 @@ button:disabled, button.principal-disabled {
 }
  
 
+
+
+.principal-header-button{
+  margin-right: 15px;
+}
+
+
+
+.principal-admin-button-asd {
+
+  background-color: #0c5304;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.principal-admin-button-asd:hover {
+  background-color: #f39c12;
+}
+
+
+
+@media (max-width: 1024px) {
+  .principal-cart {
+    width: 400px; /* Un poco más ancho en dispositivos medianos */
+  }
+}
