@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css";
 import logo from "../imagenes/asdlogo.png";
@@ -8,9 +8,13 @@ const PaymentConfirmation = () => {
   const { state } = useLocation();
   const { products = [], subtotal = 0, user = {} } = state || {};
   const totalAmount = (subtotal + 1.5).toFixed(2); // Total con costo de envío
- 
+
   // Usar memoización para evitar reejecuciones innecesarias
   const memoizedProducts = useMemo(() => products, [products]);
+
+  // ====== NUEVOS ESTADOS PARA EL MODAL Y FACTURA ======
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null); // Guarda la info de la factura
 
   useEffect(() => {
     const loadPayPalScript = () => {
@@ -19,7 +23,7 @@ const PaymentConfirmation = () => {
         initializePayPalButtons();
         return;
       }
-       
+
       const script = document.createElement("script");
       script.id = "paypal-sdk";
       script.src = `https://www.paypal.com/sdk/js?client-id=ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U&currency=USD`;
@@ -30,7 +34,7 @@ const PaymentConfirmation = () => {
       };
       document.body.appendChild(script);
     };
-    
+
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
       if (buttonContainer) {
@@ -53,11 +57,12 @@ const PaymentConfirmation = () => {
             onApprove: async (data, actions) => {
               try {
                 const details = await actions.order.capture();
-                alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
+                // Se completa el pago en PayPal:
+                console.log(`Pago completado con éxito por ${details.payer.name.given_name}`);
 
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: 6, // Usar el ID del cliente
+                  id_cliente: 6, // Asigna aquí el ID del cliente real
                   total: totalAmount,
                   metodo_pago: "paypal",
                 };
@@ -76,6 +81,9 @@ const PaymentConfirmation = () => {
 
                 const responseData = await response.json();
                 console.log("Factura creada:", responseData);
+
+                // Guardamos los datos de la factura en el estado
+                setInvoiceData(responseData);
 
                 // Eliminar los productos de la base de datos según la cantidad
                 const productIdsWithQuantities = memoizedProducts.map((product) => ({
@@ -96,8 +104,11 @@ const PaymentConfirmation = () => {
                 }
 
                 console.log("Productos eliminados correctamente");
-                // Redirigir después del pago
-                navigate("/principal");
+
+                // ===== En lugar de redirigir inmediatamente,
+                // mostramos el modal de confirmación de pago =====
+                setShowConfirmationModal(true);
+
               } catch (error) {
                 console.error("Error al procesar la factura:", error);
                 alert("El pago fue exitoso, pero ocurrió un error al guardar la factura.");
@@ -120,14 +131,29 @@ const PaymentConfirmation = () => {
     // Cargar el script de PayPal cuando el componente se monta
     loadPayPalScript();
   }, [totalAmount, user.id, navigate, memoizedProducts]);
-   // Funciones para manejar el cambio de dirección
-   const handleChangeAddress = () => {
+
+  // Funciones para manejar el cambio de dirección
+  const handleChangeAddress = () => {
     navigate("/CambioDireccion");
   };
   const handleBackClick = () => {
     navigate("/principal");
   };
-  
+
+  // ====== MANEJADORES DEL MODAL ======
+  // Descargar la factura (si el backend provee un PDF u otro archivo, adaptarlo)
+  const handleDownloadInvoice = () => {
+    if (!invoiceData) return;
+    // Supongamos que el backend retorna el ID de la factura en "invoiceData.id"
+    // Ajusta la ruta según tu backend (PDF, etc.)
+    window.open(`http://localhost:4000/api/facturas/${invoiceData.id}/descargar`, "_blank");
+  };
+
+  const handleGoHome = () => {
+    // Cierra el modal y navega a la principal
+    setShowConfirmationModal(false);
+    navigate("/principal");
+  };
 
   return (
     <div className="pagoC-page">
@@ -137,13 +163,32 @@ const PaymentConfirmation = () => {
           <div className="pagoC-name">TU DESPENSA 🛒</div>
         </div>
       </header>
+
       <div className="pagoC-back-button-container">
         <button className="pagoC-back-button" onClick={handleBackClick}>
           Volver
         </button>
       </div>
 
-      <main className="pagoC-payment-confirmation">
+      {/* 
+        Si el modal está visible, aplicamos una clase de "fondo opaco" (overlay).
+        En CSS, puedes hacer que .overlay o .modal-background oscurezca el contenido de fondo.
+      */}
+      {showConfirmationModal && (
+        <div className="modal-overlay">
+          <div className="confirmation-modal">
+            <h2>¡Pago realizado con éxito!</h2>
+            <p>Tu pago se ha procesado correctamente.</p>
+
+            <div className="modal-buttons">
+              <button className="fin-btn" onClick={handleDownloadInvoice}>Descargar Factura</button>
+              <button className="fin-btn" onClick={handleGoHome}>Volver al Inicio</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <main className={`pagoC-payment-confirmation ${showConfirmationModal ? "blur-content" : ""}`}>
         <h1>Confirmación de Pago</h1>
 
         <div className="pagoC-user-info">
@@ -155,36 +200,32 @@ const PaymentConfirmation = () => {
             <strong>Correo electrónico:</strong> {user.correo || "No disponible"}
           </p>
           <p>
-          <strong>Dirección:</strong> {user.domicilio || "No disponible"}
+            <strong>Dirección:</strong> {user.domicilio || "No disponible"}
           </p>
-          
-
 
           <div className="pagoC-row">
-    <label htmlFor="cedula">Cédula:</label>
-    <input
-      type="text"
-      id="cedula"
-      placeholder="Ingrese su cédula"
-      required
-    />
-  </div>
-  <div className="pagoC-row">
-    <label htmlFor="telefono">Número de Celular:</label>
-    <input
-      type="text"
-      id="telefono"
-      placeholder="Ingrese su número de celular"
-      required
-    />
-  </div>
-
-          
+            <label htmlFor="cedula">Cédula:</label>
+            <input
+              type="text"
+              id="cedula"
+              placeholder="Ingrese su cédula"
+              required
+            />
+          </div>
+          <div className="pagoC-row">
+            <label htmlFor="telefono">Número de Celular:</label>
+            <input
+              type="text"
+              id="telefono"
+              placeholder="Ingrese su número de celular"
+              required
+            />
+          </div>
         </div>
+
         <div className="change-address-button">
           <button onClick={handleChangeAddress}>Cambiar Dirección</button>
-          </div>
-        
+        </div>
 
         <div className="pagoC-product-info">
           <h2>Productos</h2>
