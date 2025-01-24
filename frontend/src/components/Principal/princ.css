@@ -1,0 +1,251 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+/* Estilo principal del header */
+.principal-app-header {
+    flex-shrink: 0; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-bottom: 8px solid #0e6705; /* Borde inferior verde */
+    border-radius: 10px 10px 10px 10px; /* Esquinas redondeadas (arriba y abajo) */
+    height: 100px; /* Altura del header */
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: all 0.4s ease-in-out;
+}
+  
+  /* Añadir animación al hover del header */
+  .principal-app-header:hover {
+    
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Mayor sombra al hacer hover */
+  }
+  
+  /* Logo y su contenedor */
+  .principal-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .principal-logo-img {
+    width: 80px;
+    height: auto;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+  }
+  
+  
+  
+  /* Nombre principal del header */
+  .principal-name {
+    font-family: 'Agbalumo', sans-serif;
+    font-size: 40px;
+    color: #0c5304; /* Color del texto del nombre */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombras ligeras en el texto */
+  }
+  
+  /* Barra de búsqueda */
+  .principal-search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    
+  }
+  
+  .principal-search-input {
+    width: 100%;
+    max-width: 400px; /* Ajusta el ancho máximo para evitar desbordamiento */
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(14, 103, 5, 0.5);
+    border-color: #0e6705;
+  }
+  
+  .principal-search-input:hover, 
+.principal-search-input:focus {
+    border-color: #0a74da; /* Borde celeste al interactuar */
+    box-shadow: 0px 0px 10px rgba(10, 116, 218, 0.7); /* Sombra celeste más intensa */
+    outline: none; /* Elimina el borde de enfoque por defecto */
+}
+  
+  /* Botón del header */
+  .principal-header-button {
+    background-color: #371d03f0;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Animación para hover del botón */
+  .principal-header-button:hover {
+    background-color: greenyellow;
+    transform: scale(1.1);
+  }
+  .carousel-container {
+    margin: 0 auto; /* Centra el carrusel horizontalmente */
+    max-width: 1400px; /* Ajusta este valor para hacerlo más angosto */
+    height: 450px;
+    overflow: hidden; /* Evita que el contenido salga del contenedor */
+    border-radius: 10px; /* Opcional: Bordes redondeados para un diseño más moderno */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+  }
+  
+  .carousel-container img {
+    width: 100%; /* Ajusta las imágenes al ancho del contenedor */
+    height: auto; /* Mantén la proporción original de las imágenes */
+    display: block;
+  }
+  /* Efecto de transición al entrar a la página */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .principal-app-header {
+    animation: fadeIn 0.8s ease;
+  }
+  
+
+  .principal-app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .principal-main-container {
+    display: flex;
+    flex-direction: column; /* Cambia a columna para apilar categorías y contenido */
+    gap: 20px;
+    padding: 0px;
+    flex: 1;
+    
+    
+  }
+  .principal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    height: 100vh;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Hace que el contenido crezca para ocupar el espacio disponible */
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    margin: 0; /* Elimina cualquier margen horizontal */
+    overflow-y: auto;
+  }
+  
+  .principal-main-container {
+    display: flex;
+    flex-direction: column; /* Cambia a columna para organizar las secciones */
+    gap: 20px;
+    padding: 20px;
+     /* Permite el scroll si el contenido es más alto que el viewport */
+     
+  }
+  
+  .principal-category-list {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las categorías se ajusten en varias filas */
+    gap: 20px; /* Espaciado entre categorías */
+    justify-content: flex-start; /* Alinea las categorías al inicio */
+    padding: 0;
+    margin: 0;
+    list-style: none; /* Quita los puntos de lista predeterminados */
+    
+  }
+  
+  .principal-category-item {
+    display: flex;
+    flex-direction: column; /* Asegura que el nombre esté debajo de la imagen */
+    align-items: center; /* Centra la imagen y el texto */
+    text-align: center; /* Centra el texto */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 150px; /* Controla el ancho total del item (imagen + texto) */
+   
+  }
+  
+  .principal-category-item:hover {
+    transform: scale(1.1); /* Efecto de zoom al hacer hover */
+  }
+  
+  /* Imagen de la categoría */
+  .principal-category-item img {
+    width: 120px; /* Ajusta el tamaño de la imagen */
+    height: 120px;
+    border-radius: 50%; /* Hace la imagen circular */
+    object-fit: cover; /* Ajusta la imagen sin distorsión */
+    border: 3px solid #ddd; /* Borde circular */
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .principal-category-item:hover img {
+    border-color: greenyellow; /* Cambia el color del borde al hacer hover */
+  }
+  
+  /* Nombre de la categoría */
+  .principal-category-item span {
+    margin-top: 12px; /* Espaciado entre la imagen y el texto */
+    font-size: 16px; /* Tamaño del texto */
+    font-weight: 600; /* Hace el texto más destacado */
+    color: #333; /* Color del texto */
+    text-align: center; /* Asegura la alineación centrada */
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    overflow: hidden; /* Esconde el texto que excede el ancho */
+    text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+  }
+  .principal-sidebar {
+    background-color:white;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+
+
+
+
+
+
+
+
+  .principal-app-footer {
+    grid-column: 2;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    margin: 0px;
+    width: 100%;
+    border-top: 1px solid #ddd; /* Línea superior opcional */
+    
+    position: relative; /* Mantiene el footer después del contenido */
+  }
+  
+  .principal-app-footer p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
