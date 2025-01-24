@@ -57,6 +57,30 @@ const Principal = () => {
   };
 
 
+  const handleClearCartAfterPayment = async () => {
+    try {
+      const clearedProducts = productsState.map((product) => ({
+        ...product,
+        quantity: 0,
+        inventario: product.inventario,
+      }));
+      setProducts(clearedProducts);
+      localStorage.removeItem("cart"); // Limpia el carrito del almacenamiento local
+  
+      // Si tienes una API para actualizar el inventario del backend, puedes agregar esto:
+      await fetch("http://localhost:4000/api/actualizarInventario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(clearedProducts),
+      });
+    } catch (error) {
+      console.error("Error al limpiar el carrito después del pago:", error);
+    }
+  };
+  
+
+
+
   const saveCartToLocalStorage = (updatedProducts) => {
     const cartItems = updatedProducts
       .filter((product) => product.quantity > 0)
@@ -360,14 +384,15 @@ const Principal = () => {
       </div>
 
       {cartVisible && (
-        <Cart
-          products={productsState.filter((product) => product.quantity > 0)}
-          onAddToCart={handleAddToCart}
-          onRemoveFromCart={handleRemoveFromCart}
-          onClearCart={handleClearCart}
-          onRemoveAllFromCart={handleRemoveAllFromCart}
-          onClose={() => setCartVisible(false)}
-        />
+     <Cart
+     products={productsState.filter((product) => product.quantity > 0)}
+     onAddToCart={handleAddToCart}
+     onRemoveFromCart={handleRemoveFromCart}
+     onClearCart={handleClearCart}
+     onRemoveAllFromCart={handleRemoveAllFromCart}
+     onClearCartAfterPayment={handleClearCartAfterPayment}
+     onClose={() => setCartVisible(false)} 
+/>
       )}
 
       {isModalVisible && (

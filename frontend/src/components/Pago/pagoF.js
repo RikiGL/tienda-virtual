@@ -9,6 +9,9 @@ import { FaArrowLeft } from "react-icons/fa";
 
 import logo from "../imagenes/asdlogo.png";
 
+
+
+
 // 3) Definir StyledWrapper con tus estilos (el snippet + adaptaciones)
 const StyledWrapper = styled.div`
  
@@ -364,9 +367,16 @@ const StyledWrapper = styled.div`
 `;
 
 const PaymentConfirmation = () => {
-  const navigate = useNavigate();
+
+
+
   const { state } = useLocation();
-  const { products = [], subtotal = 0, user = {} } = state || {};
+    const { products = [], subtotal = 0, user = {}, onClearCartAfterPayment } = state || {};
+    
+
+  const navigate = useNavigate();
+
+
   const totalAmount = (subtotal + 1.5).toFixed(2);
 
   // Manejo de estados
@@ -394,6 +404,12 @@ const PaymentConfirmation = () => {
       document.body.appendChild(script);
     };
 
+
+
+  
+
+
+
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
       if (buttonContainer) {
@@ -409,33 +425,38 @@ const PaymentConfirmation = () => {
                 ],
               });
             },
+
+
+
+
             onApprove: async (data, actions) => {
               try {
                 // Capturar el pago
                 const details = await actions.order.capture();
-                // Mensaje emergente con nombre del pagador
-                //alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
-
-                // Crear la factura en backend
+                console.log("Pago capturado:", details);
+                localStorage.removeItem("cart");
+                // Crear la factura en el backend
                 const factura = {
-                  id_cliente: 6, 
+                  id_cliente: 6, // Cambiar según lógica de cliente
                   total: totalAmount,
                   metodo_pago: "paypal",
                 };
+            
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(factura),
                 });
+            
                 if (!response.ok) {
                   throw new Error("Error al guardar la factura.");
                 }
-
+            
                 const responseData = await response.json();
                 console.log("Factura creada:", responseData);
                 setInvoiceData(responseData);
-
-                // Eliminar productos
+            
+                // Eliminar productos del inventario
                 const productIdsWithQuantities = memoizedProducts.map((product) => ({
                   productId: product._id,
                   quantity: product.quantity,
@@ -445,20 +466,29 @@ const PaymentConfirmation = () => {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ productIdsWithQuantities }),
                 });
+            
                 if (!deleteResponse.ok) {
                   throw new Error("Error al eliminar los productos.");
                 }
-
+            
                 console.log("Productos eliminados correctamente");
-
-                // Mostramos el modal en lugar de redirigir
+            
+                // Vaciar el carrito en el frontend
+                if (typeof onClearCartAfterPayment === "function") {
+                  onClearCartAfterPayment(); // Vacía el carrito en `principal.js`
+                }
+            
+                // Mostrar el modal de confirmación de pago
                 setShowConfirmationModal(true);
-
               } catch (error) {
-                console.error("Error al procesar la factura:", error);
-                alert("El pago fue exitoso, pero ocurrió un error al guardar la factura.");
+                console.error("Error al procesar el pago:", error);
+                alert("El pago fue exitoso, pero ocurrió un error al procesar la factura o actualizar el inventario.");
               }
             },
+            
+
+
+
             onError: (err) => {
               console.error("Error durante el pago:", err);
               alert("Hubo un error al procesar el pago. Por favor, inténtalo nuevamente.");
@@ -472,7 +502,7 @@ const PaymentConfirmation = () => {
         console.error("SDK de PayPal no disponible.");
       }
     };
-
+    
     loadPayPalScript();
   }, [totalAmount, memoizedProducts]);
 
