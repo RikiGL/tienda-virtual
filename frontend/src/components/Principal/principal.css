@@ -1,74 +1,6 @@
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  min-height: 100vh;
-}
 
-.principal-app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f1c40f; /* Fondo amarillo */
-  color: white;
-  height: 60px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Añadir sombra para mejor visibilidad */
-}
 
-.principal-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-.principal-logo-img {
-  width: 80px;
-  height: auto;
-  vertical-align: middle;
-}
-
-.principal-name {
-  font-family: 'Agbalumo', sans-serif;
-  font-size: 40px;
-  color: #0c5304; /* Color del texto del nombre */
-}
-
-.principal-search-bar {
-  flex-grow: 1;
-  margin: 0 20px;
-}
-
-.principal-search-input {
-  width: 100%;
-  max-width: 400px; /* Ajusta el ancho máximo para evitar desbordamiento */
-  padding: 10px;
-  border-radius: 25px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.principal-search-input:focus {
-  border-color: #0e6705;
-}
-
-.principal-header-button {
-  background-color: #371d03f0;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.principal-header-button:hover {
-  background-color: #f39c12;
-}
 
 .principal-nav-links {
   display: flex;
@@ -82,18 +14,6 @@ body {
   font-size: 16px;
 }
 
-.principal-app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.principal-main-container {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 20px;
-  flex: 1;
-}
 
 .principal-sidebar {
   background-color: #CCD1D1;
@@ -153,7 +73,7 @@ body {
 
 .principal-product-card {
   width: 100%;
-  max-width: 250px;
+  max-width: 350px;
   margin: 0 auto;
   margin-bottom: 10px;
   background: #fff;
@@ -450,19 +370,7 @@ body {
   cursor: not-allowed;
 }
 
-.principal-app-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 10px 0;
-  margin-top: auto;
-  width: 100%;
-}
 
-.principal-app-footer p {
-  margin: 5px 0;
-  font-size: 14px;
-}
 
 .principal-product-grid {
   display: grid;
