@@ -71,6 +71,14 @@ function Login() {
         localStorage.setItem("userRole", data.usuario.rol); // Almacenar el rol
         localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
       
+        const user = {
+          nombre: data.usuario.nombre,
+          apellido: data.usuario.apellido,
+          email: data.usuario.email,
+          domicilio: data.usuario.domicilio,
+        };
+
+
         // Redirigir según el rol
         if (data.usuario.rol === "admin") {
           navigate("/admin");
