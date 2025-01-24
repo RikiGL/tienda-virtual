@@ -87,7 +87,12 @@ clienteCtrl.loginCliente = async (req, res) => {
       mensaje: "Inicio de sesión exitoso",
       usuario: {
         nombre: cliente.nombre,
-        rol: cliente.rol//en el login verifica si es admin o cliente
+        rol: cliente.rol,//en el login verifica si es admin o cliente
+
+        apellido: cliente.apellido, // Debes agregar este campo
+        email: cliente.email,      // Debes agregar este campo
+        domicilio: cliente.domicilio,
+
       },
     });
   } catch (error) {

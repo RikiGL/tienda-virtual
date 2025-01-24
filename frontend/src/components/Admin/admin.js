@@ -18,17 +18,16 @@ function AdminProductos() {
   });
   const navigate = useNavigate();
 
+  const [usuarioNombre, setUsuarioNombre] = useState("");
+
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      navigate("/login"); // Redirige al login si no está autenticado
+    const nombre = localStorage.getItem("usuarioNombre");
+    if (!isLoggedIn || !isAdmin()) {
+      navigate("/login"); // Redirige si no está autenticado o no es admin
     }
-  }, [navigate]);
-  
-  useEffect(() => {
-    if (!isAdmin()) {
-      navigate("/login");
-    }
+    setUsuarioNombre(nombre || ""); // Establece el nombre del usuario
   }, [navigate]);
   
 
@@ -276,26 +275,68 @@ function AdminProductos() {
                     </tr>
                   </thead>
                   <tbody>
-                  {filtrarProductos().map((producto) => (
-                    <tr key={producto.id}>
-                      <td>{producto.nombre}</td>
-                      <td>{producto.inventario}</td>
-                      <td className="admin-actions">
-                        <button className="aumentar-btn " onClick={() => actualizarInventario(producto._id, "incrementar")}>
-                          Aumentar
-                        </button>
-                        <button className="disminuir-btn"onClick={() => actualizarInventario(producto._id, "decrementar")}>
-                          Disminuir
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-
+                    {filtrarProductos().map((producto) => (
+                      <tr key={producto._id}>
+                        <td>{producto.nombre}</td>
+                        <td>
+                          {producto.editando ? (
+                            <input
+                              type="number"
+                              value={producto.nuevoInventario || producto.inventario}
+                              onChange={(e) => {
+                                const nuevoValor = parseInt(e.target.value, 10);
+                                setProductos((prev) =>
+                                  prev.map((p) =>
+                                    p._id === producto._id
+                                      ? { ...p, nuevoInventario: nuevoValor }
+                                      : p
+                                  )
+                                );
+                              }}
+                            />
+                          ) : (
+                            producto.inventario
+                          )}
+                        </td>
+                        <td>
+                          {producto.editando ? (
+                            <button 
+                            className="guardar-btn"
+                              onClick={() => {
+                                actualizarInventario(producto._id, producto.nuevoInventario);
+                                setProductos((prev) =>
+                                  prev.map((p) =>
+                                    p._id === producto._id
+                                      ? { ...p, editando: false, inventario: producto.nuevoInventario }
+                                      : p
+                                  )
+                                );
+                              }}
+                            >
+                              Guardar
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() =>
+                                setProductos((prev) =>
+                                  prev.map((p) =>
+                                    p._id === producto._id ? { ...p, editando: true } : p
+                                  )
+                                )
+                              }
+                            >
+                              ✏️
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>
           );
+        
         
 
           case "eliminar":
@@ -352,13 +393,12 @@ function AdminProductos() {
         </div>
 
         
-          <button
-            className="principal-admin-button"
-            onClick={() => navigate("/login")}
-          >
-            Cerrar Sesión
-          </button>
-        
+        <button onClick={() => navigate("/principal")} className="principal-admin-button">
+          Principal ( {usuarioNombre || "Admin "} )
+        </button>
+        <button onClick={handleCerrarSesion} className="principal-admin-button-cerrar">
+          Cerrar Sesión
+        </button>
 
    
       </header>

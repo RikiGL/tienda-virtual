@@ -82,6 +82,30 @@ const Principal = () => {
   };
  
 
+  const handleClearCartAfterPayment = async () => {
+    try {
+      const clearedProducts = productsState.map((product) => ({
+        ...product,
+        quantity: 0,
+        inventario: product.inventario,
+      }));
+      setProducts(clearedProducts);
+      localStorage.removeItem("cart"); // Limpia el carrito del almacenamiento local
+  
+      // Si tienes una API para actualizar el inventario del backend, puedes agregar esto:
+      await fetch("http://localhost:4000/api/actualizarInventario", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(clearedProducts),
+      });
+    } catch (error) {
+      console.error("Error al limpiar el carrito después del pago:", error);
+    }
+  };
+  
+
+
+
   const saveCartToLocalStorage = (updatedProducts) => {
     const cartItems = updatedProducts
       .filter((product) => product.quantity > 0)
@@ -155,18 +179,21 @@ const Principal = () => {
     filterProducts();
   }, [searchQuery, selectedCategory, productsState]);
 
+  
+  
+  // nueva parte 
+
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
-    const userRole = localStorage.getItem("userRole");
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
-    if (nombre && userRole !== "admin" && isLoggedIn === "true") {
-      setUsuarioNombre(nombre);
+    if (isAuthenticated()) {
+      setUsuarioNombre(nombre || ""); // Establece el nombre del usuario si está autenticado
     } else {
-      setUsuarioNombre(""); // Limpiar usuarioNombre si no está autenticado o es admin
+      setUsuarioNombre(""); // Asegúrate de limpiar el nombre del usuario si no está autenticado
     }
   }, []);
   
+
+  ///////////////////
    
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -253,25 +280,38 @@ const Principal = () => {
 
         <SearchBar onSearch={handleSearch} />
         {usuarioNombre ? (
-          <div className="principal-user-menu">
-            <span
-              className="principal-header-button principal-user-name"
-              onClick={() => setShowMenu((prev) => !prev)}
-            >
-              ¡Hola, {usuarioNombre}!
-            </span>
-            {showMenu && (
-              <div className="principal-dropdown-menu">
-                <button
-                  className="principal-dropdown-item"
-                  onClick={handleCerrarSesion}
-                >
-                  Cerrar Sesión
-                </button>
 
-              </div>
-            )}
-          </div>
+
+
+<div className="principal-user-menu">
+  {isAdmin() && (
+    <button
+      className="principal-header-button principal-admin-button-asd"
+      onClick={() => navigate("/admin")}
+    >
+      Gestionar Inventario
+    </button>
+  )}
+
+  <span
+    className="principal-header-button principal-user-name"
+    onClick={() => setShowMenu((prev) => !prev)}
+  >
+    ¡Hola, {usuarioNombre}!
+  </span>
+
+  {showMenu && (
+    <div className="principal-dropdown-menu">
+      <button
+        className="principal-dropdown-item"
+        onClick={handleCerrarSesion}
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  )}
+</div>
+
         ) : (
           <button
             className="principal-header-button"
@@ -383,14 +423,15 @@ const Principal = () => {
       </div>
 
       {cartVisible && (
-        <Cart
-          products={productsState.filter((product) => product.quantity > 0)}
-          onAddToCart={handleAddToCart}
-          onRemoveFromCart={handleRemoveFromCart}
-          onClearCart={handleClearCart}
-          onRemoveAllFromCart={handleRemoveAllFromCart}
-          onClose={() => setCartVisible(false)}
-        />
+     <Cart
+     products={productsState.filter((product) => product.quantity > 0)}
+     onAddToCart={handleAddToCart}
+     onRemoveFromCart={handleRemoveFromCart}
+     onClearCart={handleClearCart}
+     onRemoveAllFromCart={handleRemoveAllFromCart}
+     onClearCartAfterPayment={handleClearCartAfterPayment}
+     onClose={() => setCartVisible(false)} 
+/>
       )}
 
       {isModalVisible && (
