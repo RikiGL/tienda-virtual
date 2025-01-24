@@ -18,17 +18,16 @@ function AdminProductos() {
   });
   const navigate = useNavigate();
 
+  const [usuarioNombre, setUsuarioNombre] = useState("");
+
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      navigate("/login"); // Redirige al login si no está autenticado
+    const nombre = localStorage.getItem("usuarioNombre");
+    if (!isLoggedIn || !isAdmin()) {
+      navigate("/login"); // Redirige si no está autenticado o no es admin
     }
-  }, [navigate]);
-  
-  useEffect(() => {
-    if (!isAdmin()) {
-      navigate("/login");
-    }
+    setUsuarioNombre(nombre || ""); // Establece el nombre del usuario
   }, [navigate]);
   
 
@@ -394,13 +393,12 @@ function AdminProductos() {
         </div>
 
         
-          <button
-            className="principal-admin-button"
-            onClick={() => navigate("/login")}
-          >
-            Cerrar Sesión
-          </button>
-        
+        <button onClick={() => navigate("/principal")} className="principal-admin-button">
+          Principal ( {usuarioNombre || "Admin "} )
+        </button>
+        <button onClick={handleCerrarSesion} className="principal-admin-button-cerrar">
+          Cerrar Sesión
+        </button>
 
    
       </header>

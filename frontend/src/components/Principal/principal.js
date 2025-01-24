@@ -130,18 +130,21 @@ const Principal = () => {
     filterProducts();
   }, [searchQuery, selectedCategory, productsState]);
 
+  
+  
+  // nueva parte 
+
   useEffect(() => {
     const nombre = localStorage.getItem("usuarioNombre");
-    const userRole = localStorage.getItem("userRole");
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
-    if (nombre && userRole !== "admin" && isLoggedIn === "true") {
-      setUsuarioNombre(nombre);
+    if (isAuthenticated()) {
+      setUsuarioNombre(nombre || ""); // Establece el nombre del usuario si está autenticado
     } else {
-      setUsuarioNombre(""); // Limpiar usuarioNombre si no está autenticado o es admin
+      setUsuarioNombre(""); // Asegúrate de limpiar el nombre del usuario si no está autenticado
     }
   }, []);
   
+
+  ///////////////////
    
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -228,25 +231,44 @@ const Principal = () => {
 
         <SearchBar onSearch={handleSearch} />
         {usuarioNombre ? (
-          <div className="principal-user-menu">
-            <span
-              className="principal-header-button principal-user-name"
-              onClick={() => setShowMenu((prev) => !prev)}
-            >
-              ¡Hola, {usuarioNombre}!
-            </span>
-            {showMenu && (
-              <div className="principal-dropdown-menu">
-                <button
-  className="principal-dropdown-item"
-  onClick={handleCerrarSesion}
->
-  Cerrar Sesión
-</button>
 
-              </div>
-            )}
-          </div>
+
+
+<div className="principal-user-menu">
+  {isAdmin() && (
+    <button
+      className="principal-header-button principal-admin-button-asd"
+      onClick={() => navigate("/admin")}
+    >
+      Gestionar Inventario
+    </button>
+  )}
+
+  <span
+    className="principal-header-button principal-user-name"
+    onClick={() => setShowMenu((prev) => !prev)}
+  >
+    ¡Hola, {usuarioNombre}!
+  </span>
+
+  {showMenu && (
+    <div className="principal-dropdown-menu">
+      <button
+        className="principal-dropdown-item"
+        onClick={handleCerrarSesion}
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  )}
+</div>
+
+
+
+
+
+
+
         ) : (
           <button
             className="principal-header-button"

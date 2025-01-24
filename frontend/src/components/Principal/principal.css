@@ -349,7 +349,7 @@ body {
 
 .principal-cart-button {
   position: absolute;
-  top: 70px;
+  top: 130px;
   right: 20px;
   background-color: #371d03f0;
   color: white;
@@ -527,7 +527,7 @@ button:disabled, button.principal-disabled {
 .principal-dropdown-menu {
   position: absolute;
   top: 100%;
-  right: -20px; 
+  right: -60px; 
   background-color: #ffedcc; 
   border: 1px solid #e5a100; 
   border-radius: 8px;
@@ -914,3 +914,26 @@ button:disabled, button.principal-disabled {
 }
  
 
+
+
+.principal-header-button{
+  margin-right: 15px;
+}
+
+
+
+.principal-admin-button-asd {
+
+  background-color: #0c5304;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.principal-admin-button-asd:hover {
+  background-color: #f39c12;
+}
