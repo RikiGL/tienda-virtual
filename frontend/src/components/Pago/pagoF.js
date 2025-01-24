@@ -1,11 +1,10 @@
-// PaymentConfirmation.js
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css"
-// 1) Importar styled-components
+
 import styled from "styled-components";
 
-// 2) Iconos (opcional), por ejemplo react-icons
+
 import { FaArrowLeft } from "react-icons/fa";
 
 import logo from "../imagenes/asdlogo.png";
@@ -415,7 +414,7 @@ const PaymentConfirmation = () => {
                 // Capturar el pago
                 const details = await actions.order.capture();
                 // Mensaje emergente con nombre del pagador
-                alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
+                //alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
 
                 // Crear la factura en backend
                 const factura = {
