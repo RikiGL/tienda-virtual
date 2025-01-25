@@ -27,6 +27,29 @@ const facturaSchema = new mongoose.Schema({
     required: true, // Campo obligatorio
     enum: ["paypal"], // Solo acepta estos valores
   },
+  cedula:{
+    type: String,
+    required: true,
+    match: /^\d{10}$/, // Validación para una cédula ecuatoriana de 10 dígitos
+  },
+  celular:{
+    type: String,
+    required: true,
+    match: /^\d{10}$/, // Validación para una cédula ecuatoriana de 10 dígitos
+  },
+  productos: [
+    {
+      id_producto: {
+        type: Number, // ID del producto
+        required: true,
+      },
+      cantidad: {
+        type: Number, // Cantidad del producto comprado
+        required: true,
+        min: 1, // No puede ser menor a 1
+      },
+    },
+  ],
 });
 
 //El identificador será solo numérico y se asignará automaticamente incrementando.

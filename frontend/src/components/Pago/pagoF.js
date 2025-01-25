@@ -66,17 +66,20 @@ const PaymentConfirmation = () => {
 
 
     ////////////////
-
-
     const savedUser = {
       nombre: localStorage.getItem("usuarioNombre") || "Invitado",
       apellido: localStorage.getItem("usuarioApellido") || "",
       email: localStorage.getItem("usuarioEmail") || "No disponible",
-      domicilio: JSON.parse(localStorage.getItem("usuarioDomicilio")) || {
+      /*domicilio: localStorage.getItem("usuarioDomicilio") || {
         direccion: "No disponible",
         ciudad: "No disponible",
         referencia: "No disponible",
-      },
+      },*/
+      domicilio:{
+        direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
+        ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
+        referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
+      }
     };
     
     // Combina los datos del `state` con el respaldo de `localStorage`
@@ -148,7 +151,7 @@ const PaymentConfirmation = () => {
                   total: totalAmount,
                   metodo_pago: "paypal",
                 };
-            
+            //CAMBIAR DESPUES
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },

@@ -86,6 +86,7 @@ clienteCtrl.loginCliente = async (req, res) => {
     res.status(200).json({
       mensaje: "Inicio de sesión exitoso",
       usuario: {
+        id:cliente._id,
         nombre: cliente.nombre,
         rol: cliente.rol,//en el login verifica si es admin o cliente
 
