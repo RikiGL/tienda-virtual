@@ -4,18 +4,22 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     height: 100vh;
-
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
   }
 /* Estilo principal del header */
 .principal-app-header {
+
+
+
+  background: linear-gradient(to right, #3B7D38, #A7E3AE);
     flex-shrink: 0; 
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #ffffff; /* Fondo blanco */
+   /*  background-color: #ffffff; Fondo blanco */
     border-bottom: 8px solid #0e6705; /* Borde inferior verde */
     border-radius: 10px 10px 10px 10px; /* Esquinas redondeadas (arriba y abajo) */
     height: 100px; /* Altura del header */
@@ -49,7 +53,8 @@ body {
   .principal-name {
     font-family: 'Agbalumo', sans-serif;
     font-size: 40px;
-    color: #0c5304; /* Color del texto del nombre */
+    color:white;
+    /* color: #0c5304; Color del texto del nombre */
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Sombras ligeras en el texto */
   }
   
@@ -80,21 +85,26 @@ body {
 }
   
   /* Botón del header */
+  .principal-header-button-principal-user-name,
   .principal-header-button {
-    background-color: #371d03f0;
+    font-weight: bold;
+    background: #3B7D38;
     color: white;
     border: none;
     padding: 8px 16px;
     border-radius: 25px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+   
   }
   
   /* Animación para hover del botón */
+  .principal-header-button-principal-user-name:hover,
   .principal-header-button:hover {
-    background-color: greenyellow;
-    transform: scale(1.1);
+    background: #4CAF50;
+    transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
+
   }
   .carousel-container {
     margin: 0 auto; /* Centra el carrusel horizontalmente */

@@ -117,10 +117,10 @@ const CambioDireccion = () => {
 
   return (
     <div className="cambio-direccion-princ">
-      <header className="CambDir-header">
-        <div className="login-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="login-logo-img" />
-          <div className="login-name">TU DESPENSA 🛒</div>
+     <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
 

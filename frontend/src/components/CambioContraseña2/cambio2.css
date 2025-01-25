@@ -5,6 +5,8 @@
   background-size: cover;
   background-position: center;
   font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #E0F5E8, #FFFFFF);
+
 }
 
 .cambio2-change-code-main {
@@ -71,18 +73,24 @@
 .cambio2-change-code-button {
   width: 100%;
   padding: 14px;
-  background: #6a11cb;
+  background: #3B7D38;
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease;
+  
+  transform: scale(1.0); /* Pequeño zoom */
+  transition: all 0.3s ease;
+
 }
 
 .cambio2-change-code-button:hover {
-  background: #5a0dbf;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease
+
 }
 
 .cambio2-back-button-container {
@@ -92,8 +100,9 @@
 }
 
 .cambio2-back-button {
+  margin-top: 50px;
   padding: 8px 20px;
-  background: #6a11cb;
+  background:   #3B7D38;;
   color: white;
   border: none;
   border-radius: 8px;
@@ -104,7 +113,10 @@
 }
 
 .cambio2-back-button:hover {
-  background: #5a0dbf;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease
+
 }
 
 .cambio2-app-header {
@@ -148,4 +160,13 @@
 
 .cambio2-app-footer p {
   margin: 5px 0;
+}
+
+
+.verification-info-message {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
 }
