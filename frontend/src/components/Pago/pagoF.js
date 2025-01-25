@@ -257,6 +257,7 @@ const PaymentConfirmation = () => {
           <div className="confirmation-modal">
             <h2>¡Pago realizado con éxito!</h2>
             <p>Tu pago se ha procesado correctamente.</p>
+            <p>Tu factura se ha enviado a tu correo electronico.</p>
             <div className="modal-buttons">
               <button className="fin-btn" onClick={handleDownloadInvoice}>Descargar Factura</button>
               <button className="fin-btn" onClick={handleGoHome}>Volver al Inicio</button>
