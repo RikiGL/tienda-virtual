@@ -159,6 +159,30 @@ app.get('/api/generate-factura', (req, res) => {
 
 
 
+//Envio de Factura 
+app.get("/api/envio-factura", (req, res) => {
+  const {email, link} = req.body;
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: email, // Change to your recipient
+    from: "rikiguallichico16@gmail.com", // Change to your verified sender
+    subject: "Factura Electronica",
+    text: "De la tienda de Tu Despensa",
+    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+      res.status(200).json({ success: true, message: "Token valido" })
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+});
+
 
 
 
