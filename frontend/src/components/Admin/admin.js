@@ -18,6 +18,15 @@ function AdminProductos() {
   });
   const navigate = useNavigate();
 
+ 
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para abrir/cerrar menú
+
+  const handleToggleMenu = () => {
+      setIsMenuOpen(!isMenuOpen); // Alterna entre abierto y cerrado
+  };
+
+
+
   const [usuarioNombre, setUsuarioNombre] = useState("");
 
 
@@ -445,21 +454,34 @@ function AdminProductos() {
 
   return (
     <div>
-    <header className="admin-header">
-        <div className="admin-logo">
+  <header className="principal-app-header">
+        <div className="principal-logo">
           <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
-          <div className="principal-name">TU DESPENSA </div>
+          <div className="principal-name-admin">TU DESPENSA 🛒</div>
         </div>
 
         
-        <button onClick={() => navigate("/principal")} className="principal-admin-button">
-          Principal ( {usuarioNombre || "Admin "} )
-        </button>
-        <button onClick={handleCerrarSesion} className="principal-admin-button-cerrar">
-          Cerrar Sesión
-        </button>
+  {/* Ícono del menú hamburguesa */}
+  <div className="hamburger-icon" onClick={handleToggleMenu}>
+                ☰
+            </div>
 
-   
+            {/* Botones normales (se esconden en pantallas pequeñas) */}
+            <button onClick={() => navigate("/principal")} className="principal-admin-button">
+                ← Principal ({usuarioNombre || "Admin"})
+            </button>
+            <button onClick={handleCerrarSesion} className="principal-admin-button-cerrar">
+                Cerrar Sesión
+            </button>
+
+            {/* Menú hamburguesa desplegable */}
+            {isMenuOpen && (
+                <div className="hamburger-menu">
+                    <a href="/principal">Principal</a>
+                    <a onClick={handleCerrarSesion}>Cerrar Sesión</a>
+                </div>
+            )}
+
       </header>
 
       <div className="admin-container">

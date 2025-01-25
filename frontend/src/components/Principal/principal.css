@@ -55,8 +55,10 @@
 }
 
 .principal-category-item:hover {
-  color: #f39c12;
-  border-bottom: 2px solid #f39c12;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
+
 }
 
 .principal-category-item.principal-active {
@@ -149,7 +151,9 @@
 }
 
 .principal-controls button:hover {
-  background-color: #f39c12;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
 }
 
 .principal-disabled {
@@ -248,7 +252,9 @@
 }
 
 .principal-cart-controls button:hover {
-  background-color: #e43e00;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
 }
 
 .principal-cart-item-quantity {
@@ -850,7 +856,7 @@ button:disabled, button.principal-disabled {
 }
 
 .principal-admin-button-asd:hover {
-  background-color: #f39c12;
+  background: #4CAF50;
 }
 
 

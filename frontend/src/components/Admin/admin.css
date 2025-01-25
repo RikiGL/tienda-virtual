@@ -1,8 +1,77 @@
+
+
+
+.principal-name-admin {
+  font-family: 'Agbalumo', sans-serif;
+  font-size: 40px;
+  margin-right: auto;
+  color: white; /* Color del texto del nombre */
+  text-shadow: 1px 1px 2px
+  
+  rgba(0, 0, 0, 0.2); /* Sombras ligeras en el texto */
+}
+
+.principal-admin-button,
+.principal-admin-button-cerrar {
+    font-size: 16px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #0c5304;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.principal-admin-button:hover,
+.principal-admin-button-cerrar:hover {
+
+  background: #4CAF50;
+
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
+
+}
+
+
+
+@media (max-width: 768px) {
+  .principal-name-admin {
+      font-size: 24px;
+  }
+
+  .principal-admin-button,
+  .principal-admin-button-cerrar {
+      font-size: 14px;
+      padding: 8px 12px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .principal-logo-img {
+      width: 40px;
+      height: 40px;
+  }
+
+  .principal-name-admin {
+      font-size: 18px;
+  }
+
+  .principal-app-header-asd {
+      flex-direction: column; /* Cambia la dirección de los elementos */
+      align-items: flex-start;
+  }
+}
+
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    background: linear-gradient(to bottom, #E0F5E8, #FFFFFF);
+   
 }
 
 
@@ -36,24 +105,32 @@ h2 {
 }
 
 .admin-form-control {
-    margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px; /* Espacio entre etiquetas y campos */
+  margin-bottom: 15px;
 }
 
 .admin-form-control label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+  font-weight: bold;
+  font-size: 14px;
 }
 
-.admin-form-control input, 
-.admin-form-control select, 
-.admin-form-control textarea,
-.admin-search-bar input {
+.admin-form-control input,
+.admin-form-control select,
+.admin-form-control textarea {
     width: 100%;
     padding: 10px;
+    font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 14px;
+}
+
+.admin-form-control input:focus,
+.admin-form-control select:focus,
+.admin-form-control textarea:focus {
+    border-color: #0c5304;
+    outline: none;
 }
 
 .admin-btn {
@@ -67,13 +144,23 @@ h2 {
     cursor: pointer;
     margin: 5px;
     transition: background-color 0.3s ease;
+    flex: 1 1 calc(33.333% - 30px); /* Asegura que cada botón ocupe el mismo ancho */
+    max-width: 300px; /* Ancho máximo para evitar que crezcan demasiado */
 }
 
+
+
 .admin-btn:hover {
-    background-color: #0c5304;
+  background: #4CAF50;
+    
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
 }
 
 .admin-buttons {
+  flex-wrap: wrap; /* Permite que los botones se ajusten a otra fila si no caben */
+  gap: 15px; /* Espacio entre botones */
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
@@ -131,36 +218,14 @@ h2 {
 
 .admin-actions i:hover {
     color: #0056b3;
+    
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
 }
 
 
-.admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: white;
-    color: white;
-    height: 60px;
-  }
-  
-  .admin-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .admin-logo-img {
-    width: 50px;
-    height: auto;
-    vertical-align: middle;
-  }
-  
-  .admin-name {
-    font-size: 24px;
-    font-weight: bold;
-    color: #0c5304;
-  }
+
   
   .admin-footer {
     background-color: #333;
@@ -195,6 +260,10 @@ h2 {
   .eliminar-btn:hover,
  
   .disminuir-btn:hover {
+    
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
     background-color: #b21f2d; /* Un rojo más intenso al pasar el cursor */
   }
   
@@ -213,11 +282,16 @@ h2 {
     transition: background-color 0.3s ease;
   }
   .guardar-btn:hover{
-    background-color: #0c5304
+    background-color: #0c5304;
+    
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
   }
 
   .principal-admin-button {
-    margin-right: -670px;
+    font-weight: bold;
+    margin-right: -620px;
     background-color: #0c5304;
     color: white;
     border: none;
@@ -228,12 +302,11 @@ h2 {
     transition: background-color 0.3s ease;
   }
   
-  .principal-admin-button:hover {
-    background-color: #f39c12;
-  }
+
 
   .principal-admin-button-cerrar {
-    margin-left: -30px;
+    margin-right: 15px;
+    font-weight: bold;
     background-color: #0c5304;
     color: white;
     border: none;
@@ -245,5 +318,256 @@ h2 {
   }
   
   .principal-admin-button-cerrar:hover {
-    background-color: #f39c12;
+    background: #4CAF50;
+    
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
   }
+
+
+
+
+  @media (max-width: 768px) {
+    .admin-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+        flex: 1 1 calc(50% - 20px); /* Ajusta a dos botones por fila */
+    }
+}
+
+
+@media (max-width: 480px) {
+  .admin-btn {
+      flex: 1 1 100%; /* Cada botón ocupa toda la fila */
+  }
+}
+
+
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+@media (max-width: 912px) {
+    .principal-name-admin {
+      font-size: 18px; /* Reduce el tamaño del texto */
+      white-space: nowrap; /* Evita que el texto salte de línea */
+      overflow: hidden; /* Oculta texto que exceda el contenedor */
+      text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+    }
+  }
+  
+
+
+  /* Estilos para el menú hamburguesa */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  background-color: #0c5304;
+  color: white;
+  position: absolute;
+  top: 60px; /* Ajusta según el tamaño del encabezado */
+  right: 10px;
+  width: 180px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  margin-top: 20px;
+}
+
+.hamburger-menu a {
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  display: block;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hamburger-menu a:hover {
+  background-color: #f39c12;
+
+ transform: scale(1.02); /* Pequeño zoom */
+ transition: all 0.3s ease;
+
+}
+
+
+
+
+/* Ícono del menú hamburguesa */
+.hamburger-icon {
+
+  display: none;
+  font-size: 24px;
+  color: #0c5304;
+  cursor: pointer;
+}
+
+/* Ocultar botones en pantallas pequeñas */
+@media (max-width: 768px) {
+  .principal-admin-button,
+  .principal-admin-button-cerrar {
+      display: none;
+  }
+
+  .hamburger-icon {
+      display: block;
+  }
+
+  .hamburger-menu {
+      display: flex; /* Muestra el menú en pantallas pequeñas */
+  }
+}
+
+.principal-name-admin {
+  font-family: 'Agbalumo', sans-serif;
+    font-size: 36px;
+    font-weight: bold;
+    color: white;
+    margin-right: auto; /* Empuja los botones hacia la derecha */
+}
+
+@media (max-width: 768px) {
+  .principal-name-admin {
+      font-size: 28px; /* Reduce un poco para pantallas pequeñas */
+  }
+}
+
+@media (max-width: 400px) {
+  .principal-name-admin {
+      font-size: 20px; /* Más pequeño para pantallas muy pequeñas */
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .admin-form-control {
+      gap: 3px; /* Reduce espacio entre etiquetas y campos */
+  }
+
+  .admin-form-control input,
+  .admin-form-control select,
+  .admin-form-control textarea {
+      font-size: 12px;
+      padding: 8px;
+  }
+}
+
+
+
+
+/* Media query para pantallas menores o iguales a 768px */
+@media (max-width: 768px) {
+  .admin-container {
+    padding: 10px; /* Reducir el padding */
+    width: 100%; /* Asegurar que use todo el ancho disponible */
+  }
+
+  .admin-form-section,
+  .admin-product-list {
+    padding: 10px; /* Reducir espacio interno */
+    margin: 0 auto; /* Centrar contenido */
+  }
+
+  .admin-buttons {
+    flex-wrap: wrap; /* Asegurar que los botones se ajusten en filas */
+    gap: 10px; /* Reducir espacio entre botones */
+    justify-content: center;
+  }
+
+  .admin-btn {
+    flex: 1 1 calc(100% - 20px); /* Botones ocupan todo el ancho */
+    max-width: none; /* Eliminar ancho máximo */
+  }
+
+  .admin-search-bar input {
+    width: 100%; /* Ajustar el buscador al 100% del ancho disponible */
+    font-size: 14px; /* Reducir tamaño de fuente */
+  }
+
+  .principal-admin-button,
+  .principal-admin-button-cerrar {
+    display: none; /* Ocultar botones principales en móviles */
+  }
+
+  .hamburger-icon {
+    display: block; /* Mostrar menú hamburguesa */
+  }
+}
+
+/* Media query para pantallas menores o iguales a 480px */
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 5px; /* Reducir aún más el padding */
+  }
+
+  .principal-logo-img {
+    width: 30px; /* Reducir tamaño del logo */
+    height: 30px;
+  }
+
+  .principal-name-admin {
+    font-size: 16px; /* Ajustar tamaño de fuente */
+    text-align: center; /* Centrar texto */
+  }
+
+  .admin-buttons {
+    gap: 5px; /* Espacio más pequeño entre botones */
+  }
+
+  .admin-btn {
+    padding: 8px; /* Reducir el padding del botón */
+    font-size: 14px; /* Reducir el tamaño de fuente */
+  }
+
+  .admin-form-control label {
+    font-size: 12px; /* Reducir tamaño de etiquetas */
+  }
+
+  .admin-form-control input,
+  .admin-form-control select,
+  .admin-form-control textarea {
+    font-size: 12px; /* Reducir tamaño de los campos */
+    padding: 6px; /* Reducir padding interno */
+  }
+
+  .hamburger-menu {
+    top: 50px; /* Ajustar posición del menú hamburguesa */
+    right: 5px; /* Ajustar posición derecha */
+    width: 150px; /* Reducir el ancho */
+  }
+}
+
+/* Media query para pantallas menores o iguales a 360px */
+@media (max-width: 360px) {
+  .principal-name-admin {
+    font-size: 14px; /* Reducir tamaño del texto aún más */
+  }
+
+  .hamburger-menu {
+    width: 120px; /* Menú más pequeño */
+  }
+
+  .admin-btn {
+    font-size: 12px; /* Reducir tamaño del texto en botones */
+  }
+
+  .admin-footer p {
+    font-size: 10px; /* Texto más pequeño en el pie de página */
+  }
+}
+

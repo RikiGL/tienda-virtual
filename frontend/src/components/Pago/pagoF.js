@@ -268,12 +268,11 @@ const PaymentConfirmation = () => {
   return (
     <StyledWrapper>
       {/* ========== HEADER ========== */}
-      <header className="header">
-        <div className="logo-section">
-          <img src={logo} alt="Logo" className="logo-img" />
-          <div className="header-title">TU DESPENSA 🛒</div>
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
-        {/* Si quisieras algo a la derecha, lo agregarías aquí */}
       </header>
 
       {/* ========== BOTÓN VOLVER ========== */}

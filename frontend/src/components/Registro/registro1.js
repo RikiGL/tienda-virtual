@@ -7,7 +7,7 @@ import Modal from "../Modal/modal";
 import "./registro1.css";
 //import google from '../imagenes/googleI-.png';
 import { GoogleLogin } from "@react-oauth/google";
-
+import "../Header/principal-header-asd.css"
 function Registro1() {
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -52,7 +52,8 @@ function Registro1() {
   
     const regexContraseña = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!regexContraseña.test(contraseña)) {
-      setModalMessage("La contraseña debe tener al menos 8 caracteres e incluir un carácter especial.");
+      setModalMessage("La contraseña debe tener al menos 8 caracteres, incluir al menos una letra, un número y un carácter especial."
+);
       return;
     }
   
@@ -158,13 +159,14 @@ function Registro1() {
 
   return (
     <div>
-      <header className="registro-header">
-        <div className="registro-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="registro-logo-img" />
-          <div className="registro-name">TU DESPENSA 🛒</div>
+
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
-      <div className="registro-container" style={{ backgroundImage: `url(${fondo})` }}>
+      <div className="registro-container" >
         <button onClick={() => navigate(-1)} className="registro-back-button" title="Volver">
           ← Volver
         </button>

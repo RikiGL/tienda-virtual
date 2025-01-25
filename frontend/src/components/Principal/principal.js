@@ -294,7 +294,7 @@ const Principal = () => {
   )}
 
   <span
-    className="principal-header-button principal-user-name"
+    className="principal-header-button-principal-user-name"
     onClick={() => setShowMenu((prev) => !prev)}
   >
     ¡Hola, {usuarioNombre}!
