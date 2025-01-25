@@ -217,6 +217,7 @@ h2 {
   }
 
   .principal-admin-button {
+    margin-right: -670px;
     background-color: #0c5304;
     color: white;
     border: none;
@@ -228,5 +229,21 @@ h2 {
   }
   
   .principal-admin-button:hover {
+    background-color: #f39c12;
+  }
+
+  .principal-admin-button-cerrar {
+    margin-left: -30px;
+    background-color: #0c5304;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .principal-admin-button-cerrar:hover {
     background-color: #f39c12;
   }

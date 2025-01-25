@@ -18,17 +18,16 @@ function AdminProductos() {
   });
   const navigate = useNavigate();
 
+  const [usuarioNombre, setUsuarioNombre] = useState("");
+
+
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      navigate("/login"); // Redirige al login si no está autenticado
+    const nombre = localStorage.getItem("usuarioNombre");
+    if (!isLoggedIn || !isAdmin()) {
+      navigate("/login"); // Redirige si no está autenticado o no es admin
     }
-  }, [navigate]);
-  
-  useEffect(() => {
-    if (!isAdmin()) {
-      navigate("/login");
-    }
+    setUsuarioNombre(nombre || ""); // Establece el nombre del usuario
   }, [navigate]);
   
 
@@ -62,7 +61,7 @@ function AdminProductos() {
     setNuevoProducto({ ...nuevoProducto, [name]: value });
   };
   const crearProducto = async () => {
-    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria || !nuevoProducto.inventario) {
+    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria || !nuevoProducto.inventario || !nuevoProducto.descripcion) {
       alert("Por favor completa los campos obligatorios.");
       return;
     }
@@ -110,7 +109,7 @@ function AdminProductos() {
     );
   };
 
-  const actualizarInventario = async (id, accion) => {
+  const actualizarInventario = async (id, valor) => {
     const productoActualizado = productos.find((producto) => producto._id === id);
     if (!productoActualizado) {
       alert("Producto no encontrado");
@@ -118,10 +117,8 @@ function AdminProductos() {
     }
   
     // Calcular el nuevo inventario
-    const nuevoInventario =
-      accion === "incrementar"
-        ? productoActualizado.inventario + 1
-        : Math.max(productoActualizado.inventario - 1, 0);
+    const nuevoInventario = valor;
+     
   
     console.log("ID enviado al servidor:", id);
     console.log("Cuerpo enviado al servidor:", JSON.stringify({ inventario: nuevoInventario }));
@@ -213,6 +210,17 @@ function AdminProductos() {
                 name="precio"
                 value={nuevoProducto.precio}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  // Bloquear teclas específicas
+                  if (
+                    e.key === "-" || // Evitar el signo negativo
+                    e.key === "e" || // Evitar notación científica
+                    e.key === "E" ||
+                    e.key === "+" // Evitar el signo más
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="Ingrese el precio"
               />
             </div>
@@ -247,6 +255,19 @@ function AdminProductos() {
                 name="inventario"
                 value={nuevoProducto.inventario}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  // Bloquear teclas específicas
+                  if (
+                    e.key === "-" || // Evitar el signo negativo
+                    e.key === "." || // Evitar el punto
+                    e.key === "," || // Evitar la coma
+                    e.key === "e" || // Evitar notación científica
+                    e.key === "E" ||
+                    e.key === "+" // Evitar el signo más
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="Ingrese la cantidad inicial"
               />
             </div>
@@ -282,19 +303,56 @@ function AdminProductos() {
                         <td>
                           {producto.editando ? (
                             <input
-                              type="number"
-                              value={producto.nuevoInventario || producto.inventario}
-                              onChange={(e) => {
-                                const nuevoValor = parseInt(e.target.value, 10);
+                            type="number"
+                            value={
+                              producto.nuevoInventario !== undefined
+                                ? producto.nuevoInventario
+                                : producto.inventario
+                            }
+                            onChange={(e) => {
+                              const nuevoValor = e.target.value;
+                              if (nuevoValor === "" || /^[0-9]+$/.test(nuevoValor)) {
                                 setProductos((prev) =>
                                   prev.map((p) =>
                                     p._id === producto._id
-                                      ? { ...p, nuevoInventario: nuevoValor }
+                                      ? {
+                                          ...p,
+                                          nuevoInventario: nuevoValor === "" ? "" : parseInt(nuevoValor, 10),
+                                        }
                                       : p
                                   )
                                 );
-                              }}
-                            />
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              // Bloquear teclas específicas
+                              if (
+                                e.key === "-" || // Evitar el signo negativo
+                                e.key === "." || // Evitar el punto
+                                e.key === "," || // Evitar la coma
+                                e.key === "e" || // Evitar notación científica
+                                e.key === "E" ||
+                                e.key === "+" // Evitar el signo más
+                              ) {
+                                e.preventDefault();
+                              }
+                            }}
+                            onBlur={(e) => {
+                              // Si el campo queda vacío, establecer 0 automáticamente
+                              if (e.target.value === "") {
+                                setProductos((prev) =>
+                                  prev.map((p) =>
+                                    p._id === producto._id
+                                      ? {
+                                          ...p,
+                                          nuevoInventario: 0,
+                                        }
+                                      : p
+                                  )
+                                );
+                              }
+                            }}
+                          />
                           ) : (
                             producto.inventario
                           )}
@@ -394,13 +452,12 @@ function AdminProductos() {
         </div>
 
         
-          <button
-            className="principal-admin-button"
-            onClick={() => navigate("/login")}
-          >
-            Cerrar Sesión
-          </button>
-        
+        <button onClick={() => navigate("/principal")} className="principal-admin-button">
+          Principal ( {usuarioNombre || "Admin "} )
+        </button>
+        <button onClick={handleCerrarSesion} className="principal-admin-button-cerrar">
+          Cerrar Sesión
+        </button>
 
    
       </header>

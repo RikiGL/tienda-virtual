@@ -4,6 +4,7 @@ const cors = require("cors");
 const Cliente = require("./models/cliente.model");
 require('dotenv').config();
 const { google } = require('googleapis');
+const PDFDocument = require('pdfkit');
 //const bcryptRoute = require('./routes/bcryptRoute');
 const app = express(); //En app se almacena las funcionalidad de express
 //const clienteRoutes = require("./routes/cliente.route");
@@ -128,6 +129,75 @@ app.post("/api/auth/google-reg", async (req, res) => {
     res.status(401).json({ success: false, message: "Token inválido" });
   }
 });
+
+// FACTURA - Ruta para generar la factura
+app.get('/api/generate-factura', (req, res) => {
+  // Crear un nuevo documento PDF
+  const doc = new PDFDocument();
+
+  // Establecer encabezados para la respuesta HTTP (esto indica que es un PDF)
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', 'attachment; filename="factura.pdf"');
+
+  // Iniciar el flujo de salida para el archivo PDF
+  doc.pipe(res);
+
+  // Agregar contenido al PDF (por ejemplo, una factura simple)
+  doc.fontSize(18).text('Factura', { align: 'center' });
+  doc.fontSize(12).text('Fecha: 25/01/2025');
+  doc.text('---------------------------------------');
+  doc.text('Cliente: Juan Pérez');
+  doc.text('Producto: Laptop');
+  doc.text('Cantidad: 1');
+  doc.text('Precio unitario: $1000');
+  doc.text('Total: $1000');
+  doc.text('---------------------------------------');
+
+  // Finalizar el documento PDF
+  doc.end();
+});
+
+
+
+//Envio de Factura 
+app.get("/api/envio-factura", (req, res) => {
+  const {email, link} = req.body;
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: email, // Change to your recipient
+    from: "rikiguallichico16@gmail.com", // Change to your verified sender
+    subject: "Factura Electronica",
+    text: "De la tienda de Tu Despensa",
+    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+  };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log("Email sent");
+      res.status(200).json({ success: true, message: "Token valido" })
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //app.use("/a")
 //Se exporta el app para que sea utilizado en otras partes del proyecto

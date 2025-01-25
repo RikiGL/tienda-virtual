@@ -1,27 +1,120 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "./pagoF.css";
+import "./pagoF.css"
+
+import styled from "styled-components";
+
+
+import { FaArrowLeft } from "react-icons/fa";
+
 import logo from "../imagenes/asdlogo.png";
 
-const PaymentConfirmation = () => {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { products = [], subtotal = 0, user = {} } = state || {};
-  const totalAmount = (subtotal + 1.5).toFixed(2); // Total con costo de envío
+
+const StyledWrapper = styled.div`
  
-  // Usar memoización para evitar reejecuciones innecesarias
+  
+  /* Animaciones e íconos */
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 10px;
+  }
+
+
+  /* Animación fadeIn */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
+const PaymentConfirmation = () => {
+
+
+
+  const { state } = useLocation();
+  const {
+  products = [],
+  subtotal = 0,
+  user = {
+    nombre: "Invitado",
+    apellido: "",
+    email: "No disponible",
+    domicilio: {
+      direccion: "No disponible",
+      ciudad: "No disponible",
+      referencia: "No disponible",
+    },
+  },
+  onClearCartAfterPayment,
+} = state || {};
+    
+
+  const navigate = useNavigate();
+
+
+  const totalAmount = (subtotal + 1.5).toFixed(2);
+
+
+
+    ////////////////
+    const savedUser = {
+      nombre: localStorage.getItem("usuarioNombre") || "Invitado",
+      apellido: localStorage.getItem("usuarioApellido") || "",
+      email: localStorage.getItem("usuarioEmail") || "No disponible",
+      domicilio:{
+        direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
+        ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
+        referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
+      }
+    };
+    
+    // Combina los datos del `state` con el respaldo de `localStorage`
+    const finalUser = { ...savedUser, ...user };
+      // Estado para almacenar el valor de la cédula
+  const [cedula, setCedula] = useState('');
+  // Arrow function para manejar el cambio en el input
+  const handleCedula = (event) => setCedula(event.target.value);
+
+  // Estado para almacenar el valor de  celular
+  const [celular, setCelular] = useState('');
+  // Arrow function para manejar el cambio en el input
+  const handleCelular = (event) => setCelular(event.target.value);
+
+
+    
+
+
+
+    //////////////////
+
+  
+
+  // Manejo de estados
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [invoiceData, setInvoiceData] = useState(null);
+
+
+  // Memo
   const memoizedProducts = useMemo(() => products, [products]);
 
   useEffect(() => {
     const loadPayPalScript = () => {
-      // Verificar si el script ya está cargado
       if (document.getElementById("paypal-sdk")) {
         initializePayPalButtons();
         return;
       }
-       
       const script = document.createElement("script");
       script.id = "paypal-sdk";
+      // Reemplaza con tu verdadero Client ID si es diferente
       script.src = `https://www.paypal.com/sdk/js?client-id=ATtZcCKaqQhq6HWExO-YM8HaLEffYoqEbPsIG6S7Lr8VoFkynDSwVXIO9d7pm6NhkQhq3iB1efjh-b1U&currency=USD`;
       script.async = true;
       script.onload = initializePayPalButtons;
@@ -30,11 +123,14 @@ const PaymentConfirmation = () => {
       };
       document.body.appendChild(script);
     };
-    
+
+
+
+
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
       if (buttonContainer) {
-        buttonContainer.innerHTML = ""; // Limpia cualquier contenido previo
+        buttonContainer.innerHTML = "";
       }
       if (window.paypal) {
         window.paypal
@@ -42,67 +138,77 @@ const PaymentConfirmation = () => {
             createOrder: (data, actions) => {
               return actions.order.create({
                 purchase_units: [
-                  {
-                    amount: {
-                      value: totalAmount, // Total a pagar
-                    },
-                  },
+                  { amount: { value: totalAmount } },
                 ],
               });
             },
+
+
+
+
             onApprove: async (data, actions) => {
               try {
+                // Capturar el pago
                 const details = await actions.order.capture();
-                alert(`Pago completado con éxito por ${details.payer.name.given_name}`);
-
+                console.log("Pago capturado:", details);
+                localStorage.removeItem("cart");
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: 6, // Usar el ID del cliente
+                  id_cliente: localStorage.getItem("usuarioId") , // Cambiar según lógica de cliente
                   total: totalAmount,
                   metodo_pago: "paypal",
+                  cedula,
+                  celular,
                 };
-
+                console.log(factura)
+            //CAMBIAR DESPUES
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
+                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(factura),
                 });
-
+            
                 if (!response.ok) {
                   throw new Error("Error al guardar la factura.");
                 }
-
+            
                 const responseData = await response.json();
                 console.log("Factura creada:", responseData);
-
-                // Eliminar los productos de la base de datos según la cantidad
+                setInvoiceData(responseData);
+            
+                // Eliminar productos del inventario
                 const productIdsWithQuantities = memoizedProducts.map((product) => ({
                   productId: product._id,
                   quantity: product.quantity,
                 }));
-
                 const deleteResponse = await fetch("http://localhost:4000/api/productos/id", {
                   method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
+                  headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ productIdsWithQuantities }),
                 });
-
+            
                 if (!deleteResponse.ok) {
                   throw new Error("Error al eliminar los productos.");
                 }
-
+            
                 console.log("Productos eliminados correctamente");
-                // Redirigir después del pago
-                navigate("/principal");
+            
+                // Vaciar el carrito en el frontend
+                if (typeof onClearCartAfterPayment === "function") {
+                  onClearCartAfterPayment(); // Vacía el carrito en `principal.js`
+                }
+            
+                // Mostrar el modal de confirmación de pago
+                setShowConfirmationModal(true);
               } catch (error) {
-                console.error("Error al procesar la factura:", error);
-                alert("El pago fue exitoso, pero ocurrió un error al guardar la factura.");
+                console.error("Error al procesar el pago:", error);
+                alert("El pago fue exitoso, pero ocurrió un error al procesar la factura o actualizar el inventario.");
               }
             },
+            
+
+
+
             onError: (err) => {
               console.error("Error durante el pago:", err);
               alert("Hubo un error al procesar el pago. Por favor, inténtalo nuevamente.");
@@ -110,18 +216,17 @@ const PaymentConfirmation = () => {
           })
           .render("#paypal-button-container")
           .catch((err) => {
-            console.error("Error al renderizar el botón de PayPal:", err);
+            console.error("Error al renderizar PayPal:", err);
           });
       } else {
-        console.error("El SDK de PayPal no está disponible.");
+        console.error("SDK de PayPal no disponible.");
       }
     };
-
-    // Cargar el script de PayPal cuando el componente se monta
+    
     loadPayPalScript();
-  }, [totalAmount, user.id, navigate, memoizedProducts]);
-   // Funciones para manejar el cambio de dirección
-   const handleChangeAddress = () => {
+  }, [totalAmount, memoizedProducts]);
+
+  const handleChangeAddress = () => {
     navigate("/CambioDireccion");
   };
   const handleBackClick = () => {
@@ -129,64 +234,101 @@ const PaymentConfirmation = () => {
   };
   
 
+  // Descargar factura
+  const handleDownloadInvoice = async () => {
+    //if (!invoiceData) return;
+    //window.open(`http://localhost:4000/api/facturas/${invoiceData.id}/descargar`, "_blank");
+    try {
+      // Realizar la solicitud para obtener el PDF
+      const response = await fetch('http://localhost:4000/api/generate-factura', {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al generar la factura');
+      }
+
+      // Crear un enlace para descargar el archivo PDF
+      const blob = await response.blob(); // Convertir la respuesta en un objeto Blob (archivo binario)
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob); // Crear una URL temporal para el archivo PDF
+      link.download = 'factura.pdf'; // Nombre del archivo que se descargará
+      link.click(); // Simular el clic en el enlace para iniciar la descarga
+    } catch (error) {
+      console.error('Error al generar la factura:', error);
+    }
+  };
+
+  // Cerrar modal y volver
+  const handleGoHome = () => {
+    setShowConfirmationModal(false);
+    navigate("/principal");
+  };
+
   return (
-    <div className="pagoC-page">
-      <header className="pagoC-app-header">
-        <div className="pagoC-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="pagoC-logo-img" />
-          <div className="pagoC-name">TU DESPENSA 🛒</div>
+    <StyledWrapper>
+      {/* ========== HEADER ========== */}
+      <header className="header">
+        <div className="logo-section">
+          <img src={logo} alt="Logo" className="logo-img" />
+          <div className="header-title">TU DESPENSA 🛒</div>
         </div>
+        {/* Si quisieras algo a la derecha, lo agregarías aquí */}
       </header>
-      <div className="pagoC-back-button-container">
-        <button className="pagoC-back-button" onClick={handleBackClick}>
+
+      {/* ========== BOTÓN VOLVER ========== */}
+      <div className="back-button-container">
+        <button className="back-button" onClick={handleBackClick}>
+          <FaArrowLeft style={{ marginRight: "8px" }} />
           Volver
         </button>
       </div>
 
-      <main className="pagoC-payment-confirmation">
+      {/* ========== MODAL DE CONFIRMACIÓN ========== */}
+      {showConfirmationModal && (
+        <div className="modal-overlay">
+          <div className="confirmation-modal">
+            <h2>¡Pago realizado con éxito!</h2>
+            <p>Tu pago se ha procesado correctamente.</p>
+            <p>Tu factura se ha enviado a tu correo electronico.</p>
+            <div className="modal-buttons">
+              <button className="fin-btn" onClick={handleDownloadInvoice}>Descargar Factura</button>
+              <button className="fin-btn" onClick={handleGoHome}>Volver al Inicio</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========== MAIN CONTAINER ========== */}
+      <main className={`main-container ${showConfirmationModal ? "blur-content" : ""}`}>
         <h1>Confirmación de Pago</h1>
 
-        <div className="pagoC-user-info">
-          <h2>Información del Usuario</h2>
-          <p>
-            <strong>Nombre:</strong> {user.nombre && user.apellido}
-          </p>
-          <p>
-            <strong>Correo electrónico:</strong> {user.correo || "No disponible"}
-          </p>
-          <p>
-          <strong>Dirección:</strong> {user.domicilio || "No disponible"}
-          </p>
-          
+        {/* Información del Usuario */}
+        <div className="info-section">
+  <h2>Información del Usuario</h2>
+  <p><strong>Nombre:</strong> {finalUser.nombre} {finalUser.apellido}</p>
+  <p><strong>Correo electrónico:</strong> {finalUser.email}</p>
+  <p><strong>Dirección:</strong> {finalUser.domicilio.direccion}</p>
+  <p><strong>Ciudad:</strong> {finalUser.domicilio.ciudad}</p>
+  <p><strong>Referencia:</strong> {finalUser.domicilio.referencia}</p>
 
-
-          <div className="pagoC-row">
+  <div className="pagoC-row">
     <label htmlFor="cedula">Cédula:</label>
-    <input
-      type="text"
-      id="cedula"
-      placeholder="Ingrese su cédula"
-      required
-    />
+    <input type="text" id="cedula" onChange={handleCedula} placeholder="Ingrese su cédula" required />
   </div>
   <div className="pagoC-row">
     <label htmlFor="telefono">Número de Celular:</label>
-    <input
-      type="text"
-      id="telefono"
-      placeholder="Ingrese su número de celular"
-      required
-    />
+    <input type="text" id="telefono" onChange={handleCelular} placeholder="Ingrese su número de celular" required />
   </div>
 
-          
-        </div>
-        <div className="change-address-button">
-          <button onClick={handleChangeAddress}>Cambiar Dirección</button>
-          </div>
-        
+  <div className="change-address-button">
+    <button onClick={handleChangeAddress}>Cambiar Dirección</button>
+  </div>
+</div>
 
-        <div className="pagoC-product-info">
+
+        {/* Productos */}
+        <div className="info-section">
           <h2>Productos</h2>
           <table>
             <thead>
@@ -210,7 +352,8 @@ const PaymentConfirmation = () => {
           </table>
         </div>
 
-        <div className="pagoC-total-amount">
+        {/* Total a Pagar */}
+        <div className="total-amount">
           <h2>Total a Pagar</h2>
           <div className="pagoC-row">
             <span>Subtotal:</span>
@@ -220,20 +363,21 @@ const PaymentConfirmation = () => {
             <span>Costo de Envío:</span>
             <span>$1.50</span>
           </div>
-          <div className="pagoC-row pagoC-final-total">
+          <div className="pagoC-row final-total">
             <span>Total:</span>
             <span>${totalAmount}</span>
           </div>
         </div>
 
+    
         <div id="paypal-button-container"></div>
       </main>
 
-      <footer className="pagoC-app-footer">
+      <footer className="footer">
         <p>© 2024 Tu Despensa. Todos los derechos reservados.</p>
         <p>Contacto: info@tudespensa.com</p>
       </footer>
-    </div>
+    </StyledWrapper>
   );
 };
 

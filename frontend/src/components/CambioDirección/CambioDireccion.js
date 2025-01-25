@@ -71,10 +71,39 @@ const CambioDireccion = () => {
     loadGoogleMapsScript();
   }, [newAddress.referencia]);  // Se ejecuta cuando la referencia cambie
 
-  const handleSaveAddress = () => {
+  const handleSaveAddress = async () => {
     // Mostrar notificación de éxito con el mensaje de dirección actualizada
-    setNotificationMessage(`Dirección actualizada a: ${newAddress.direccion}, ${newAddress.ciudad}, ${newAddress.referencia}`);
-    setIsNotificationVisible(true);
+    
+    try {
+      console.log(typeof localStorage.getItem("usuarioId"))
+      console.log(localStorage.getItem("usuarioId"))
+      const response = await fetch(`http://localhost:4000/api/clientes/${localStorage.getItem("usuarioId")}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({domicilio:newAddress}),
+      });
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Error al actualizar la direccion:", errorMessage);
+        alert(`Error del servidor: ${errorMessage}`);
+        return;
+      }
+      localStorage.setItem("usuarioDireccion", newAddress.direccion);
+      localStorage.setItem("usuarioCiudad", newAddress.ciudad);
+      localStorage.setItem("usuarioReferencia", newAddress.referencia);
+
+      setNotificationMessage(`Dirección actualizada a: ${newAddress.direccion}, ${newAddress.ciudad}, ${newAddress.referencia}`);
+      setIsNotificationVisible(true);
+
+      console.log("Direccion actualizado en el servidor correctamente.");
+    } catch (error) {
+      console.error("Error en la solicitud al servidor:", error);
+      alert("Error al comunicarse con el servidor.");
+    }
+
 
     // Ocultar la notificación después de 3 segundos
     setTimeout(() => {
