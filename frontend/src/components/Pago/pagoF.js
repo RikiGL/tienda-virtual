@@ -66,21 +66,30 @@ const PaymentConfirmation = () => {
 
 
     ////////////////
-
-
     const savedUser = {
       nombre: localStorage.getItem("usuarioNombre") || "Invitado",
       apellido: localStorage.getItem("usuarioApellido") || "",
       email: localStorage.getItem("usuarioEmail") || "No disponible",
-      domicilio: JSON.parse(localStorage.getItem("usuarioDomicilio")) || {
-        direccion: "No disponible",
-        ciudad: "No disponible",
-        referencia: "No disponible",
-      },
+      domicilio:{
+        direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
+        ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
+        referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
+      }
     };
     
     // Combina los datos del `state` con el respaldo de `localStorage`
     const finalUser = { ...savedUser, ...user };
+      // Estado para almacenar el valor de la cédula
+  const [cedula, setCedula] = useState('');
+  // Arrow function para manejar el cambio en el input
+  const handleCedula = (event) => setCedula(event.target.value);
+
+  // Estado para almacenar el valor de  celular
+  const [celular, setCelular] = useState('');
+  // Arrow function para manejar el cambio en el input
+  const handleCelular = (event) => setCelular(event.target.value);
+
+
     
 
 
@@ -92,6 +101,7 @@ const PaymentConfirmation = () => {
   // Manejo de estados
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
+
 
   // Memo
   const memoizedProducts = useMemo(() => products, [products]);
@@ -144,11 +154,14 @@ const PaymentConfirmation = () => {
                 localStorage.removeItem("cart");
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: 6, // Cambiar según lógica de cliente
+                  id_cliente: localStorage.getItem("usuarioId") , // Cambiar según lógica de cliente
                   total: totalAmount,
                   metodo_pago: "paypal",
+                  cedula,
+                  celular,
                 };
-            
+                console.log(factura)
+            //CAMBIAR DESPUES
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -219,6 +232,7 @@ const PaymentConfirmation = () => {
   const handleBackClick = () => {
     navigate("/principal");
   };
+  
 
   // Descargar factura
   const handleDownloadInvoice = () => {
@@ -257,6 +271,7 @@ const PaymentConfirmation = () => {
           <div className="confirmation-modal">
             <h2>¡Pago realizado con éxito!</h2>
             <p>Tu pago se ha procesado correctamente.</p>
+            <p>Tu factura se ha enviado a tu correo electronico.</p>
             <div className="modal-buttons">
               <button className="fin-btn" onClick={handleDownloadInvoice}>Descargar Factura</button>
               <button className="fin-btn" onClick={handleGoHome}>Volver al Inicio</button>
@@ -280,11 +295,11 @@ const PaymentConfirmation = () => {
 
   <div className="pagoC-row">
     <label htmlFor="cedula">Cédula:</label>
-    <input type="text" id="cedula" placeholder="Ingrese su cédula" required />
+    <input type="text" id="cedula" onChange={handleCedula} placeholder="Ingrese su cédula" required />
   </div>
   <div className="pagoC-row">
     <label htmlFor="telefono">Número de Celular:</label>
-    <input type="text" id="telefono" placeholder="Ingrese su número de celular" required />
+    <input type="text" id="telefono" onChange={handleCelular} placeholder="Ingrese su número de celular" required />
   </div>
 
   <div className="change-address-button">
