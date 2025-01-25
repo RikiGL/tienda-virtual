@@ -61,7 +61,7 @@ function AdminProductos() {
     setNuevoProducto({ ...nuevoProducto, [name]: value });
   };
   const crearProducto = async () => {
-    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria || !nuevoProducto.inventario) {
+    if (!nuevoProducto.nombre || !nuevoProducto.precio || !nuevoProducto.categoria || !nuevoProducto.inventario || !nuevoProducto.descripcion) {
       alert("Por favor completa los campos obligatorios.");
       return;
     }
@@ -210,6 +210,17 @@ function AdminProductos() {
                 name="precio"
                 value={nuevoProducto.precio}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  // Bloquear teclas específicas
+                  if (
+                    e.key === "-" || // Evitar el signo negativo
+                    e.key === "e" || // Evitar notación científica
+                    e.key === "E" ||
+                    e.key === "+" // Evitar el signo más
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="Ingrese el precio"
               />
             </div>
@@ -244,6 +255,19 @@ function AdminProductos() {
                 name="inventario"
                 value={nuevoProducto.inventario}
                 onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  // Bloquear teclas específicas
+                  if (
+                    e.key === "-" || // Evitar el signo negativo
+                    e.key === "." || // Evitar el punto
+                    e.key === "," || // Evitar la coma
+                    e.key === "e" || // Evitar notación científica
+                    e.key === "E" ||
+                    e.key === "+" // Evitar el signo más
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 placeholder="Ingrese la cantidad inicial"
               />
             </div>
@@ -307,6 +331,7 @@ function AdminProductos() {
                                 e.key === "." || // Evitar el punto
                                 e.key === "," || // Evitar la coma
                                 e.key === "e" || // Evitar notación científica
+                                e.key === "E" ||
                                 e.key === "+" // Evitar el signo más
                               ) {
                                 e.preventDefault();
