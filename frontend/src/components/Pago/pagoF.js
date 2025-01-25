@@ -235,9 +235,28 @@ const PaymentConfirmation = () => {
   
 
   // Descargar factura
-  const handleDownloadInvoice = () => {
-    if (!invoiceData) return;
-    window.open(`http://localhost:4000/api/facturas/${invoiceData.id}/descargar`, "_blank");
+  const handleDownloadInvoice = async () => {
+    //if (!invoiceData) return;
+    //window.open(`http://localhost:4000/api/facturas/${invoiceData.id}/descargar`, "_blank");
+    try {
+      // Realizar la solicitud para obtener el PDF
+      const response = await fetch('http://localhost:4000/api/generate-factura', {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al generar la factura');
+      }
+
+      // Crear un enlace para descargar el archivo PDF
+      const blob = await response.blob(); // Convertir la respuesta en un objeto Blob (archivo binario)
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob); // Crear una URL temporal para el archivo PDF
+      link.download = 'factura.pdf'; // Nombre del archivo que se descargará
+      link.click(); // Simular el clic en el enlace para iniciar la descarga
+    } catch (error) {
+      console.error('Error al generar la factura:', error);
+    }
   };
 
   // Cerrar modal y volver
