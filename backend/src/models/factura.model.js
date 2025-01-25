@@ -41,11 +41,11 @@ const facturaSchema = new mongoose.Schema({
     {
       id_producto: {
         type: Number, // ID del producto
-        required: true,
+        //required: true,
       },
       cantidad: {
         type: Number, // Cantidad del producto comprado
-        required: true,
+        //required: true,
         min: 1, // No puede ser menor a 1
       },
     },
