@@ -7,7 +7,7 @@ import Modal from "../Modal/modal";
 import "./login.css";
 //import google from "../imagenes/googleI-.png";
 import { GoogleLogin } from "@react-oauth/google";
-
+import "../Header/principal-header-asd.css"
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -65,12 +65,26 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem("usuarioId", data.usuario.id);
+        console.log("id: ", data.usuario.id);
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
         localStorage.setItem("usuarioApellido", data.usuario.apellido);
         localStorage.setItem("usuarioEmail", data.usuario.email);
         localStorage.setItem("userRole", data.usuario.rol); // Almacenar el rol
+        localStorage.setItem("usuarioDireccion", data.usuario.domicilio.direccion);
+        localStorage.setItem("usuarioCiudad", data.usuario.domicilio.ciudad);
+        localStorage.setItem("usuarioReferencia", data.usuario.domicilio.referencia);
+
         localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
       
+        const user = {
+          nombre: data.usuario.nombre,
+          apellido: data.usuario.apellido,
+          email: data.usuario.email,
+          domicilio: data.usuario.domicilio,
+        };
+
+
         // Redirigir según el rol
         if (data.usuario.rol === "admin") {
           navigate("/admin");
@@ -112,10 +126,14 @@ function Login() {
         setModalMessage("¡Dirección y token enviados exitosamente!");
         console.log("Respuesta del backend:", data);
         // Guardar el nombre del usuario
+        localStorage.setItem("usuarioId", data.clienteExistente._id);
         localStorage.setItem("usuarioNombre", data.clienteExistente.nombre);
         localStorage.setItem("usuarioApellido", data.clienteExistente.apellido);
         localStorage.setItem("usuarioEmail", data.clienteExistente.email);
         localStorage.setItem("userRole", data.clienteExistente.rol); // Almacenar el rol
+        localStorage.setItem("usuarioDireccion", data.clienteExistente.domicilio.direccion);
+        localStorage.setItem("usuarioCiudad", data.clienteExistente.domicilio.ciudad);
+        localStorage.setItem("usuarioReferencia", data.clienteExistente.domicilio.referencia);
         localStorage.setItem("isLoggedIn", "true"); // Confirmar que está autenticado
         console.log("Usuario autenticado:", data.clienteExistente);
 
@@ -138,16 +156,16 @@ function Login() {
 
   return (
     <div>
-      <header className="login-header">
-        <div className="login-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="login-logo-img" />
-          <div className="login-name">TU DESPENSA 🛒</div>
+           <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
 
       <div
-        className="login-container"
-        style={{ backgroundImage: `url(${fondo})` }}
+        className="login-container" 
+        /*style={{ back*/
       >
         <button
           className="login-back-button"

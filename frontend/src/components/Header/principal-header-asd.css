@@ -1,0 +1,51 @@
+
+.principal-name-asd {
+    font-family: 'Agbalumo', sans-serif;
+    font-size: 40px;
+    color:white;/* Color del texto del nombre */
+    text-shadow: 1px 1px 2px 
+    rgba(0, 0, 0, 0.2); /* Sombras ligeras en el texto */
+}
+
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.principal-app-header {
+    animation: fadeIn 0.8s ease;
+}
+
+@media (max-width: 912px) {
+    .principal-name {
+      font-size: 18px; /* Reduce el tamaño del texto */
+      white-space: nowrap; /* Evita que el texto salte de línea */
+      overflow: hidden; /* Oculta texto que exceda el contenedor */
+      text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+    }
+  }
+  
+
+
+
+  
+  @media (max-width: 768px) {
+    .principal-name-asd {
+        font-size: 28px; /* Reduce un poco para pantallas pequeñas */
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .principal-name-asd {
+        font-size: 20px; /* Más pequeño para pantallas muy pequeñas */
+    }
+  }
+  

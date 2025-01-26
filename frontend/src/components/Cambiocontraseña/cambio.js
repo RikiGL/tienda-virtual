@@ -83,24 +83,36 @@ function CambioContrasena() {
   return (
     <div
       className="cambio1-change-password-container"
-      style={{ backgroundImage: `url(${fondo})` }}
+   
     >
-      <header className="cambio1-app-header">
-        <div className="cambio1-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="cambio1-logo-img" />
-          <div className="cambio1-name">TU DESPENSA 🛒</div>
+    <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
 
       <div className="cambio1-back-button-container">
         <button type="button" onClick={handleBack} className="cambio1-back-button">
-          Volver
+        ← Volver
         </button>
       </div>
-
+    
       <main className="cambio1-change-password-main">
         <div className="cambio1-change-password-box">
+
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+  <img src="https://th.bing.com/th/id/OIP.z735DWGkzl0AgKMOwgIIeAHaFj?w=222&h=180&c=7&r=0&o=5&pid=1.7" alt="Email Security Icon" style={{ width: '50px', height: '50px' }} />
+</div>
+  
+
+
           <h2 className="cambio1-change-password-title">Cambio de contraseña</h2>
+          <p className="cambio1-info-message">
+  Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña. 
+  Si no recibes el correo en unos minutos, revisa tu carpeta de spam.
+</p>
+
           <form onSubmit={handleSubmit} noValidate>
             <div className="cambio1-input-group">
               <label htmlFor="email" className="cambio1-input-label">

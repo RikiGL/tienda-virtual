@@ -34,7 +34,7 @@ function CambioContrasena3() {
 
     if (!regexContraseña.test(contraseña)) {
       setModalMessage(
-        "La contraseña debe tener al menos 8 caracteres e incluir un carácter especial."
+        "La contraseña no cumple con los requisitos. Por favor, revisa las indicaciones."
       );
       return;
     }
@@ -78,13 +78,13 @@ function CambioContrasena3() {
   return (
     <div
       className="cambio3-change-password-container"
-      style={{ backgroundImage: `url(${fondo})` }}
+     
     >
       {}
-      <header className="cambio3-app-header">
-        <div className="cambio3-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="cambio3-logo-img" />
-          <div className="cambio3-name">TU DESPENSA 🛒</div>
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
 
@@ -95,14 +95,32 @@ function CambioContrasena3() {
           onClick={handleBack}
           className="cambio3-back-button"
         >
-          Volver
+         ← Volver
         </button>
       </div>
 
       {}
       <main className="cambio3-change-password-main">
         <div className="cambio3-change-password-box">
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+  <img
+    src="https://img.icons8.com/ios-filled/50/000000/lock--v1.png"
+    alt="Password Icon"
+    style={{ width: '30px', height: '30px' }}
+  />
+</div>
+
           <h2 className="cambio3-change-password-title">Ingrese su nueva contraseña</h2>
+          <p className="password-reset-info">
+          Cree una contraseña con:
+            <ul className="styled-list">
+              <li>8 o más caracteres.</li>
+              <li>Al menos una letra.</li>
+              <li>Un número.</li>
+              <li>Un símbolo (@, $, !, %, *, ?, &).</li>
+            </ul>
+          </p>
+
           <form onSubmit={handleSubmit}>
             <div className="cambio3-input-group">
               <label htmlFor="contraseña" className="cambio3-input-label">

@@ -95,12 +95,12 @@ function CambioCodigo() {
   return (
     <div
       className="cambio2-change-code-container"
-      style={{ backgroundImage: `url(${fondo})` }}
+     
     >
-      <header className="cambio2-app-header">
-        <div className="cambio2-logo">
-          <img src={logo} alt="Tu Despensa Logo" className="cambio2-logo-img" />
-          <div className="cambio2-name">TU DESPENSA 🛒</div>
+   <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
       </header>
   
@@ -110,12 +110,16 @@ function CambioCodigo() {
           onClick={handleBack}
           className="cambio2-back-button"
         >
-          Volver
+          ← Volver
         </button>
       </div>
   
       <main className="cambio2-change-code-main">
         <div className="cambio2-change-code-box">
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+  <img src="https://img.icons8.com/ios-filled/50/000000/verified-account.png" alt="Verification Icon" />
+</div>
+
           <h2 className="cambio2-change-code-title">Ingrese el código de verificación</h2>
           <p className="cambio2-verification-instruction">
             Ingrese el código de verificación que ha sido enviado a su correo electrónico

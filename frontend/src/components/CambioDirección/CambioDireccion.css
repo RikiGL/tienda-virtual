@@ -1,0 +1,148 @@
+/* Establece que el body y el html tengan altura completa */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  
+  /* Contenedor principal con flexbox */
+  .cambio-direccion-princ {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .CambDir-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    color: white;
+    height: 60px;
+  }
+  
+  .admin-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .admin-logo-img {
+    width: 50px;
+    height: auto;
+    vertical-align: middle;
+  }
+  
+  .admin-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0c5304;
+  }
+  
+  
+  
+  
+  /* Contenedor de cambio de dirección (60% de ancho) */
+  .cambio-direccion {
+    width: 60%;  /* Ocupa el 60% del ancho de la pantalla */
+    margin: 2px auto;  /* Centra el contenedor horizontalmente */
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto; /* Permite desplazarse si el contenido excede la altura */
+    border-radius: 20px;
+  }
+  
+  /* Mapa */
+  .mapa {
+    margin-bottom: 20px;
+  }
+  
+  .mapa iframe {
+    width: 100%;
+    height: 400px;
+    border: none;
+  }
+  
+  /* Contenedor de direcciones */
+  .direccion-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 3px;
+    
+  }
+  
+  .direccion-container input {
+    background-color: #f1f1f1;
+    height: 40px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+  }
+  
+  /* Contenedor de botones */
+  .cd-botones-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .Volver-btn , .Actualizar-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 1;
+    margin: 10px;
+  }
+  
+  .Volver-btn , .Actualizar-btn:hover {
+    background-color: #45a049;
+  }
+  /* Estilos para el contenedor de la notificación */
+.notification-container-act {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px;
+  position: fixed; /* Asegura que la notificación se muestre en la parte superior */
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  border-left: 7px solid green; /* Borde izquierdo verde */
+}
+
+/* Estilos para el ícono dentro de la notificación */
+.notification-icon-act {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  color: green; /* Color verde para el ícono de check */
+}
+  
+  /* Footer */
+  .cd-footer {
+    background-color: #f1f1f1;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    width: 100%;
+  }
+  .cd-footer p {
+    margin: 5px 0;
+  }

@@ -1,74 +1,6 @@
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-  min-height: 100vh;
-}
 
-.principal-app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #f1c40f; /* Fondo amarillo */
-  color: white;
-  height: 60px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Añadir sombra para mejor visibilidad */
-}
 
-.principal-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-.principal-logo-img {
-  width: 80px;
-  height: auto;
-  vertical-align: middle;
-}
-
-.principal-name {
-  font-family: 'Agbalumo', sans-serif;
-  font-size: 40px;
-  color: #0c5304; /* Color del texto del nombre */
-}
-
-.principal-search-bar {
-  flex-grow: 1;
-  margin: 0 20px;
-}
-
-.principal-search-input {
-  width: 100%;
-  max-width: 400px; /* Ajusta el ancho máximo para evitar desbordamiento */
-  padding: 10px;
-  border-radius: 25px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.principal-search-input:focus {
-  border-color: #0e6705;
-}
-
-.principal-header-button {
-  background-color: #371d03f0;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.principal-header-button:hover {
-  background-color: #f39c12;
-}
 
 .principal-nav-links {
   display: flex;
@@ -82,18 +14,6 @@ body {
   font-size: 16px;
 }
 
-.principal-app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.principal-main-container {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 20px;
-  flex: 1;
-}
 
 .principal-sidebar {
   background-color: #CCD1D1;
@@ -135,8 +55,10 @@ body {
 }
 
 .principal-category-item:hover {
-  color: #f39c12;
-  border-bottom: 2px solid #f39c12;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
+
 }
 
 .principal-category-item.principal-active {
@@ -153,7 +75,7 @@ body {
 
 .principal-product-card {
   width: 100%;
-  max-width: 250px;
+  max-width: 350px;
   margin: 0 auto;
   margin-bottom: 10px;
   background: #fff;
@@ -229,7 +151,9 @@ body {
 }
 
 .principal-controls button:hover {
-  background-color: #f39c12;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
 }
 
 .principal-disabled {
@@ -242,7 +166,7 @@ body {
   position: fixed;
   top: 0;
   right: 0;
-  width: 450px;
+  width: 650px;
   height: 90vh;
   background-color: white;
   border-bottom: 2px solid #ddd;
@@ -276,6 +200,9 @@ body {
   border-radius: 10px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  height: auto;
+  width: 600px;
 }
 
 .principal-cart-item img {
@@ -311,10 +238,11 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  height: auto;
 }
 
 .principal-cart-controls button {
-  font-size: 20px;
+  font-size: 15px;
   padding: 8px 12px;
   background-color: #ff4500;
   color: white;
@@ -324,7 +252,9 @@ body {
 }
 
 .principal-cart-controls button:hover {
-  background-color: #e43e00;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease;
 }
 
 .principal-cart-item-quantity {
@@ -345,7 +275,7 @@ body {
 
 .principal-cart-button {
   position: absolute;
-  top: 70px;
+  top: 130px;
   right: 20px;
   background-color: #371d03f0;
   color: white;
@@ -446,19 +376,7 @@ body {
   cursor: not-allowed;
 }
 
-.principal-app-footer {
-  background-color: #333;
-  color: white;
-  text-align: center;
-  padding: 10px 0;
-  margin-top: auto;
-  width: 100%;
-}
 
-.principal-app-footer p {
-  margin: 5px 0;
-  font-size: 14px;
-}
 
 .principal-product-grid {
   display: grid;
@@ -523,7 +441,7 @@ button:disabled, button.principal-disabled {
 .principal-dropdown-menu {
   position: absolute;
   top: 100%;
-  right: -20px; 
+  right: -60px; 
   background-color: #ffedcc; 
   border: 1px solid #e5a100; 
   border-radius: 8px;
@@ -633,10 +551,73 @@ button:disabled, button.principal-disabled {
   font-weight: bold;
   color: #f39c12;
 }
+/* Botón de eliminar producto  */
+.remove-all-button {
+  margin-top: 2px;    
+  font-size: 15px;     
+  border: none;       
+  color: #888;        
+  cursor: pointer;  
+  text-align: center;
+}
 
+.remove-all-button:hover {
+  transform: scale(1.3); /* Escala 1.1 cuando se hace clic */
+  color: #666; /* Gris más oscuro cuando se hace clic */
+}
+.notification-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #ccc;  
+  width: 100%;
+  max-width: 500px;
+  margin: 10px; 
+  position: fixed; 
+  top: 20px;
+  left: 20px; 
+  z-index: 1000; 
+  
+  border-left: 7px solid green; 
+}
 
+/* Estilos para el ícono dentro de la notificación */
+.notification-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 5px;
+  color: green; 
+}
+/* Estilos para el contenedor de la notificación */
+.notification-container-eliminar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 500px;
+  margin: 10px;
+  position: fixed; /* Asegura que la notificación se muestre en la parte superior */
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  border-left: 5px solid red; /* Borde izquierdo rojo */
+}
+
+/* Estilos para el ícono dentro de la notificación */
+.notification-icon-eli {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  color: red; /* Color rojo para el ícono de "X" */
+}
 /* Ocultar menú hamburguesa en pantallas grandes */
 @media (min-width: 1024px) {
+
   .menu-toggle {
     display: none; /* Esconde el botón hamburguesa en pantallas grandes */
   }
@@ -794,11 +775,17 @@ button:disabled, button.principal-disabled {
   }
 
   .principal-cart {
-    width: 85%; /* El carrito ocupa el 85% del ancho */
-    max-width: 500px; /* Limita el ancho máximo */
-    margin: 0 auto; /* Centra el carrito */
-    padding: 10px; /* Reduce el padding */
-    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px; /* Reduce el ancho del carrito */
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    background-color: #fff;
+    border-left: 1px solid #ddd; /* Borde lateral más discreto */
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: -3px 0 5px rgba(0, 0, 0, 0.1); /* Sombra en el borde izquierdo */
   }
 
   .tituloCarrito {
@@ -848,3 +835,34 @@ button:disabled, button.principal-disabled {
 }
  
 
+
+
+.principal-header-button{
+  margin-right: 15px;
+}
+
+
+
+.principal-admin-button-asd {
+
+  background-color: #0c5304;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.principal-admin-button-asd:hover {
+  background: #4CAF50;
+}
+
+
+
+@media (max-width: 1024px) {
+  .principal-cart {
+    width: 400px; /* Un poco más ancho en dispositivos medianos */
+  }
+}

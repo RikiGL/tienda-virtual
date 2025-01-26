@@ -5,9 +5,9 @@ const facturaCtrl = {};
 
 //Nueva factura
 facturaCtrl.crearFactura = async (req, res) => {
-  const { id_cliente, total, metodo_pago } = req.body;
+  const { id_cliente, cedula, celular, total, metodo_pago, productos } = req.body;
 
-  if (!id_cliente || !total || !metodo_pago) {
+  if (!id_cliente || !total || !metodo_pago || !cedula || !celular ) {
     return res
       .status(400)
       .json({ mensaje: "Todos los campos son obligatorios" });
@@ -15,8 +15,11 @@ facturaCtrl.crearFactura = async (req, res) => {
 
   const nuevaFactura = new Factura({
     id_cliente,
+    cedula,
+    celular,
     total,
     metodo_pago,
+    productos,
   });
 
   try {
@@ -54,7 +57,7 @@ facturaCtrl.obtenerFacturaPorId = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ mensaje: "Error al obtener las facturas", error: error.message });
+      .json({ mensaje: "Error al obtener la factura", error: error.message });
   }
 };
 
