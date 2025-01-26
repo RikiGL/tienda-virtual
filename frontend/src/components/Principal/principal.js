@@ -132,7 +132,7 @@ const Principal = () => {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch("http://localhost:4000/api/productos/");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}productos`);
         if (!response.ok) throw new Error("Error al cargar los productos");
 
         const data = await response.json();

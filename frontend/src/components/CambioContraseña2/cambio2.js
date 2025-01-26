@@ -42,7 +42,7 @@ function CambioCodigo() {
       console.log("Código enviado:", codigoTrimmed);
       console.log("Email enviado:", email);
       
-      const response = await fetch("http://localhost:4000/api/auth/cambio2", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}auth/cambio2`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: codigoTrimmed }), 

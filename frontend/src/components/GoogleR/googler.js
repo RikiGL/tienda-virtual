@@ -61,10 +61,9 @@ function GoogleR() {
 
       console.log(typeof token)
     }
-  
     // Combina el token con la dirección y envía al backend
     try {
-      const response = await fetch("http://localhost:4000/api/auth/google", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}auth/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
