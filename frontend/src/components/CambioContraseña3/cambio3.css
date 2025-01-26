@@ -5,6 +5,7 @@
   background-size: cover;
   background-position: center;
   font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to bottom, #E0F5E8, #FFFFFF);
 }
 
 .cambio3-change-password-main {
@@ -67,7 +68,7 @@
 .cambio3-change-password-button {
   width: 100%;
   padding: 14px;
-  background: #6a11cb;
+  background: #3B7D38;
   color: white;
   border: none;
   border-radius: 8px;
@@ -78,7 +79,10 @@
 }
 
 .cambio3-change-password-button:hover {
-  background: #5a0dbf;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease
+
 }
 
 .cambio3-back-button-container {
@@ -88,8 +92,9 @@
 }
 
 .cambio3-back-button {
+  margin-top: 50px;
   padding: 8px 20px;
-  background: #6a11cb;
+  background: #3B7D38;
   color: white;
   border: none;
   border-radius: 8px;
@@ -100,7 +105,10 @@
 }
 
 .cambio3-back-button:hover {
-  background: #5a0dbf;
+  background: #4CAF50;
+  transform: scale(1.02); /* Pequeño zoom */
+  transition: all 0.3s ease
+
 }
 
 .cambio3-app-header {
@@ -144,4 +152,33 @@
 
 .cambio3-app-footer p {
   margin: 5px 0;
+}
+
+
+.password-reset-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+.password-reset-info ul {
+  
+  padding: 0;
+  margin-top: 5px;
+}
+.password-reset-info li {
+  margin-bottom: 5px;
+  text-align: left;
+}
+
+.styled-list {
+  list-style-type: disc; /* Habilita las viñetas de puntos */
+  margin-left: 20px; /* Desplaza el contenido ligeramente */
+  padding: 0;
+  color: #666; /* Ajusta el color del texto */
+}
+
+.styled-list li {
+  margin-bottom: 8px; /* Espaciado entre los elementos */
+  font-size: 14px; /* Ajusta el tamaño del texto */
 }

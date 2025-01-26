@@ -76,18 +76,9 @@ const PaymentConfirmation = () => {
         referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
       }
     };
-    
-    // Combina los datos del `state` con el respaldo de `localStorage`
     const finalUser = { ...savedUser, ...user };
-      // Estado para almacenar el valor de la cédula
-  const [cedula, setCedula] = useState('');
-  // Arrow function para manejar el cambio en el input
-  const handleCedula = (event) => setCedula(event.target.value);
+    
 
-  // Estado para almacenar el valor de  celular
-  const [celular, setCelular] = useState('');
-  // Arrow function para manejar el cambio en el input
-  const handleCelular = (event) => setCelular(event.target.value);
 
 
     
@@ -101,10 +92,19 @@ const PaymentConfirmation = () => {
   // Manejo de estados
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
+  const [cedula, setCedula] = useState('');
+  const [celular, setCelular] = useState('');
 
 
   // Memo
   const memoizedProducts = useMemo(() => products, [products]);
+  const handleCedulaChange = (event) => {
+    setCedula(event.target.value); // Actualiza el estado de la cédula
+  };
+  
+  const handleCelularChange = (event) => {
+    setCelular(event.target.value); // Actualiza el estado del celular
+  };
 
   useEffect(() => {
     const loadPayPalScript = () => {
@@ -148,19 +148,23 @@ const PaymentConfirmation = () => {
 
             onApprove: async (data, actions) => {
               try {
+
                 // Capturar el pago
                 const details = await actions.order.capture();
                 console.log("Pago capturado:", details);
                 localStorage.removeItem("cart");
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: localStorage.getItem("usuarioId") , // Cambiar según lógica de cliente
-                  total: totalAmount,
+                  id_cliente: Number (localStorage.getItem("usuarioId")) , // Cambiar según lógica de cliente
+                  total: Number (totalAmount),
                   metodo_pago: "paypal",
-                  cedula,
-                  celular,
+                  cedula: document.getElementById("cedula").value, // Leer directamente del input
+                  celular: document.getElementById("telefono").value, // Leer directamente del input
+                  productos: memoizedProducts,
+                  
                 };
-                console.log(factura)
+                console.log(memoizedProducts)
+               
             //CAMBIAR DESPUES
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
@@ -268,12 +272,11 @@ const PaymentConfirmation = () => {
   return (
     <StyledWrapper>
       {/* ========== HEADER ========== */}
-      <header className="header">
-        <div className="logo-section">
-          <img src={logo} alt="Logo" className="logo-img" />
-          <div className="header-title">TU DESPENSA 🛒</div>
+      <header className="principal-app-header">
+        <div className="principal-logo">
+          <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
+          <div className="principal-name-asd">TU DESPENSA 🛒</div>
         </div>
-        {/* Si quisieras algo a la derecha, lo agregarías aquí */}
       </header>
 
       {/* ========== BOTÓN VOLVER ========== */}
@@ -314,11 +317,11 @@ const PaymentConfirmation = () => {
 
   <div className="pagoC-row">
     <label htmlFor="cedula">Cédula:</label>
-    <input type="text" id="cedula" onChange={handleCedula} placeholder="Ingrese su cédula" required />
+    <input type="text" id="cedula" value = {cedula} onChange={handleCedulaChange} placeholder="Ingrese su cédula" required />
   </div>
   <div className="pagoC-row">
     <label htmlFor="telefono">Número de Celular:</label>
-    <input type="text" id="telefono" onChange={handleCelular} placeholder="Ingrese su número de celular" required />
+    <input type="text" id="telefono" value = {celular}  onChange={handleCelularChange} placeholder="Ingrese su número de celular" required />
   </div>
 
   <div className="change-address-button">

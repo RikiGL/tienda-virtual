@@ -7,7 +7,7 @@ const facturaCtrl = {};
 facturaCtrl.crearFactura = async (req, res) => {
   const { id_cliente, cedula, celular, total, metodo_pago, productos } = req.body;
 
-  if (!id_cliente || !total || !metodo_pago || !cedula || !celular || !productos) {
+  if (!id_cliente || !total || !metodo_pago || !cedula || !celular ) {
     return res
       .status(400)
       .json({ mensaje: "Todos los campos son obligatorios" });
