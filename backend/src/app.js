@@ -12,6 +12,9 @@ const { OAuth2Client } = require("google-auth-library");
 const { find } = require("./models/factura.model");
 const Table = require("pdfkit-table"); // Importar el constructor de la tabla correctamente
 const Factura = require("./models/factura.model");
+const multer = require("multer");
+const upload = multer();
+
 
 //Configuración
 //Se usará el puerto que se asigne con por el S.O. con process.env.PORT
@@ -307,15 +310,23 @@ app.get("/api/generate-factura/:id", async (req, res) => {
 });
 
 //Envio de Factura
-app.get("/api/envio-factura", (req, res) => {
-  const { email, link } = req.body;
+app.post("/api/envio-factura", upload.single("file"), (req, res) => {
+  try{
+  const email = req.body.email; // Dirección de correo
+  const file = req.file; // Archivo PDF
+
+  if (!email || !file) {
+    return res.status(400).json({ error: "Correo y archivo son requeridos" });
+  }
+
   const sgMail = require("@sendgrid/mail");
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
   const msg = {
-    to: email, // Change to your recipient
-    from: "rikiguallichico16@gmail.com", // Change to your verified sender
+    to: email,
+    from: "rikiguallichico16@gmail.com",
     subject: "Factura Electrónica - Tu Despensa",
-    text: "Factura electrónica enviada desde Tu Despensa. Revisa tu correo para más detalles.",
+    text: "Estimado cliente,\nGracias por tu compra en Tu Despensa.\nAdjuntamos a este correo tu factura electrónica en formato PDF.\nSi tienes alguna consulta, no dudes en contactarnos respondiendo a este correo o a través de nuestro soporte: info@tudespensa.com",
     html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
         <h2 style="color: #007BFF; text-align: center;">Factura Electrónica</h2>
@@ -329,16 +340,30 @@ app.get("/api/envio-factura", (req, res) => {
         </footer>
       </div>
     `,
+    attachments: [
+      {
+        content: file.buffer.toString("base64"),
+        filename: file.originalname,
+        type: file.mimetype,
+        disposition: "attachment",
+      },
+    ],
   };
+
   sgMail
     .send(msg)
     .then(() => {
       console.log("Email sent");
-      res.status(200).json({ success: true, message: "Token valido" });
+      res.status(200).json({ success: true, message: "Correo enviado con éxito." });
     })
     .catch((error) => {
       console.error(error);
+      res.status(500).json({ error: "Error al enviar el correo." });
     });
+  } catch (error) {
+    console.error("Error en el servidor:", error);
+    res.status(500).json({ error: "Ocurrió un error en el servidor." });
+  }
 });
 
 //app.use("/a")
