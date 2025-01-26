@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css"
-
 import styled from "styled-components";
-
-
 import { FaArrowLeft } from "react-icons/fa";
-
 import logo from "../imagenes/asdlogo.png";
 
 
@@ -37,9 +33,6 @@ const StyledWrapper = styled.div`
 `;
 
 const PaymentConfirmation = () => {
-
-
-
   const { state } = useLocation();
   const {
     products = [],
@@ -78,39 +71,58 @@ const PaymentConfirmation = () => {
   };
   const finalUser = { ...savedUser, ...user };
 
-
-
-
-
-
-
-
-  //////////////////
-
-
-
   // Manejo de estados
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
   const [cedula, setCedula] = useState('');
   const [celular, setCelular] = useState('');
+  const [isCedulaValid, setIsCedulaValid] = useState(false);
+  const [isCelularValid, setIsCelularValid] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+
 
 
   // Memo
   const memoizedProducts = useMemo(() => products, [products]);
   const handleCedulaChange = (event) => {
-    setCedula(event.target.value); // Actualiza el estado de la cédula
+    const value = event.target.value;
+    if (/^\d{0,10}$/.test(value)) {  // Solo números y máximo 10 dígitos
+      setCedula(value);
+      setIsCedulaValid(value.length === 10);  // Verifica si tiene 10 dígitos
+    }
   };
 
   const handleCelularChange = (event) => {
-    setCelular(event.target.value); // Actualiza el estado del celular
+    const value = event.target.value;
+    if (/^\d{0,10}$/.test(value)) {  // Solo números y máximo 10 dígitos
+      setCelular(value);
+      setIsCelularValid(value.length === 10);  // Verifica si tiene 10 dígitos
+    }
   };
+
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    if (isCedulaValid && isCelularValid) {
+      setIsFormValid(true);
+      setWarningMessage('');
+    } else {
+      setIsFormValid(false);
+      if (!isCedulaValid || !cedula) {
+        setWarningMessage('Debe ingresar una cédula válida.');
+      } else if (!isCelularValid || !celular) {
+        setWarningMessage('Debe ingresar un número de celular válido.');
+      }
+    }
+  }, [isCedulaValid, isCelularValid, cedula, celular]);
+
 
   useEffect(() => {
     if (showConfirmationModal) {
       handleSendEmail();
     }
-  }, [showConfirmationModal]); 
+  }, [showConfirmationModal]);
 
   useEffect(() => {
     const loadPayPalScript = () => {
@@ -130,11 +142,18 @@ const PaymentConfirmation = () => {
       document.body.appendChild(script);
     };
 
-    
+    // Validar si los campos de cédula y celular están completos
+    const isFormValid = cedula.length === 10 && celular.length === 10;
 
 
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
+      if (!isFormValid) {
+        buttonContainer.innerHTML = ''; // Elimina el botón si los campos no están completos
+        setWarningMessage('Debe completar todos los campos antes de proceder.');
+        return;
+      }
+      
       if (buttonContainer) {
         buttonContainer.innerHTML = "";
       }
@@ -148,9 +167,6 @@ const PaymentConfirmation = () => {
                 ],
               });
             },
-
-
-
 
             onApprove: async (data, actions) => {
               try {
@@ -231,7 +247,7 @@ const PaymentConfirmation = () => {
     };
 
     loadPayPalScript();
-  }, [totalAmount, memoizedProducts]);
+  }, [totalAmount, memoizedProducts, cedula, celular, isFormValid]);
 
   const handleChangeAddress = () => {
     navigate("/CambioDireccion");
@@ -274,7 +290,7 @@ const PaymentConfirmation = () => {
       console.error('Error al generar la factura:', error);
     }
   };
-  
+
   const handleSendEmail = async () => {
     try {
       const formData = new FormData();
@@ -298,7 +314,7 @@ const PaymentConfirmation = () => {
     } catch (error) {
       console.error('Error al enviar el correo:', error);
     }
-  };
+  }; 
 
   // Cerrar modal y volver
   const handleGoHome = () => {
@@ -360,12 +376,17 @@ const PaymentConfirmation = () => {
             <label htmlFor="telefono">Número de Celular:</label>
             <input type="text" id="telefono" value={celular} onChange={handleCelularChange} placeholder="Ingrese su número de celular" required />
           </div>
-
           <div className="change-address-button">
             <button onClick={handleChangeAddress}>Cambiar Dirección</button>
           </div>
         </div>
 
+        {/* Mensaje de advertencia si los campos no son válidos */}
+        {warningMessage && (
+          <div className="warning-message">
+            <p>{warningMessage}</p>
+          </div>
+        )}
 
         {/* Productos */}
         <div className="info-section">
