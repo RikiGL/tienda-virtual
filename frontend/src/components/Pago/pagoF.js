@@ -42,21 +42,21 @@ const PaymentConfirmation = () => {
 
   const { state } = useLocation();
   const {
-  products = [],
-  subtotal = 0,
-  user = {
-    nombre: "Invitado",
-    apellido: "",
-    email: "No disponible",
-    domicilio: {
-      direccion: "No disponible",
-      ciudad: "No disponible",
-      referencia: "No disponible",
+    products = [],
+    subtotal = 0,
+    user = {
+      nombre: "Invitado",
+      apellido: "",
+      email: "No disponible",
+      domicilio: {
+        direccion: "No disponible",
+        ciudad: "No disponible",
+        referencia: "No disponible",
+      },
     },
-  },
-  onClearCartAfterPayment,
-} = state || {};
-    
+    onClearCartAfterPayment,
+  } = state || {};
+
 
   const navigate = useNavigate();
 
@@ -65,29 +65,29 @@ const PaymentConfirmation = () => {
 
 
 
-    ////////////////
-    const savedUser = {
-      nombre: localStorage.getItem("usuarioNombre") || "Invitado",
-      apellido: localStorage.getItem("usuarioApellido") || "",
-      email: localStorage.getItem("usuarioEmail") || "No disponible",
-      domicilio:{
-        direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
-        ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
-        referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
-      }
-    };
-    const finalUser = { ...savedUser, ...user };
-    
+  ////////////////
+  const savedUser = {
+    nombre: localStorage.getItem("usuarioNombre") || "Invitado",
+    apellido: localStorage.getItem("usuarioApellido") || "",
+    email: localStorage.getItem("usuarioEmail") || "No disponible",
+    domicilio: {
+      direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
+      ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
+      referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
+    }
+  };
+  const finalUser = { ...savedUser, ...user };
 
 
 
-    
 
 
 
-    //////////////////
 
-  
+
+  //////////////////
+
+
 
   // Manejo de estados
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -101,10 +101,16 @@ const PaymentConfirmation = () => {
   const handleCedulaChange = (event) => {
     setCedula(event.target.value); // Actualiza el estado de la cédula
   };
-  
+
   const handleCelularChange = (event) => {
     setCelular(event.target.value); // Actualiza el estado del celular
   };
+
+  useEffect(() => {
+    if (showConfirmationModal) {
+      handleSendEmail();
+    }
+  }, [showConfirmationModal]); 
 
   useEffect(() => {
     const loadPayPalScript = () => {
@@ -124,7 +130,7 @@ const PaymentConfirmation = () => {
       document.body.appendChild(script);
     };
 
-
+    
 
 
     const initializePayPalButtons = () => {
@@ -155,31 +161,31 @@ const PaymentConfirmation = () => {
                 localStorage.removeItem("cart");
                 // Crear la factura en el backend
                 const factura = {
-                  id_cliente: Number (localStorage.getItem("usuarioId")) , // Cambiar según lógica de cliente
-                  total: Number (totalAmount),
+                  id_cliente: Number(localStorage.getItem("usuarioId")), // Cambiar según lógica de cliente
+                  total: Number(totalAmount),
                   metodo_pago: "paypal",
                   cedula: document.getElementById("cedula").value, // Leer directamente del input
                   celular: document.getElementById("telefono").value, // Leer directamente del input
                   productos: memoizedProducts,
-                  
+
                 };
                 console.log(memoizedProducts)
-               
-            //CAMBIAR DESPUES
+
+                //CAMBIAR DESPUES
                 const response = await fetch("http://localhost:4000/api/facturas", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(factura),
                 });
-            
+
                 if (!response.ok) {
                   throw new Error("Error al guardar la factura.");
                 }
-            
+
                 const responseData = await response.json();
                 console.log("Factura creada:", responseData);
                 setInvoiceData(responseData);
-            
+
                 // Eliminar productos del inventario
                 const productIdsWithQuantities = memoizedProducts.map((product) => ({
                   productId: product._id,
@@ -190,18 +196,18 @@ const PaymentConfirmation = () => {
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ productIdsWithQuantities }),
                 });
-            
+
                 if (!deleteResponse.ok) {
                   throw new Error("Error al eliminar los productos.");
                 }
-            
+
                 console.log("Productos eliminados correctamente");
-            
+
                 // Vaciar el carrito en el frontend
                 if (typeof onClearCartAfterPayment === "function") {
                   onClearCartAfterPayment(); // Vacía el carrito en `principal.js`
                 }
-            
+
                 // Mostrar el modal de confirmación de pago
                 setShowConfirmationModal(true);
               } catch (error) {
@@ -209,9 +215,6 @@ const PaymentConfirmation = () => {
                 alert("El pago fue exitoso, pero ocurrió un error al procesar la factura o actualizar el inventario.");
               }
             },
-            
-
-
 
             onError: (err) => {
               console.error("Error durante el pago:", err);
@@ -226,7 +229,7 @@ const PaymentConfirmation = () => {
         console.error("SDK de PayPal no disponible.");
       }
     };
-    
+
     loadPayPalScript();
   }, [totalAmount, memoizedProducts]);
 
@@ -236,30 +239,64 @@ const PaymentConfirmation = () => {
   const handleBackClick = () => {
     navigate("/principal");
   };
-  
+
 
   // Descargar factura
   const handleDownloadInvoice = async () => {
-    //if (!invoiceData) return;
-    //window.open(`http://localhost:4000/api/facturas/${invoiceData.id}/descargar`, "_blank");
     try {
-      // Realizar la solicitud para obtener el PDF
-      const response = await fetch('http://localhost:4000/api/generate-factura', {
-        method: 'GET',
+      const response = await handeGenerateFactura();
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Factura-${invoiceData.nuevaFactura._id}.pdf`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error al descargar la factura:', error);
+    }
+  };
+
+  const handeGenerateFactura = async () => {
+    try {
+      console.log("invoiceData", invoiceData);
+      const response = await fetch(`http://localhost:4000/api/generate-factura/${invoiceData.nuevaFactura._id}/`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
-        throw new Error('Error al generar la factura');
+        throw new Error("Error al generar la factura.");
       }
 
-      // Crear un enlace para descargar el archivo PDF
-      const blob = await response.blob(); // Convertir la respuesta en un objeto Blob (archivo binario)
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob); // Crear una URL temporal para el archivo PDF
-      link.download = 'factura.pdf'; // Nombre del archivo que se descargará
-      link.click(); // Simular el clic en el enlace para iniciar la descarga
+      return response;
     } catch (error) {
       console.error('Error al generar la factura:', error);
+    }
+  };
+  
+  const handleSendEmail = async () => {
+    try {
+      const formData = new FormData();
+      const responseDoc = await handeGenerateFactura();
+      const fileBlob = await responseDoc.blob();
+      formData.append("file", fileBlob, "archivo.pdf");
+      formData.append("email", finalUser.email);
+      console.log("file", fileBlob);
+      console.log("finalUser.email", finalUser.email);
+      const response = await fetch(`http://localhost:4000/api/envio-factura/`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al enviar el correo.");
+      }
+      const result = await response.json();
+      console.log("Archivo enviado con éxito:", result);
+
+    } catch (error) {
+      console.error('Error al enviar el correo:', error);
     }
   };
 
@@ -308,26 +345,26 @@ const PaymentConfirmation = () => {
 
         {/* Información del Usuario */}
         <div className="info-section">
-  <h2>Información del Usuario</h2>
-  <p><strong>Nombre:</strong> {finalUser.nombre} {finalUser.apellido}</p>
-  <p><strong>Correo electrónico:</strong> {finalUser.email}</p>
-  <p><strong>Dirección:</strong> {finalUser.domicilio.direccion}</p>
-  <p><strong>Ciudad:</strong> {finalUser.domicilio.ciudad}</p>
-  <p><strong>Referencia:</strong> {finalUser.domicilio.referencia}</p>
+          <h2>Información del Usuario</h2>
+          <p><strong>Nombre:</strong> {finalUser.nombre} {finalUser.apellido}</p>
+          <p><strong>Correo electrónico:</strong> {finalUser.email}</p>
+          <p><strong>Dirección:</strong> {finalUser.domicilio.direccion}</p>
+          <p><strong>Ciudad:</strong> {finalUser.domicilio.ciudad}</p>
+          <p><strong>Referencia:</strong> {finalUser.domicilio.referencia}</p>
 
-  <div className="pagoC-row">
-    <label htmlFor="cedula">Cédula:</label>
-    <input type="text" id="cedula" value = {cedula} onChange={handleCedulaChange} placeholder="Ingrese su cédula" required />
-  </div>
-  <div className="pagoC-row">
-    <label htmlFor="telefono">Número de Celular:</label>
-    <input type="text" id="telefono" value = {celular}  onChange={handleCelularChange} placeholder="Ingrese su número de celular" required />
-  </div>
+          <div className="pagoC-row">
+            <label htmlFor="cedula">Cédula:</label>
+            <input type="text" id="cedula" value={cedula} onChange={handleCedulaChange} placeholder="Ingrese su cédula" required />
+          </div>
+          <div className="pagoC-row">
+            <label htmlFor="telefono">Número de Celular:</label>
+            <input type="text" id="telefono" value={celular} onChange={handleCelularChange} placeholder="Ingrese su número de celular" required />
+          </div>
 
-  <div className="change-address-button">
-    <button onClick={handleChangeAddress}>Cambiar Dirección</button>
-  </div>
-</div>
+          <div className="change-address-button">
+            <button onClick={handleChangeAddress}>Cambiar Dirección</button>
+          </div>
+        </div>
 
 
         {/* Productos */}
@@ -372,7 +409,7 @@ const PaymentConfirmation = () => {
           </div>
         </div>
 
-    
+
         <div id="paypal-button-container"></div>
       </main>
 

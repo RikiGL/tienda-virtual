@@ -57,7 +57,7 @@ facturaCtrl.obtenerFacturaPorId = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ mensaje: "Error al obtener las facturas", error: error.message });
+      .json({ mensaje: "Error al obtener la factura", error: error.message });
   }
 };
 
