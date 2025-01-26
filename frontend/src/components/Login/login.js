@@ -65,7 +65,8 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("usuarioId", data.usuario._id);
+        localStorage.setItem("usuarioId", data.usuario.id);
+        console.log("id: ", data.usuario.id);
         localStorage.setItem("usuarioNombre", data.usuario.nombre);
         localStorage.setItem("usuarioApellido", data.usuario.apellido);
         localStorage.setItem("usuarioEmail", data.usuario.email);
