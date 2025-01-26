@@ -130,6 +130,8 @@ app.post("/api/auth/google-reg", async (req, res) => {
   }
 });
 
+
+
 // FACTURA - Ruta para generar la factura
 app.get('/api/generate-factura', (req, res) => {
   // Crear un nuevo documento PDF
@@ -142,21 +144,65 @@ app.get('/api/generate-factura', (req, res) => {
   // Iniciar el flujo de salida para el archivo PDF
   doc.pipe(res);
 
+  // Obtener la fecha y hora actual
+  const now = new Date();
+  const formattedDate = now.toLocaleDateString('es-ES'); // Formato de fecha: dd/mm/yyyy
+  const formattedTime = now.toLocaleTimeString('es-ES'); // Formato de hora: hh:mm:ss
+  doc
+    .font('Helvetica-Bold') // Cambiar a una fuente en negrilla
+    .fontSize(20)
+    .text('Tu Despensa', { align: 'center' }) // Nombre de la tienda
+    .fontSize(10)
+    .moveDown();
+
+  // Línea divisoria después del título
+  doc
+    .strokeColor('#aaaaaa')
+    .lineWidth(1)
+    .moveTo(50, doc.y) // Comienza en la posición actual del cursor
+    .lineTo(550, doc.y)
+    .stroke()
+    .moveDown(0.5);
+
   // Agregar contenido al PDF (por ejemplo, una factura simple)
-  doc.fontSize(18).text('Factura', { align: 'center' });
-  doc.fontSize(12).text('Fecha: 25/01/2025');
-  doc.text('---------------------------------------');
-  doc.text('Cliente: Juan Pérez');
+  doc.fontSize(12).text(`Fecha de emisión: ${formattedDate}`);
+  doc.fontSize(12).text(`Hora de emisión: ${formattedTime}`);
+  doc.fontSize(12).text('FACTURA', { align: 'center' });
+  
+  // Línea divisoria después de la fecha, hora y título
+  doc
+    .strokeColor('#aaaaaa')
+    .lineWidth(1)
+    .moveTo(50, doc.y) // Comienza en la posición actual del cursor
+    .lineTo(550, doc.y)
+    .stroke()
+    .moveDown(0.5);
+
+  doc.fontSize(12).text('Cliente: Juan Pérez');
   doc.text('Producto: Laptop');
   doc.text('Cantidad: 1');
   doc.text('Precio unitario: $1000');
   doc.text('Total: $1000');
-  doc.text('---------------------------------------');
+
+  // Línea divisoria para separar los detalles de la factura
+  doc
+    .strokeColor('#aaaaaa')
+    .lineWidth(1)
+    .moveTo(50, doc.y + 10) // Ajustar espacio después del contenido
+    .lineTo(550, doc.y + 10)
+    .stroke()
+    .moveDown(1);
+
+  // Pie de página
+  doc
+    .moveDown()
+    .fontSize(10)
+    .text('Gracias por su compra en Tu Despensa.', { align: 'center' })
+    .text('Contactanos: info@tudespensa.com', { align: 'center' });
 
   // Finalizar el documento PDF
   doc.end();
 });
-
 
 
 //Envio de Factura 
@@ -167,9 +213,21 @@ app.get("/api/envio-factura", (req, res) => {
   const msg = {
     to: email, // Change to your recipient
     from: "rikiguallichico16@gmail.com", // Change to your verified sender
-    subject: "Factura Electronica",
-    text: "De la tienda de Tu Despensa",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    subject: "Factura Electrónica - Tu Despensa",
+    text: "Factura electrónica enviada desde Tu Despensa. Revisa tu correo para más detalles.",
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <h2 style="color: #007BFF; text-align: center;">Factura Electrónica</h2>
+        <p>Estimado cliente,</p>
+        <p>Gracias por tu compra en <strong>Tu Despensa</strong>. Adjuntamos a este correo tu factura electrónica en formato PDF.</p>
+        <p style="margin-top: 20px;">Si tienes alguna consulta, no dudes en contactarnos respondiendo a este correo o a través de nuestro soporte: <strong>info@tudespensa.com</strong>.</p>
+        <hr style="border: 0; border-top: 1px solid #ccc;" />
+        <footer style="text-align: center; font-size: 12px; color: #777;">
+          <p>Tu Despensa © 2025</p>
+          <p>Gracias por confiar en nosotros.</p>
+        </footer>
+      </div>
+    `,
   };
   sgMail
     .send(msg)
