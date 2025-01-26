@@ -134,7 +134,7 @@ function AdminProductos() {
   
     // Enviar el cambio al backend
     try {
-      const response = await fetch(`http://localhost:4000/api/productos/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}productos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function AdminProductos() {
   };
   
   const eliminarProducto = (id) => {
-    fetch(`http://localhost:4000/api/productos/admin/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}productos/admin/${id}`, {
       method: "DELETE",
     })
       .then((response) => {

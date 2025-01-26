@@ -77,7 +77,7 @@ const CambioDireccion = () => {
     try {
       console.log(typeof localStorage.getItem("usuarioId"))
       console.log(localStorage.getItem("usuarioId"))
-      const response = await fetch(`http://localhost:4000/api/clientes/${localStorage.getItem("usuarioId")}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes/${localStorage.getItem("usuarioId")}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

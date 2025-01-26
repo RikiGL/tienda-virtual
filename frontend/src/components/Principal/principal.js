@@ -93,7 +93,7 @@ const Principal = () => {
       localStorage.removeItem("cart"); // Limpia el carrito del almacenamiento local
   
       // Si tienes una API para actualizar el inventario del backend, puedes agregar esto:
-      await fetch("http://localhost:4000/api/actualizarInventario", {
+      await fetch(`${process.env.REACT_APP_API_URL}actualizarInventario`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(clearedProducts),

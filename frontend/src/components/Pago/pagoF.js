@@ -259,7 +259,7 @@ const PaymentConfirmation = () => {
   const handeGenerateFactura = async () => {
     try {
       console.log("invoiceData", invoiceData);
-      const response = await fetch(`http://localhost:4000/api/generate-factura/${invoiceData.nuevaFactura._id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}generate-factura/${invoiceData.nuevaFactura._id}/`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -283,7 +283,7 @@ const PaymentConfirmation = () => {
       formData.append("email", finalUser.email);
       console.log("file", fileBlob);
       console.log("finalUser.email", finalUser.email);
-      const response = await fetch(`http://localhost:4000/api/envio-factura/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}envio-factura/`, {
         method: "POST",
         body: formData,
       });
