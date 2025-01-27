@@ -5,14 +5,11 @@ import ProductList from "./ProductList";
 import SearchBar from "./SearchBar";
 import Cart from "./Cart";
 import logo from "../imagenes/asdlogo.png";
-import "./principal.css";
+//import "./principal.css";
 import "./princ.css";
 import Modal from "../Modal/modal";
 import { isAdmin, isAuthenticated } from "../auth";
 import { FaCheckCircle } from 'react-icons/fa';
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css"; 
-import "slick-carousel/slick/slick-theme.css";
 import imagen1 from "../imagenes/slider/imagen1.PNG";
 import imagen2 from "../imagenes/slider/imagen2.PNG";
 import imagen3 from "../imagenes/slider/imagen3.PNG";
@@ -28,10 +25,56 @@ const Principal = () => {
   const navigate = useNavigate();
   const [usuarioNombre, setUsuarioNombre] = useState("");
   const [showMenu, setShowMenu] = useState(false);
-  const [showMenuHamburguesa, setShowMenuHamburguesa] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Controla el estado del tamaño de la pantalla
+  
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [notificationMessage, setNotificationMessage] = useState('');
   const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+
+
+
+
+  const images = [imagen1, imagen2, imagen3];
+  
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 2000);
+
+    return () => clearInterval(interval); // Limpieza del intervalo
+  }, [images.length]);
+///// menu hamburguesa
+
+const [showSearch, setShowSearch] = useState(false);
+const [showCategories, setShowCategories] = useState(false);
+const [showUserOptions, setShowUserOptions] = useState(false);
+
+
+const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para abrir/cerrar menú
+
+const handleToggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen); // Alterna entre abierto y cerrado
+};
+
+// Función para manejar el cambio de categoría
+const handleMenuCategoryChange = (category) => {
+  setSelectedCategory(category);
+  setIsMenuOpen(false); // Cierra el menú después de seleccionar
+};
+
+
+// Función para manejar el cambio en la barra de búsqueda
+const handleSearchChange = (e) => {
+  setSearchQuery(e.target.value); // Actualiza la búsqueda
+};
+
+///////////////////
+
+
+
+
 
   const categories = [
     "Todas",
@@ -53,21 +96,14 @@ const Principal = () => {
     "Carnes-Embutidos": "https://despensallena.com/wp-content/uploads/2024/03/Icono-Carniceria.png",
     Abastos: "https://despensallena.com/wp-content/uploads/2024/11/DespensaDepot.png",
   };
-  const images = [imagen1, imagen2, imagen3];
+
   const handleCerrarSesion = () => {
     localStorage.clear(); // Limpiar todos los datos
     setUsuarioNombre(""); // Resetear usuarioNombre
     navigate("/login"); // Redirigir al login
   };
-  const sliderSettings = {
-    dots: true, // Muestra indicadores debajo del carrusel
-    infinite: true, // Permite desplazamiento infinito
-    speed: 450, // Velocidad de transición
-    slidesToShow: 1, // Muestra una imagen a la vez
-    slidesToScroll: 1, // Avanza de a una imagen
-    autoplay: true, // Activa el cambio automático
-    autoplaySpeed: 3000, // Tiempo entre transiciones automáticas
-  };
+
+  
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -180,7 +216,23 @@ const Principal = () => {
   }, [searchQuery, selectedCategory, productsState]);
 
   
-  
+  /// cuando es movil
+  useEffect(() => {
+    const handleResize = () => {
+        const isMobileView = window.innerWidth <= 912;
+        setIsMobile(isMobileView);
+        if (!isMobileView) {
+            setIsMenuOpen(false); // Cierra el menú si ya no es móvil
+        }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+
+
+
   // nueva parte 
 
   useEffect(() => {
@@ -260,15 +312,7 @@ const Principal = () => {
     setProducts(clearedProducts);
     localStorage.removeItem("cart");
   };
-  // Detecta el tamaño de la pantalla
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 912);
-    };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <div className="principal-app-container">
@@ -278,6 +322,110 @@ const Principal = () => {
           <div className="principal-name">TU DESPENSA 🛒</div>
         </div>
 
+
+
+
+
+
+
+{/* Icono del menú hamburguesa */}
+<div className="p-hamburger-icon" onClick={handleToggleMenu}>
+    ☰
+</div>
+
+
+
+
+
+{/* Menú desplegable */}
+{isMenuOpen && (
+  <div className="hamburger-menu">
+    {/* Buscar Productos */}
+    <div className="principal-menu-section">
+      <h4
+        className="principal-menu-title"
+        onClick={() => setShowSearch((prev) => !prev)}
+      >
+        Buscar Productos
+      </h4>
+      {showSearch && (
+        <input
+          type="text"
+          placeholder="Buscar..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="principal-hamburger-search-bar"
+        />
+      )}
+    </div>
+
+    {/* Categorías */}
+    <div className="principal-menu-section">
+      <h4
+        className="principal-menu-title"
+        onClick={() => setShowCategories((prev) => !prev)}
+      >
+        Categorías
+      </h4>
+      {showCategories && (
+        <ul className="principal-category-list">
+          {categories.map((category) => (
+            <li
+              key={category}
+              className="principal-category-item"
+              onClick={() => handleMenuCategoryChange(category)}
+            >
+              {category}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    {/* Usuario */}
+    {usuarioNombre && (
+      <div className="principal-menu-section">
+        <h4
+          className="principal-menu-title"
+          onClick={() => setShowUserOptions((prev) => !prev)}
+        >
+          Usuario
+        </h4>
+        {showUserOptions && (
+          <ul className="principal-user-options">
+            {isAdmin() && (
+              <li
+                className="principal-admin-option"
+                onClick={() => {
+                  navigate("/admin");
+                  setIsMenuOpen(false);
+                }}
+              >
+                Gestionar Inventario
+              </li>
+            )}
+            <li
+              className="principal-logout-option"
+              onClick={handleCerrarSesion}
+            >
+              Cerrar Sesión
+            </li>
+          </ul>
+        )}
+      </div>
+    )}
+  </div>
+)}
+
+
+
+
+
+
+
+
+
+
         <SearchBar onSearch={handleSearch} />
         {usuarioNombre ? (
 
@@ -286,7 +434,7 @@ const Principal = () => {
 <div className="principal-user-menu">
   {isAdmin() && (
     <button
-      className="principal-header-button principal-admin-button-asd"
+      className="principal-header-button  principal-admin-button-asd"
       onClick={() => navigate("/admin")}
     >
       Gestionar Inventario
@@ -321,7 +469,7 @@ const Principal = () => {
           </button>
         )}
 
-        {!cartVisible && (
+{!cartVisible && (
           <button
             className="principal-cart-button"
             onClick={() => setCartVisible(!cartVisible)}
@@ -332,53 +480,22 @@ const Principal = () => {
         )}
       </header>
       <div>
-      {/* Botón hamburguesa solo en pantallas pequeñas */}
-      {isMobile && (
-        <div className="menu-toggle" onClick={() =>  {
-          setShowMenuHamburguesa((prev) => !prev); // Alterna el menú hamburguesa
-          setShowMenu(false); // Asegúrate de cerrar el menú de usuario
-        }}>
-          ☰
-        </div>
-      )}
+   
 
-      {/* Menú de navegación */}
-      {isMobile && showMenuHamburguesa && (
-      <div className="nav-menu active">
-      <button className="close-btn" onClick={() => setShowMenuHamburguesa(false)}>
-        ×
-      </button>
-      <h3 className="category-title">Categorías</h3>
-      <ul className="principal-category-list">
-        {categories.map((category, index) => (
-          <li
-            className="principal-category-item"
-            key={index}
-            onClick={() => {
-              handleCategoryChange(category);
-              setShowMenuHamburguesa(false); // Cerrar el menú al seleccionar una categoría
-            }}
-          >
-            {category}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+
     </div>
 
     <div className="principal-main-container">
-    <Slider {...sliderSettings} className="carousel-container">
-    {images.map((image, index) => (
-      <div key={index}>
+    <div className="carousel-container">
         <img
-          src={image} // Usa la imagen importada
-          alt={`Imagen ${index + 1}`}
-          className="w-full h-60 object-cover rounded-lg shadow"
+          src={images[currentIndex]}
+          alt={`Imagen ${currentIndex + 1}`}
+          className="carousel-image"
+          style={{ width: "100%", height: "300px", objectFit: "cover", borderRadius: "8px" }}
         />
       </div>
-    ))}
-  </Slider>
+
+
     {/* Barra lateral solo visible en pantallas grandes */}
     {!isMobile && (
       <aside className="principal-sidebar">

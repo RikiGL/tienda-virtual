@@ -373,7 +373,7 @@ h2 {
 
 
   /* Estilos para el menú hamburguesa */
-.hamburger-menu {
+.hamburger-menu-admin {
   display: none;
   flex-direction: column;
   background-color: #0c5304;
@@ -388,7 +388,7 @@ h2 {
   margin-top: 20px;
 }
 
-.hamburger-menu a {
+.hamburger-menu-admin a {
   color: white;
   padding: 10px 20px;
   text-decoration: none;
@@ -396,7 +396,7 @@ h2 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.hamburger-menu a:hover {
+.hamburger-menu-admin a:hover {
   background-color: #f39c12;
 
  transform: scale(1.02); /* Pequeño zoom */
@@ -427,7 +427,7 @@ h2 {
       display: block;
   }
 
-  .hamburger-menu {
+  .hamburger-menu-admin {
       display: flex; /* Muestra el menú en pantallas pequeñas */
   }
 }
@@ -545,7 +545,7 @@ h2 {
     padding: 6px; /* Reducir padding interno */
   }
 
-  .hamburger-menu {
+  .hamburger-menu-admin {
     top: 50px; /* Ajustar posición del menú hamburguesa */
     right: 5px; /* Ajustar posición derecha */
     width: 150px; /* Reducir el ancho */
@@ -558,7 +558,7 @@ h2 {
     font-size: 14px; /* Reducir tamaño del texto aún más */
   }
 
-  .hamburger-menu {
+  .hamburger-menu-admin {
     width: 120px; /* Menú más pequeño */
   }
 

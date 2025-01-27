@@ -20,6 +20,14 @@
   transform: scale(1.05);
 }
 
+.warning-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: center;
+}
 
 
 

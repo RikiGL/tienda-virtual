@@ -1,12 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./pagoF.css"
-
 import styled from "styled-components";
-
-
 import { FaArrowLeft } from "react-icons/fa";
-
 import logo from "../imagenes/asdlogo.png";
 
 
@@ -37,9 +33,6 @@ const StyledWrapper = styled.div`
 `;
 
 const PaymentConfirmation = () => {
-
-
-
   const { state } = useLocation();
   const {
     products = [],
@@ -78,39 +71,75 @@ const PaymentConfirmation = () => {
   };
   const finalUser = { ...savedUser, ...user };
 
-
-
-
-
-
-
-
-  //////////////////
-
-
-
   // Manejo de estados
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [invoiceData, setInvoiceData] = useState(null);
   const [cedula, setCedula] = useState('');
   const [celular, setCelular] = useState('');
-
+  const [isCedulaValid, setIsCedulaValid] = useState(false);
+  const [isCelularValid, setIsCelularValid] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
 
   // Memo
   const memoizedProducts = useMemo(() => products, [products]);
   const handleCedulaChange = (event) => {
-    setCedula(event.target.value); // Actualiza el estado de la cédula
+    const value = event.target.value;
+
+    // Solo permitir números y que tenga 10 dígitos, y que los primeros dos números estén entre 01 y 24
+    if (/^\d{0,10}$/.test(value)) {
+      const firstTwoDigits = value.slice(0, 2);
+      if (firstTwoDigits >= "01" && firstTwoDigits <= "24" || value.length <= 10) {
+        setCedula(value);
+        setIsCedulaValid(value.length === 10 && firstTwoDigits >= "01" && firstTwoDigits <= "24");
+      }
+    }
   };
 
   const handleCelularChange = (event) => {
-    setCelular(event.target.value); // Actualiza el estado del celular
+    const value = event.target.value;
+
+    // Solo permitir números y que tenga 10 dígitos, y que empiece con "09"
+    if (/^\d{0,10}$/.test(value)) {
+      const firstTwoDigits = value.slice(0, 2);
+      if (firstTwoDigits === "09" || value.length <= 10) {
+        setCelular(value);
+        setIsCelularValid(value.length === 10 && firstTwoDigits === "09");
+      }
+    }
   };
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    // Si la cédula y celular son válidos
+    if (isCedulaValid && isCelularValid) {
+      setIsFormValid(true);
+      setWarningMessage(''); // Limpiar mensaje de advertencia si es válido
+    } else {
+      setIsFormValid(false);
+
+      // Mostrar los mensajes de advertencia correspondientes
+      if (!cedula && !celular) {
+        setWarningMessage('Debe completar todos los campos antes de proceder.');
+      } else if (!cedula) {
+        setWarningMessage('Debe ingresar una cédula.');
+      } else if (!isCedulaValid) {
+        setWarningMessage('Debe ingresar una cédula válida que comience con un número entre 01 y 24.');
+      } else if (!celular) {
+        setWarningMessage('Debe ingresar un número de celular.');
+      } else if (!isCelularValid) {
+        setWarningMessage('Debe ingresar un número de celular válido que comience con "09".');
+      }
+    }
+  }, [isCedulaValid, isCelularValid, cedula, celular]);
+
+
 
   useEffect(() => {
     if (showConfirmationModal) {
       handleSendEmail();
     }
-  }, [showConfirmationModal]); 
+  }, [showConfirmationModal]);
 
   useEffect(() => {
     const loadPayPalScript = () => {
@@ -130,11 +159,19 @@ const PaymentConfirmation = () => {
       document.body.appendChild(script);
     };
 
-    
+    // Actualizar la validación en el código donde se utiliza
+    const isFormValid = isCedulaValid && isCelularValid;
 
 
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
+      if (!isFormValid) {
+        setWarningMessage('Debe completar todos los campos antes de proceder.');
+
+        buttonContainer.innerHTML = ''; // Elimina el botón si los campos no están completos
+        return;
+      }
+
       if (buttonContainer) {
         buttonContainer.innerHTML = "";
       }
@@ -148,9 +185,6 @@ const PaymentConfirmation = () => {
                 ],
               });
             },
-
-
-
 
             onApprove: async (data, actions) => {
               try {
@@ -230,7 +264,7 @@ const PaymentConfirmation = () => {
     };
 
     loadPayPalScript();
-  }, [totalAmount, memoizedProducts]);
+  }, [totalAmount, memoizedProducts, cedula, celular, isFormValid]);
 
   const handleChangeAddress = () => {
     navigate("/CambioDireccion");
@@ -273,7 +307,7 @@ const PaymentConfirmation = () => {
       console.error('Error al generar la factura:', error);
     }
   };
-  
+
   const handleSendEmail = async () => {
     try {
       const formData = new FormData();
@@ -359,12 +393,17 @@ const PaymentConfirmation = () => {
             <label htmlFor="telefono">Número de Celular:</label>
             <input type="text" id="telefono" value={celular} onChange={handleCelularChange} placeholder="Ingrese su número de celular" required />
           </div>
-
           <div className="change-address-button">
             <button onClick={handleChangeAddress}>Cambiar Dirección</button>
           </div>
         </div>
 
+        {/* Mensaje de advertencia si los campos no son válidos */}
+        {warningMessage && (
+          <div className="warning-message">
+            <p>{warningMessage}</p>
+          </div>
+        )}
 
         {/* Productos */}
         <div className="info-section">
