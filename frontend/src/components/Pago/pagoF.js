@@ -80,42 +80,59 @@ const PaymentConfirmation = () => {
   const [isCelularValid, setIsCelularValid] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
 
-
-
   // Memo
   const memoizedProducts = useMemo(() => products, [products]);
   const handleCedulaChange = (event) => {
     const value = event.target.value;
-    if (/^\d{0,10}$/.test(value)) {  // Solo números y máximo 10 dígitos
-      setCedula(value);
-      setIsCedulaValid(value.length === 10);  // Verifica si tiene 10 dígitos
+
+    // Solo permitir números y que tenga 10 dígitos, y que los primeros dos números estén entre 01 y 24
+    if (/^\d{0,10}$/.test(value)) {
+      const firstTwoDigits = value.slice(0, 2);
+      if (firstTwoDigits >= "01" && firstTwoDigits <= "24" || value.length <= 10) {
+        setCedula(value);
+        setIsCedulaValid(value.length === 10 && firstTwoDigits >= "01" && firstTwoDigits <= "24");
+      }
     }
   };
 
   const handleCelularChange = (event) => {
     const value = event.target.value;
-    if (/^\d{0,10}$/.test(value)) {  // Solo números y máximo 10 dígitos
-      setCelular(value);
-      setIsCelularValid(value.length === 10);  // Verifica si tiene 10 dígitos
+
+    // Solo permitir números y que tenga 10 dígitos, y que empiece con "09"
+    if (/^\d{0,10}$/.test(value)) {
+      const firstTwoDigits = value.slice(0, 2);
+      if (firstTwoDigits === "09" || value.length <= 10) {
+        setCelular(value);
+        setIsCelularValid(value.length === 10 && firstTwoDigits === "09");
+      }
     }
   };
-
 
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
+    // Si la cédula y celular son válidos
     if (isCedulaValid && isCelularValid) {
       setIsFormValid(true);
-      setWarningMessage('');
+      setWarningMessage(''); // Limpiar mensaje de advertencia si es válido
     } else {
       setIsFormValid(false);
-      if (!isCedulaValid || !cedula) {
-        setWarningMessage('Debe ingresar una cédula válida.');
-      } else if (!isCelularValid || !celular) {
-        setWarningMessage('Debe ingresar un número de celular válido.');
+
+      // Mostrar los mensajes de advertencia correspondientes
+      if (!cedula && !celular) {
+        setWarningMessage('Debe completar todos los campos antes de proceder.');
+      } else if (!cedula) {
+        setWarningMessage('Debe ingresar una cédula.');
+      } else if (!isCedulaValid) {
+        setWarningMessage('Debe ingresar una cédula válida que comience con un número entre 01 y 24.');
+      } else if (!celular) {
+        setWarningMessage('Debe ingresar un número de celular.');
+      } else if (!isCelularValid) {
+        setWarningMessage('Debe ingresar un número de celular válido que comience con "09".');
       }
     }
   }, [isCedulaValid, isCelularValid, cedula, celular]);
+
 
 
   useEffect(() => {
@@ -142,18 +159,19 @@ const PaymentConfirmation = () => {
       document.body.appendChild(script);
     };
 
-    // Validar si los campos de cédula y celular están completos
-    const isFormValid = cedula.length === 10 && celular.length === 10;
+    // Actualizar la validación en el código donde se utiliza
+    const isFormValid = isCedulaValid && isCelularValid;
 
 
     const initializePayPalButtons = () => {
       const buttonContainer = document.getElementById("paypal-button-container");
       if (!isFormValid) {
-        buttonContainer.innerHTML = ''; // Elimina el botón si los campos no están completos
         setWarningMessage('Debe completar todos los campos antes de proceder.');
+
+        buttonContainer.innerHTML = ''; // Elimina el botón si los campos no están completos
         return;
       }
-      
+
       if (buttonContainer) {
         buttonContainer.innerHTML = "";
       }
@@ -314,7 +332,7 @@ const PaymentConfirmation = () => {
     } catch (error) {
       console.error('Error al enviar el correo:', error);
     }
-  }; 
+  };
 
   // Cerrar modal y volver
   const handleGoHome = () => {
