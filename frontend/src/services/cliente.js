@@ -6,7 +6,7 @@
       const password = document.getElementById('password').value;
 
       // Hacer una solicitud POST al back-end para hacer login
-      const response = await fetch('http://localhost:4000/api/clientes', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

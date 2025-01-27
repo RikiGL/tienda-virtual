@@ -44,7 +44,7 @@ function AdminProductos() {
     const obtenerProductos = async () => {
       try {
         // Realizamos la solicitud GET para obtener los productos
-        const response = await fetch('http://localhost:4000/api/productos'); // Cambia la URL según sea necesario
+        const response = await fetch(`${process.env.REACT_APP_API_URL}productos`);
         const data = await response.json();
 
         // Actualizamos el estado con los productos obtenidos
@@ -82,7 +82,7 @@ function AdminProductos() {
 
     setProductos([...productos, productoConId]);
     try {
-      const response = await fetch ("http://localhost:4000/api/productos/", {
+      const response = await fetch (`${process.env.REACT_APP_API_URL}productos`, {
         method:"POST",
         headers:{
           "Content-Type": "application/json"
@@ -134,7 +134,7 @@ function AdminProductos() {
   
     // Enviar el cambio al backend
     try {
-      const response = await fetch(`http://localhost:4000/api/productos/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}productos/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -166,7 +166,7 @@ function AdminProductos() {
   };
   
   const eliminarProducto = (id) => {
-    fetch(`http://localhost:4000/api/productos/admin/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}productos/admin/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -476,7 +476,7 @@ function AdminProductos() {
 
             {/* Menú hamburguesa desplegable */}
             {isMenuOpen && (
-                <div className="hamburger-menu">
+                <div className="hamburger-menu-admin">
                     <a href="/principal">Principal</a>
                     <a onClick={handleCerrarSesion}>Cerrar Sesión</a>
                 </div>
