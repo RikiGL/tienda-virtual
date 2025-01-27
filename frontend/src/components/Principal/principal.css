@@ -163,6 +163,7 @@
 }
 
 .principal-cart {
+ 
   position: fixed;
   top: 0;
   right: 0;
@@ -274,9 +275,11 @@
 }
 
 .principal-cart-button {
+
+  margin-top: 100px;
   position: absolute;
   top: 130px;
-  right: 20px;
+  left: 20px;
   background-color: #371d03f0;
   color: white;
   padding: 15px;
@@ -488,6 +491,7 @@ button:disabled, button.principal-disabled {
 
   
 }
+
 /* Menu Toggle (Hamburguesa) */
 /* Botón hamburguesa */
 .menu-toggle {
@@ -883,12 +887,21 @@ button:disabled, button.principal-disabled {
    {
       display: none; /* Oculta los elementos */
   }
+  .menu-toggle {
+    display: block; /* Muestra el botón hamburguesa */
+    font-size: 30px;
+    cursor: pointer;
+  }
+
 }
 
 
 @media (min-width: 729px) {
    .principal-hamburger-menu {
       display: none !important; /* Asegúrate de que desaparezca */
+  }
+  .menu-toggle {
+    display: none; /* Oculta el botón hamburguesa */
   }
 }
 
