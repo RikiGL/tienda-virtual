@@ -1,25 +1,25 @@
 // Selecciona el botón de menú hamburguesa y el contenedor del menú de navegación
-const menuToggle = document.querySelector('.menu-toggle');
-const navMenu = document.querySelector('.nav-menu');
+const menuToggle = document.querySelector('.p-hamburger-icon'); // Asegúrate de usar la clase correcta
+const navMenu = document.querySelector('.hamburger-menu');
 
-// Verifica el tamaño de la pantalla
+// Función para verificar el tamaño de la pantalla y ajustar visibilidad
 const checkScreenSize = () => {
-  const isMobile = window.innerWidth <= 912; // Puedes ajustar este valor para considerar otras pantallas, como tablets
+  const isMobile = window.innerWidth <= 728; // Pantallas menores o iguales a 728px
   if (isMobile) {
-    menuToggle.style.display = 'block'; // Muestra el botón de menú en móviles
+    menuToggle.style.display = 'block'; // Mostrar el ícono en móviles
   } else {
-    menuToggle.style.display = 'none'; // Oculta el botón de menú en pantallas grandes
-    navMenu.classList.remove('active'); // Si se está mostrando el menú, lo oculta en pantallas grandes
+    menuToggle.style.display = 'none'; // Ocultar el ícono en pantallas grandes
+    navMenu.classList.remove('open'); // Asegurarse de que el menú esté cerrado
   }
 };
 
 // Llama la función cuando la página se cargue
-checkScreenSize();
+window.addEventListener('load', checkScreenSize);
 
 // Agrega un event listener para el cambio de tamaño de la ventana
 window.addEventListener('resize', checkScreenSize);
 
-// Añade un evento de clic al botón para alternar la clase 'active' en el menú
+// Evento de clic para alternar la clase 'open' en el menú
 menuToggle.addEventListener('click', () => {
-  navMenu.classList.toggle('active');
+  navMenu.classList.toggle('open');
 });

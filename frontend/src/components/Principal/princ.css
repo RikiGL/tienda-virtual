@@ -357,3 +357,15 @@ body {
   height: auto; /* Mantén la proporción original de las imágenes */
   display: block;
 }
+/* Media Query para pantallas menores a 728px */
+@media (max-width: 728px) {
+  .carousel-container {
+    max-width: 100%;
+    height: 200px; /* Altura ajustada para móviles */
+    border-radius: 5px;
+  }
+
+  .carousel-container img {
+    object-fit: cover; /* Recorta las imágenes proporcionalmente */
+  }
+}

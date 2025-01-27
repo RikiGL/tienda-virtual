@@ -55,7 +55,7 @@ const [showUserOptions, setShowUserOptions] = useState(false);
 const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para abrir/cerrar menú
 
 const handleToggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen); // Alterna entre abierto y cerrado
+  setIsMenuOpen((prev) => !prev);
 };
 
 // Función para manejar el cambio de categoría
@@ -219,7 +219,7 @@ const handleSearchChange = (e) => {
   /// cuando es movil
   useEffect(() => {
     const handleResize = () => {
-        const isMobileView = window.innerWidth <= 912;
+        const isMobileView = window.innerWidth <= 728;
         setIsMobile(isMobileView);
         if (!isMobileView) {
             setIsMenuOpen(false); // Cierra el menú si ya no es móvil
@@ -329,10 +329,11 @@ const handleSearchChange = (e) => {
 
 
 {/* Icono del menú hamburguesa */}
-<div className="p-hamburger-icon" onClick={handleToggleMenu}>
-    ☰
-</div>
-
+          {isMobile && (
+          <div className="p-hamburger-icon" onClick={handleToggleMenu}>
+            ☰
+          </div>
+)}
 
 
 
