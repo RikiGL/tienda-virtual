@@ -46,7 +46,7 @@ function CambioContrasena3() {
 
     try {
       // Enviar solo la nueva contraseña al backend
-      const response = await fetch("http://localhost:4000/api/clientes/cambio3", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes/cambio3`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, contrasenia: contraseña }),  // Cambiado a 'contrasenia'

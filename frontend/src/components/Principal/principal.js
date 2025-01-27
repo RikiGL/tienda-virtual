@@ -129,7 +129,7 @@ const handleSearchChange = (e) => {
       localStorage.removeItem("cart"); // Limpia el carrito del almacenamiento local
   
       // Si tienes una API para actualizar el inventario del backend, puedes agregar esto:
-      await fetch("http://localhost:4000/api/actualizarInventario", {
+      await fetch(`${process.env.REACT_APP_API_URL}actualizarInventario`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(clearedProducts),
@@ -168,7 +168,7 @@ const handleSearchChange = (e) => {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch("http://localhost:4000/api/productos/");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}productos`);
         if (!response.ok) throw new Error("Error al cargar los productos");
 
         const data = await response.json();

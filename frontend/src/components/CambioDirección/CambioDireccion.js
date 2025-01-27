@@ -84,17 +84,15 @@ const CambioDireccion = () => {
 
   const handleSaveAddress = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/api/clientes/${localStorage.getItem("usuarioId")}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ domicilio: newAddress }),
-        }
-      );
-
+      console.log(typeof localStorage.getItem("usuarioId"))
+      console.log(localStorage.getItem("usuarioId"))
+      const response = await fetch(`${process.env.REACT_APP_API_URL}clientes/${localStorage.getItem("usuarioId")}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ domicilio: newAddress }),
+      });
       if (!response.ok) {
         const errorMessage = await response.text();
         console.error("Error al actualizar la dirección:", errorMessage);

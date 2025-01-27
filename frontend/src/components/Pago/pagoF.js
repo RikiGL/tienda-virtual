@@ -205,8 +205,7 @@ const PaymentConfirmation = () => {
                 };
                 console.log(memoizedProducts)
 
-                //CAMBIAR DESPUES
-                const response = await fetch("http://localhost:4000/api/facturas", {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}facturas`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(factura),
@@ -225,7 +224,7 @@ const PaymentConfirmation = () => {
                   productId: product._id,
                   quantity: product.quantity,
                 }));
-                const deleteResponse = await fetch("http://localhost:4000/api/productos/id", {
+                const deleteResponse = await fetch(`${process.env.REACT_APP_API_URL}productos/id`, {
                   method: "DELETE",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({ productIdsWithQuantities }),
@@ -294,7 +293,7 @@ const PaymentConfirmation = () => {
   const handeGenerateFactura = async () => {
     try {
       console.log("invoiceData", invoiceData);
-      const response = await fetch(`http://localhost:4000/api/generate-factura/${invoiceData.nuevaFactura._id}/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}generate-factura/${invoiceData.nuevaFactura._id}/`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -318,7 +317,7 @@ const PaymentConfirmation = () => {
       formData.append("email", finalUser.email);
       console.log("file", fileBlob);
       console.log("finalUser.email", finalUser.email);
-      const response = await fetch(`http://localhost:4000/api/envio-factura/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}envio-factura/`, {
         method: "POST",
         body: formData,
       });
