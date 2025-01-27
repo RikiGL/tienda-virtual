@@ -476,7 +476,7 @@ function AdminProductos() {
 
             {/* Menú hamburguesa desplegable */}
             {isMenuOpen && (
-                <div className="hamburger-menu">
+                <div className="hamburger-menu-admin">
                     <a href="/principal">Principal</a>
                     <a onClick={handleCerrarSesion}>Cerrar Sesión</a>
                 </div>

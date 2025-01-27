@@ -615,6 +615,8 @@ button:disabled, button.principal-disabled {
   margin-right: 10px;
   color: red; /* Color rojo para el ícono de "X" */
 }
+
+
 /* Ocultar menú hamburguesa en pantallas grandes */
 @media (min-width: 1024px) {
 
@@ -659,9 +661,6 @@ button:disabled, button.principal-disabled {
     display: none; /* Ocultar el sidebar */
   }
 
-  .principal-name {
-    display: none; /* Ocultar el nombre en pantallas pequeñas */
-  }
 
   .principal-header {
     display: flex;
@@ -703,7 +702,9 @@ button:disabled, button.principal-disabled {
     padding: 5px; /* Reduce el padding para ahorrar espacio */
     white-space: nowrap; /* Evita que el texto se divida en dos líneas */
   }
-  
+  .principal-name {
+    font-size: 36px; /* Establece un tamaño consistente o mayor si es necesario */
+  }
 }
 /* Media query: Menores de 400px */
 @media (max-width: 400px) {
@@ -866,3 +867,54 @@ button:disabled, button.principal-disabled {
     width: 400px; /* Un poco más ancho en dispositivos medianos */
   }
 }
+
+
+
+
+
+
+
+
+/* Ocultar barra de búsqueda y botones del header en pantallas pequeñas */
+@media (max-width: 728px) {
+  .principal-search-bar, 
+  .principal-header-button,
+  .principal-header-button-principal-user-name
+   {
+      display: none; /* Oculta los elementos */
+  }
+}
+
+
+@media (min-width: 729px) {
+   .principal-hamburger-menu {
+      display: none !important; /* Asegúrate de que desaparezca */
+  }
+}
+
+
+
+
+/* Pantallas menores o iguales a 912px */
+@media (max-width: 912px) {
+  .principal-name {
+    font-size: 36px; /* Reduce el tamaño para pantallas medianas */
+    text-align: center;
+  }
+}
+
+/* Pantallas menores o iguales a 400px */
+@media (max-width: 400px) {
+  .principal-name {
+    font-size: 20px; /* Tamaño más pequeño para pantallas pequeñas */
+  }
+}
+
+/* Pantallas menores o iguales a 360px */
+@media (max-width: 360px) {
+  .principal-name {
+    font-size: 14px; /* Ajuste adicional para pantallas muy pequeñas */
+  }
+}
+
+
