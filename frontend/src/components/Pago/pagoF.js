@@ -42,8 +42,8 @@ const PaymentConfirmation = () => {
       apellido: "",
       email: "No disponible",
       domicilio: {
-        direccion: "No disponible",
         ciudad: "No disponible",
+        direccion: "No disponible",
         referencia: "No disponible",
       },
     },
@@ -64,8 +64,8 @@ const PaymentConfirmation = () => {
     apellido: localStorage.getItem("usuarioApellido") || "",
     email: localStorage.getItem("usuarioEmail") || "No disponible",
     domicilio: {
-      direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
       ciudad: localStorage.getItem("usuarioCiudad") || "No disponible",
+      direccion: localStorage.getItem("usuarioDireccion") || "No disponible",
       referencia: localStorage.getItem("usuarioReferencia") || "No disponible",
     }
   };
@@ -381,8 +381,8 @@ const PaymentConfirmation = () => {
           <h2>Información del Usuario</h2>
           <p><strong>Nombre:</strong> {finalUser.nombre} {finalUser.apellido}</p>
           <p><strong>Correo electrónico:</strong> {finalUser.email}</p>
-          <p><strong>Dirección:</strong> {finalUser.domicilio.direccion}</p>
           <p><strong>Ciudad:</strong> {finalUser.domicilio.ciudad}</p>
+          <p><strong>Dirección:</strong> {finalUser.domicilio.direccion}</p>
           <p><strong>Referencia:</strong> {finalUser.domicilio.referencia}</p>
 
           <div className="pagoC-row">

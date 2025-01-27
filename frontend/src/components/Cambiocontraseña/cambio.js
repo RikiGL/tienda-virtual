@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio.css";
@@ -13,6 +13,7 @@ function CambioContrasena() {
   const navigate = useNavigate();
 
   const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
+  
 
   useEffect(() => {
     const handlePopState = () => {
@@ -26,12 +27,14 @@ function CambioContrasena() {
     };
   }, [navigate]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Evita múltiples envíos
     if (isSubmitting) return;
 
+    // Validaciones previas
     if (!email) {
       setModalMessage("Por favor, ingresa tu correo electrónico.");
       setMostrarModal(true);
@@ -55,8 +58,9 @@ function CambioContrasena() {
 
       const data = await response.json();
 
+
       if (response.ok) {
-        setModalMessage(`Se ha enviado un código de verificación a: ${email}`);
+        setModalMessage(`Se ha enviado un código de verificación a: ${ email }`);
       } else {
         setModalMessage(data.message || "El correo no está registrado.");
       }
@@ -66,7 +70,6 @@ function CambioContrasena() {
       setMostrarModal(true);
       setIsSubmitting(false);
     }
-
   };
 
   const handleModalClose = () => {
@@ -79,6 +82,7 @@ function CambioContrasena() {
   const handleBack = () => {
     navigate("/login");
   };
+
 
   return (
     <div
@@ -104,6 +108,7 @@ function CambioContrasena() {
           <div style={{ textAlign: 'center', marginBottom: '10px' }}>
             <img src="https://th.bing.com/th/id/OIP.z735DWGkzl0AgKMOwgIIeAHaFj?w=222&h=180&c=7&r=0&o=5&pid=1.7" alt="Email Security Icon" style={{ width: '50px', height: '50px' }} />
           </div>
+
           <h2 className="cambio1-change-password-title">Cambio de contraseña</h2>
           <p className="cambio1-info-message">
             Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña.

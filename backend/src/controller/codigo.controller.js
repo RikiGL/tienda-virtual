@@ -17,7 +17,8 @@ OAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 async function sendSecurityCode(email, code) {
     try {
         console.log(`Preparando para enviar el correo a: ${email}`); // Verificación de que el código se ejecuta
-
+        //const accessToken = await OAuth2Client.getAccessToken();
+        
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -26,6 +27,7 @@ async function sendSecurityCode(email, code) {
                 clientId: process.env.CLIENT_ID,
                 clientSecret: process.env.CLIENT_SECRET,
                 refreshToken: process.env.REFRESH_TOKEN,
+                //accessToken: accessToken.token,
             },
         });
 
@@ -102,12 +104,15 @@ async function checkLastCodeSentTime(email) {
 // Función para verificar el correo
 async function verificarCorreo(email) {
     try {
+        console.log("Buscando cliente con el correo:", email); // Log para depuración
         const user = await Cliente.findOne({ email });
 
         if (!user) {
+            console.log("Cliente no encontrado."); // Log adicional
             return { valid: false, message: "El correo no está registrado." };
         }
 
+        console.log("Cliente encontrado:", user); // Log del cliente encontrado
         return { valid: true, message: "Correo válido." };
     } catch (error) {
         console.error("Error verificando el correo:", error);
@@ -232,16 +237,17 @@ const codigosController = {
     verificarCorreo: async (req, res) => {
         try {
             const { email } = req.body;
-
+    
             if (!email) {
+                console.log("Correo no proporcionado en la solicitud.");
                 return res.status(400).json({ error: "El correo electrónico es requerido." });
             }
-
+    
             const emailLimpio = email.trim().toLowerCase();
             console.log("Verificando existencia del correo:", emailLimpio);
-
+    
             const result = await verificarCorreo(emailLimpio);
-
+    
             if (result.valid) {
                 console.log("Correo encontrado:", emailLimpio);
                 res.status(200).json({ message: result.message });
