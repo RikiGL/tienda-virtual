@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import fondo from "../imagenes/fondo212.jpg";
 import "./cambio.css";
 import logo from "../imagenes/asdlogo.png";
-import Modal from "../Modal/modal"; 
+import Modal from "../Modal/modal";
 
 function CambioContrasena() {
   const [email, setEmail] = useState("");
-  const [mostrarModal, setMostrarModal] = useState(false); 
+  const [mostrarModal, setMostrarModal] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);  // Estado para controlar el clic en el botón
   const navigate = useNavigate();
 
   const regexCorreo = /^[a-zA-Z0-9._%+-]+@(gmail|hotmail|yahoo|outlook|live|icloud)\.com$/;
+  
 
   useEffect(() => {
     const handlePopState = () => {
-      navigate("/login"); 
+      navigate("/login");
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -26,21 +27,23 @@ function CambioContrasena() {
     };
   }, [navigate]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Evita múltiples envíos
     if (isSubmitting) return;
 
+    // Validaciones previas
     if (!email) {
       setModalMessage("Por favor, ingresa tu correo electrónico.");
-      setMostrarModal(true); 
+      setMostrarModal(true);
       return;
     }
 
     if (!regexCorreo.test(email)) {
       setModalMessage("El correo electrónico no es válido.");
-      setMostrarModal(true); 
+      setMostrarModal(true);
       return;
     }
 
@@ -55,8 +58,9 @@ function CambioContrasena() {
 
       const data = await response.json();
 
+
       if (response.ok) {
-        setModalMessage(`Se ha enviado un código de verificación a: ${email}`);
+        setModalMessage(`Se ha enviado un código de verificación a: ${ email }`);
       } else {
         setModalMessage(data.message || "El correo no está registrado.");
       }
@@ -66,7 +70,6 @@ function CambioContrasena() {
       setMostrarModal(true);
       setIsSubmitting(false);
     }
-
   };
 
   const handleModalClose = () => {
@@ -77,15 +80,16 @@ function CambioContrasena() {
   };
 
   const handleBack = () => {
-    navigate("/login"); 
+    navigate("/login");
   };
+
 
   return (
     <div
       className="cambio1-change-password-container"
-   
+
     >
-    <header className="principal-app-header">
+      <header className="principal-app-header">
         <div className="principal-logo">
           <img src={logo} alt="Tu Despensa Logo" className="principal-logo-img" />
           <div className="principal-name-asd">TU DESPENSA 🛒</div>
@@ -94,24 +98,24 @@ function CambioContrasena() {
 
       <div className="cambio1-back-button-container">
         <button type="button" onClick={handleBack} className="cambio1-back-button">
-        ← Volver
+          ← Volver
         </button>
       </div>
-    
+
       <main className="cambio1-change-password-main">
         <div className="cambio1-change-password-box">
 
-        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
-  <img src="https://th.bing.com/th/id/OIP.z735DWGkzl0AgKMOwgIIeAHaFj?w=222&h=180&c=7&r=0&o=5&pid=1.7" alt="Email Security Icon" style={{ width: '50px', height: '50px' }} />
-</div>
-  
+          <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+            <img src="https://th.bing.com/th/id/OIP.z735DWGkzl0AgKMOwgIIeAHaFj?w=222&h=180&c=7&r=0&o=5&pid=1.7" alt="Email Security Icon" style={{ width: '50px', height: '50px' }} />
+          </div>
+
 
 
           <h2 className="cambio1-change-password-title">Cambio de contraseña</h2>
           <p className="cambio1-info-message">
-  Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña. 
-  Si no recibes el correo en unos minutos, revisa tu carpeta de spam.
-</p>
+            Ingresa tu correo electrónico y te enviaremos un código para restablecer tu contraseña.
+            Si no recibes el correo en unos minutos, revisa tu carpeta de spam.
+          </p>
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="cambio1-input-group">
@@ -141,7 +145,7 @@ function CambioContrasena() {
         <p>Contacto: info@tudespensa.com</p>
       </footer>
 
-      {}
+      { }
       {mostrarModal && (
         <Modal
           message={modalMessage}
