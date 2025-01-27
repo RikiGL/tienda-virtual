@@ -106,20 +106,6 @@ body {
   transition: all 0.3s ease;
 
   }
-  .carousel-container {
-    margin: 0 auto; /* Centra el carrusel horizontalmente */
-    max-width: 1400px; /* Ajusta este valor para hacerlo más angosto */
-    height: 450px;
-    overflow: hidden; /* Evita que el contenido salga del contenedor */
-    border-radius: 10px; /* Opcional: Bordes redondeados para un diseño más moderno */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
-  }
-  
-  .carousel-container img {
-    width: 100%; /* Ajusta las imágenes al ancho del contenedor */
-    height: auto; /* Mantén la proporción original de las imágenes */
-    display: block;
-  }
   /* Efecto de transición al entrar a la página */
   @keyframes fadeIn {
     from {
@@ -236,12 +222,6 @@ body {
 
 
 
-
-
-
-
-
-
   .principal-app-footer {
     grid-column: 2;
     background-color: #333;
@@ -259,3 +239,121 @@ body {
     margin: 5px 0;
     font-size: 14px;
   }
+
+
+
+
+
+
+
+
+
+
+/* Estilos del ícono del menú hamburguesa */
+.principal-hamburger-icon {
+  display: none; /* Ocultar por defecto */
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* Mostrar ícono en pantallas pequeñas */
+@media (max-width: 728px) {
+  .principal-hamburger-icon {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+}
+
+/* Contenedor del menú hamburguesa */
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  background-color: #0c5304;
+  color: white;
+  position: absolute;
+  top: 70px; /* Ajusta según la altura de tu header */
+  right: 10px;
+  width: 180px; /* Reducido para pantallas pequeñas */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+/* Secciones del menú */
+.hamburger-menu .principal-menu-section h4 {
+  font-size: 14px; /* Tamaño reducido para pantallas pequeñas */
+  color: white;
+  margin: 10px 10px;
+}
+
+/* Barra de búsqueda */
+.hamburger-menu .principal-menu-section input {
+  width: calc(100% - 20px);
+  margin: 0 10px;
+  padding: 6px; /* Tamaño ajustado */
+  font-size: 12px; /* Texto más pequeño */
+  border: none;
+  border-radius: 4px;
+}
+
+/* Lista principal de categorías */
+.hamburger-menu .principal-category-list {
+  list-style: none;
+  padding: 0;
+  margin: 5px 0;
+}
+
+/* Botones de categorías y opciones del usuario */
+.hamburger-menu .principal-category-item,
+.hamburger-menu .principal-user-options li {
+  padding: 8px 10px; /* Tamaño reducido */
+  background-color: #196719; /* Fondo verde oscuro */
+  color: white;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-align: center;
+  border-radius: 4px;
+  margin: 4px 10px; /* Espaciado reducido */
+  font-size: 12px; /* Texto más pequeño */
+}
+
+/* Hover para categorías y opciones de usuario */
+.hamburger-menu .principal-category-item:hover,
+.hamburger-menu .principal-user-options li:hover {
+  background-color: #4caf50; /* Verde más claro */
+  transform: scale(1.05);
+}
+
+/* Mostrar el menú cuando está abierto */
+.hamburger-menu.open {
+  display: flex;
+}
+
+/* Ocultar botones principales en pantallas pequeñas */
+@media (max-width: 728px) {
+  .principal-admin-button,
+  .principal-admin-button-cerrar {
+    display: none;
+  }
+}
+
+
+
+.carousel-container {
+  margin: 0 auto; /* Centra el carrusel horizontalmente */
+  max-width: 1400px; /* Ajusta este valor para hacerlo más angosto */
+  height: 300px;
+  overflow: hidden; /* Evita que el contenido salga del contenedor */
+  border-radius: 10px; /* Opcional: Bordes redondeados para un diseño más moderno */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+}
+
+.carousel-container img {
+  width: 100%; /* Ajusta las imágenes al ancho del contenedor */
+  height: auto; /* Mantén la proporción original de las imágenes */
+  display: block;
+}
