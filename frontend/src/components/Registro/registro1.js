@@ -253,7 +253,7 @@ function Registro1() {
             </div>
             <div className="registro-recaptcha-container">
               <ReCAPTCHA
-                sitekey="6Lf_BZsqAAAAADM6ft64QtrZJ-jpqaDPbrfrQh4m" 
+                sitekey="6Ld_v8QqAAAAAOwN7PVzaxScKu0vRIh9VPYVs3Vz" 
                 onChange={handleRecaptchaChange}
               />
             </div>

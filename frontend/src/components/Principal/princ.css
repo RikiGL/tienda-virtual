@@ -357,3 +357,56 @@ body {
   height: auto; /* Mantén la proporción original de las imágenes */
   display: block;
 }
+
+
+
+/* Botón de Iniciar Sesión */
+.principal-login-button {
+  background-color:#0c5304; /* Azul agradable */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+border-radius: 50px;
+  cursor: pointer;
+ width: bold;
+  text-align: left;
+}
+
+
+.principal-login-button:active {
+  background-color: #003d82; /* Azul más oscuro al hacer clic */
+  transform: scale(0.95); /* Reduce ligeramente al hacer clic */
+}
+
+/* Responsividad para el botón en pantallas pequeñas */
+@media (max-width: 912px) {
+  .principal-login-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+/* Botón centrado en pantallas pequeñas */
+@media (max-width: 400px) {
+  .principal-login-button {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    text-align: center;
+  }
+}
+
+
+
+@media (min-width: 729px) {
+  .menu-toggle {
+    display: none; /* Oculta el botón hamburguesa */
+  }
+}
+@media (max-width: 728px) {
+  .menu-toggle {
+    display: block; /* Muestra el botón hamburguesa */
+    font-size: 30px;
+    cursor: pointer;
+  }
+}

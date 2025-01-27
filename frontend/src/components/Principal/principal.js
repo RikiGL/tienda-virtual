@@ -329,9 +329,13 @@ const handleSearchChange = (e) => {
 
 
 {/* Icono del menú hamburguesa */}
-<div className="p-hamburger-icon" onClick={handleToggleMenu}>
+{/* Icono del menú hamburguesa */}
+{isMobile && (
+  <div className="p-hamburger-icon" onClick={handleToggleMenu}>
     ☰
-</div>
+  </div>
+)}
+
 
 
 
@@ -383,7 +387,7 @@ const handleSearchChange = (e) => {
     </div>
 
     {/* Usuario */}
-    {usuarioNombre && (
+    {usuarioNombre ? (
       <div className="principal-menu-section">
         <h4
           className="principal-menu-title"
@@ -413,9 +417,19 @@ const handleSearchChange = (e) => {
           </ul>
         )}
       </div>
+    ) : (
+      <div className="principal-menu-section">
+        <button
+          className="principal-login-button"
+          onClick={() => navigate("/login")}
+        >
+          Iniciar Sesión
+        </button>
+      </div>
     )}
   </div>
 )}
+
 
 
 
@@ -577,3 +591,6 @@ const handleSearchChange = (e) => {
 };
 
 export default Principal;
+
+
+
